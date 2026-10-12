@@ -1,0 +1,9 @@
+# --- NO commitear: secretos de sesión y dumps ---
+recuperadas/
+.pytest_cache/
+__pycache__/
+.ipynb_checkpoints/
+*.qcow2
+*.iso
+*.tar.gz
+vmdata/
