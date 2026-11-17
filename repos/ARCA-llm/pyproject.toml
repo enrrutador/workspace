@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "arca-llm"
+version = "0.4.0"
+description = "Native low-resource ARCA language model and OpenCode-compatible cognitive agent"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.12"
+authors = [{name = "enrrutador"}]
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+arca = "arca.cli:main"
+arca-native-lm = "arca.native_lm.cli:main"
+arca-serve = "arca.server:main"
+arca-m0 = "arca.benchmark:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["arca"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100

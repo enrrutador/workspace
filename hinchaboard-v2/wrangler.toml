@@ -1,0 +1,24 @@
+# Cloudflare Worker config — Hinchaboard v2
+# Free tier: Workers (100k req/day) + KV (100k reads/day) + static assets.
+
+name = "hinchaboard-v2"
+main = "worker/index.js"
+compatibility_date = "2026-10-01"
+
+# Serve ./frontend as static assets from the same Worker (one deploy).
+[assets]
+directory = "./frontend"
+
+# KV namespace for rankings / intents / rate limits.
+# Create it once (dashboard or `npx wrangler kv namespace create RANKING_KV`)
+# and paste the returned id below.
+[[kv_namespaces]]
+binding = "RANKING_KV"
+id = "REEMPLAZAR_CON_TU_KV_ID"
+preview_id = "REEMPLAZAR_CON_TU_KV_PREVIEW_ID"
+
+# Env vars (dashboard: Worker → Settings → Variables, or wrangler secret put):
+#   ADMIN_SECRET     — secret for the testing-only /api/admin/confirm endpoint
+#   PAYMENT_PROVIDER — "stub" (default), later "polar" or "lemonsqueezy"
+[vars]
+PAYMENT_PROVIDER = "stub"

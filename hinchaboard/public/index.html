@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hinchaboard · La hinchada más generosa del mundo</title>
+<meta name="description" content="Ranking global financiado por hinchas: apoya a tu club, súbelo en el ranking, deja tu mensaje y chatea en vivo en los días de partido." />
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-star">★</span>
+    <div>
+      <h1>Hinchaboard</h1>
+      <p class="tagline">La hinchada más generosa · rank es lo que pagas</p>
+    </div>
+  </div>
+  <div class="live-stats" id="stats">
+    <div class="stat"><strong id="stat-revenue">—</strong><span>apoyado</span></div>
+    <div class="stat"><strong id="stat-bids">—</strong><span>apoyos</span></div>
+    <div class="stat"><strong id="stat-clubs">—</strong><span>clubes</span></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="board" data-scope="global">🌍 Global</button>
+  <div class="tab-select">
+    <select id="country-select"><option value="">🇦🇷 País…</option></select>
+  </div>
+  <div class="tab-select">
+    <select id="league-select"><option value="">🏆 Liga…</option></select>
+  </div>
+  <button class="tab chat-tab" data-tab="chat">💬</button>
+</nav>
+
+<main>
+  <section id="view-board">
+    <div class="board-head">
+      <h2 id="board-label">Ranking mundial</h2>
+      <p class="board-note">Apoya a tu club desde $1 y súbelo. El pago es el rank: sin algoritmos, sin reviews. <a href="#" id="open-info">¿Qué compro?</a></p>
+    </div>
+    <ol id="board-list" class="board-list"></ol>
+    <footer class="legal">
+      Apoyos y mensajes son de hinchas, no de los clubes · sin logos oficiales · pagos vía MercadoPago · imagen compartible generada al alcanzar el #1.
+    </footer>
+  </section>
+
+  <section id="view-chat" class="hidden">
+    <div class="board-head">
+      <h2 id="chat-room-label">Chat</h2>
+      <p class="board-note">Leer es gratis. Escribir: 1 mensaje = 1 crédito. <button class="link-btn" id="buy-pack-btn">Comprar paquete (10 × $2)</button> <span id="credits-remaining"></span></p>
+    </div>
+    <div id="chat-messages" class="chat-messages"></div>
+    <form id="chat-form" class="chat-form">
+      <input id="chat-input" type="text" maxlength="280" placeholder="Di algo de tu equipo…" autocomplete="off" />
+      <button type="submit">Enviar</button>
+    </form>
+    <p class="chat-hint">Filtro de contenido activo · mensajes pagados no se reembolsan · sé valiente, no grosero.</p>
+  </section>
+</main>
+
+<div id="modal-claim" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-claim">✕</button>
+    <h2 id="claim-title">Apoyar club</h2>
+    <div class="claim-summary" id="claim-summary"></div>
+    <label>Monto (USD, entero, mínimo $1)
+      <input id="claim-amount" type="number" min="1" step="1" value="1" />
+    </label>
+    <label>Mensaje destacado junto al club (+$2)</label>
+    <textarea id="claim-message" maxlength="140" placeholder="120 años de gloria…"></textarea>
+    <div class="char-count" id="claim-count">0/140</div>
+    <label>Email (para reclamar pagos, opcional)
+      <input id="claim-email" type="email" placeholder="tu@email.com" />
+    </label>
+    <div class="claim-total">Total: <strong id="claim-total">$1</strong></div>
+    <button class="btn-primary" id="claim-submit">Ir a pagar</button>
+    <p class="legal">Los apoyos no se reembolsan. Alcanzar el #1 puede requerir más de lo mostrado si alguien puja primero.</p>
+  </div>
+</div>
+
+<div id="modal-success" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-success">✕</button>
+    <h2>¡Hinchada apoyada! 🎉</h2>
+    <div id="success-share" class="success-share"></div>
+    <div class="success-actions">
+      <a id="share-download" class="btn-secondary" download="hinchaboard.svg">Descargar imagen</a>
+      <button class="btn-secondary" id="share-copy">Copiar enlace</button>
+    </div>
+    <p class="board-note" id="success-note"></p>
+  </div>
+</div>
+
+<div id="modal-pack" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-pack">✕</button>
+    <h2>Paquete de chat · 10 mensajes</h2>
+    <p class="board-note">$2 · no caducan · filtro de contenido activo · no se reembolsan</p>
+    <label>Email (opcional)
+      <input id="pack-email" type="email" placeholder="tu@email.com" />
+    </label>
+    <button class="btn-primary" id="pack-submit">Comprar por $2</button>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+# Dependencias y artefactos de build
+node_modules/
+dist/
+build/
+*.log
+
+# Entornos y secretos (nunca commitear)
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
+secrets/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Python (herramientas locales)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Estado local del dashboard (historiales de chat de tu máquina)
+runtime/registro/chats.json

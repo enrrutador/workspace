@@ -1,0 +1,14 @@
+{
+  "name": "hinchaboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ranking global financiado por hinchas: pujas por club, mensajes destacados y chat de pago",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node data/seed.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

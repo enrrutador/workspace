@@ -1,0 +1,3017 @@
+{
+  "leagues": [
+    {
+      "id": "arg",
+      "region": "latam",
+      "name_en": "Liga Profesional",
+      "name_es": "Liga Profesional",
+      "country_en": "Argentina",
+      "country_es": "Argentina"
+    },
+    {
+      "id": "bra",
+      "region": "latam",
+      "name_en": "Brasileirão",
+      "name_es": "Brasileirão",
+      "country_en": "Brazil",
+      "country_es": "Brasil"
+    },
+    {
+      "id": "mex",
+      "region": "latam",
+      "name_en": "Liga MX",
+      "name_es": "Liga MX",
+      "country_en": "Mexico",
+      "country_es": "México"
+    },
+    {
+      "id": "chi",
+      "region": "latam",
+      "name_en": "Primera División",
+      "name_es": "Primera División",
+      "country_en": "Chile",
+      "country_es": "Chile"
+    },
+    {
+      "id": "col",
+      "region": "latam",
+      "name_en": "Primera A",
+      "name_es": "Primera A",
+      "country_en": "Colombia",
+      "country_es": "Colombia"
+    },
+    {
+      "id": "uru",
+      "region": "latam",
+      "name_en": "Primera División",
+      "name_es": "Primera División",
+      "country_en": "Uruguay",
+      "country_es": "Uruguay"
+    },
+    {
+      "id": "par",
+      "region": "latam",
+      "name_en": "Primera División",
+      "name_es": "Primera División",
+      "country_en": "Paraguay",
+      "country_es": "Paraguay"
+    },
+    {
+      "id": "bol",
+      "region": "latam",
+      "name_en": "División Profesional",
+      "name_es": "División Profesional",
+      "country_en": "Bolivia",
+      "country_es": "Bolivia"
+    },
+    {
+      "id": "ecu",
+      "region": "latam",
+      "name_en": "LigaPro",
+      "name_es": "LigaPro",
+      "country_en": "Ecuador",
+      "country_es": "Ecuador"
+    },
+    {
+      "id": "ven",
+      "region": "latam",
+      "name_en": "Liga FUTVE",
+      "name_es": "Liga FUTVE",
+      "country_en": "Venezuela",
+      "country_es": "Venezuela"
+    },
+    {
+      "id": "per",
+      "region": "latam",
+      "name_en": "Liga 1",
+      "name_es": "Liga 1",
+      "country_en": "Peru",
+      "country_es": "Perú"
+    },
+    {
+      "id": "usa",
+      "region": "usa",
+      "name_en": "MLS",
+      "name_es": "MLS",
+      "country_en": "United States",
+      "country_es": "Estados Unidos"
+    },
+    {
+      "id": "eng",
+      "region": "europe",
+      "name_en": "Premier League",
+      "name_es": "Premier League",
+      "country_en": "England",
+      "country_es": "Inglaterra"
+    },
+    {
+      "id": "esp",
+      "region": "europe",
+      "name_en": "La Liga",
+      "name_es": "La Liga",
+      "country_en": "Spain",
+      "country_es": "España"
+    },
+    {
+      "id": "ita",
+      "region": "europe",
+      "name_en": "Serie A",
+      "name_es": "Serie A",
+      "country_en": "Italy",
+      "country_es": "Italia"
+    },
+    {
+      "id": "ger",
+      "region": "europe",
+      "name_en": "Bundesliga",
+      "name_es": "Bundesliga",
+      "country_en": "Germany",
+      "country_es": "Alemania"
+    },
+    {
+      "id": "fra",
+      "region": "europe",
+      "name_en": "Ligue 1",
+      "name_es": "Ligue 1",
+      "country_en": "France",
+      "country_es": "Francia"
+    },
+    {
+      "id": "ned",
+      "region": "europe",
+      "name_en": "Eredivisie",
+      "name_es": "Eredivisie",
+      "country_en": "Netherlands",
+      "country_es": "Países Bajos"
+    },
+    {
+      "id": "por",
+      "region": "europe",
+      "name_en": "Primeira Liga",
+      "name_es": "Primeira Liga",
+      "country_en": "Portugal",
+      "country_es": "Portugal"
+    },
+    {
+      "id": "sco",
+      "region": "europe",
+      "name_en": "Premiership",
+      "name_es": "Premiership",
+      "country_en": "Scotland",
+      "country_es": "Escocia"
+    },
+    {
+      "id": "tur",
+      "region": "europe",
+      "name_en": "Süper Lig",
+      "name_es": "Süper Lig",
+      "country_en": "Turkey",
+      "country_es": "Turquía"
+    },
+    {
+      "id": "bel",
+      "region": "europe",
+      "name_en": "Pro League",
+      "name_es": "Pro League",
+      "country_en": "Belgium",
+      "country_es": "Bélgica"
+    }
+  ],
+  "clubs": [
+    {
+      "id": "river-plate",
+      "name": "River Plate",
+      "short": "RIV",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "boca-juniors",
+      "name": "Boca Juniors",
+      "short": "BOC",
+      "league": "arg",
+      "color": "#003DA5"
+    },
+    {
+      "id": "racing",
+      "name": "Racing",
+      "short": "RAC",
+      "league": "arg",
+      "color": "#6EC1E4"
+    },
+    {
+      "id": "independiente",
+      "name": "Independiente",
+      "short": "IND",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "san-lorenzo",
+      "name": "San Lorenzo",
+      "short": "SLO",
+      "league": "arg",
+      "color": "#1C2D5A"
+    },
+    {
+      "id": "huracan",
+      "name": "Huracán",
+      "short": "HUR",
+      "league": "arg",
+      "color": "#D22630"
+    },
+    {
+      "id": "velez-sarsfield",
+      "name": "Vélez Sarsfield",
+      "short": "VEL",
+      "league": "arg",
+      "color": "#003DA5"
+    },
+    {
+      "id": "estudiantes",
+      "name": "Estudiantes",
+      "short": "EST",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "gimnasia",
+      "name": "Gimnasia",
+      "short": "GIM",
+      "league": "arg",
+      "color": "#1B2A6B"
+    },
+    {
+      "id": "rosario-central",
+      "name": "Rosario Central",
+      "short": "ROS",
+      "league": "arg",
+      "color": "#003DA5"
+    },
+    {
+      "id": "newells-old-boys",
+      "name": "Newell's Old Boys",
+      "short": "NOB",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "lanus",
+      "name": "Lanús",
+      "short": "LAN",
+      "league": "arg",
+      "color": "#722F37"
+    },
+    {
+      "id": "talleres",
+      "name": "Talleres",
+      "short": "TAL",
+      "league": "arg",
+      "color": "#002D62"
+    },
+    {
+      "id": "argentinos-juniors",
+      "name": "Argentinos Juniors",
+      "short": "ARJ",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "defensa-y-justicia",
+      "name": "Defensa y Justicia",
+      "short": "DYJ",
+      "league": "arg",
+      "color": "#F7D117"
+    },
+    {
+      "id": "tigre",
+      "name": "Tigre",
+      "short": "TIG",
+      "league": "arg",
+      "color": "#004B93"
+    },
+    {
+      "id": "platense",
+      "name": "Platense",
+      "short": "PLA",
+      "league": "arg",
+      "color": "#795548"
+    },
+    {
+      "id": "godoy-cruz",
+      "name": "Godoy Cruz",
+      "short": "GOD",
+      "league": "arg",
+      "color": "#0057A8"
+    },
+    {
+      "id": "belgrano",
+      "name": "Belgrano",
+      "short": "BEL",
+      "league": "arg",
+      "color": "#65B2E8"
+    },
+    {
+      "id": "union",
+      "name": "Unión",
+      "short": "UNI",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "atletico-tucuman",
+      "name": "Atlético Tucumán",
+      "short": "ATU",
+      "league": "arg",
+      "color": "#5BACE6"
+    },
+    {
+      "id": "banfield",
+      "name": "Banfield",
+      "short": "BAN",
+      "league": "arg",
+      "color": "#009444"
+    },
+    {
+      "id": "sarmiento",
+      "name": "Sarmiento",
+      "short": "SAR",
+      "league": "arg",
+      "color": "#009444"
+    },
+    {
+      "id": "instituto",
+      "name": "Instituto",
+      "short": "INS",
+      "league": "arg",
+      "color": "#E30613"
+    },
+    {
+      "id": "central-cordoba",
+      "name": "Central Córdoba",
+      "short": "CCO",
+      "league": "arg",
+      "color": "#111111"
+    },
+    {
+      "id": "barracas-central",
+      "name": "Barracas Central",
+      "short": "BAR",
+      "league": "arg",
+      "color": "#D5001C"
+    },
+    {
+      "id": "deportivo-riestra",
+      "name": "Deportivo Riestra",
+      "short": "RIE",
+      "league": "arg",
+      "color": "#1A1A1A"
+    },
+    {
+      "id": "independiente-rivadavia",
+      "name": "Independiente Rivadavia",
+      "short": "IRV",
+      "league": "arg",
+      "color": "#004B93"
+    },
+    {
+      "id": "san-martin-sj",
+      "name": "San Martín SJ",
+      "short": "SMS",
+      "league": "arg",
+      "color": "#009444"
+    },
+    {
+      "id": "aldosivi",
+      "name": "Aldosivi",
+      "short": "ALD",
+      "league": "arg",
+      "color": "#FFD200"
+    },
+    {
+      "id": "flamengo",
+      "name": "Flamengo",
+      "short": "FLA",
+      "league": "bra",
+      "color": "#E30613"
+    },
+    {
+      "id": "palmeiras",
+      "name": "Palmeiras",
+      "short": "PAL",
+      "league": "bra",
+      "color": "#006437"
+    },
+    {
+      "id": "sao-paulo",
+      "name": "São Paulo",
+      "short": "SAO",
+      "league": "bra",
+      "color": "#E30613"
+    },
+    {
+      "id": "corinthians",
+      "name": "Corinthians",
+      "short": "COR",
+      "league": "bra",
+      "color": "#111111"
+    },
+    {
+      "id": "gremio",
+      "name": "Grêmio",
+      "short": "GRE",
+      "league": "bra",
+      "color": "#0091DA"
+    },
+    {
+      "id": "internacional",
+      "name": "Internacional",
+      "short": "INT",
+      "league": "bra",
+      "color": "#E30613"
+    },
+    {
+      "id": "atletico-mineiro",
+      "name": "Atlético Mineiro",
+      "short": "CAM",
+      "league": "bra",
+      "color": "#000000"
+    },
+    {
+      "id": "fluminense",
+      "name": "Fluminense",
+      "short": "FLU",
+      "league": "bra",
+      "color": "#722F37"
+    },
+    {
+      "id": "botafogo",
+      "name": "Botafogo",
+      "short": "BOT",
+      "league": "bra",
+      "color": "#000000"
+    },
+    {
+      "id": "santos",
+      "name": "Santos",
+      "short": "SAN",
+      "league": "bra",
+      "color": "#111111"
+    },
+    {
+      "id": "cruzeiro",
+      "name": "Cruzeiro",
+      "short": "CRU",
+      "league": "bra",
+      "color": "#003DA5"
+    },
+    {
+      "id": "vasco-da-gama",
+      "name": "Vasco da Gama",
+      "short": "VAS",
+      "league": "bra",
+      "color": "#000000"
+    },
+    {
+      "id": "bahia",
+      "name": "Bahia",
+      "short": "BAH",
+      "league": "bra",
+      "color": "#0057A8"
+    },
+    {
+      "id": "fortaleza",
+      "name": "Fortaleza",
+      "short": "FOR",
+      "league": "bra",
+      "color": "#0057A8"
+    },
+    {
+      "id": "ceara",
+      "name": "Ceará",
+      "short": "CEA",
+      "league": "bra",
+      "color": "#000000"
+    },
+    {
+      "id": "vitoria",
+      "name": "Vitória",
+      "short": "VIT",
+      "league": "bra",
+      "color": "#E30613"
+    },
+    {
+      "id": "sport-recife",
+      "name": "Sport Recife",
+      "short": "SPO",
+      "league": "bra",
+      "color": "#E30613"
+    },
+    {
+      "id": "juventude",
+      "name": "Juventude",
+      "short": "JUV",
+      "league": "bra",
+      "color": "#009444"
+    },
+    {
+      "id": "red-bull-bragantino",
+      "name": "Red Bull Bragantino",
+      "short": "RBB",
+      "league": "bra",
+      "color": "#D5001C"
+    },
+    {
+      "id": "mirassol",
+      "name": "Mirassol",
+      "short": "MIR",
+      "league": "bra",
+      "color": "#F7D117"
+    },
+    {
+      "id": "club-america",
+      "name": "Club América",
+      "short": "AME",
+      "league": "mex",
+      "color": "#FDB913"
+    },
+    {
+      "id": "chivas",
+      "name": "Chivas",
+      "short": "GDL",
+      "league": "mex",
+      "color": "#D5001C"
+    },
+    {
+      "id": "cruz-azul",
+      "name": "Cruz Azul",
+      "short": "CAZ",
+      "league": "mex",
+      "color": "#003DA5"
+    },
+    {
+      "id": "pumas",
+      "name": "Pumas",
+      "short": "PUM",
+      "league": "mex",
+      "color": "#1B365D"
+    },
+    {
+      "id": "monterrey",
+      "name": "Monterrey",
+      "short": "MTY",
+      "league": "mex",
+      "color": "#00285E"
+    },
+    {
+      "id": "tigres",
+      "name": "Tigres",
+      "short": "TIG",
+      "league": "mex",
+      "color": "#FFB81C"
+    },
+    {
+      "id": "toluca",
+      "name": "Toluca",
+      "short": "TOL",
+      "league": "mex",
+      "color": "#E30613"
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "short": "ATS",
+      "league": "mex",
+      "color": "#E30613"
+    },
+    {
+      "id": "leon",
+      "name": "León",
+      "short": "LEO",
+      "league": "mex",
+      "color": "#007A33"
+    },
+    {
+      "id": "pachuca",
+      "name": "Pachuca",
+      "short": "PAC",
+      "league": "mex",
+      "color": "#0057A8"
+    },
+    {
+      "id": "santos-laguna",
+      "name": "Santos Laguna",
+      "short": "SAN",
+      "league": "mex",
+      "color": "#009444"
+    },
+    {
+      "id": "tijuana",
+      "name": "Tijuana",
+      "short": "TIJ",
+      "league": "mex",
+      "color": "#E30613"
+    },
+    {
+      "id": "necaxa",
+      "name": "Necaxa",
+      "short": "NEC",
+      "league": "mex",
+      "color": "#E30613"
+    },
+    {
+      "id": "puebla",
+      "name": "Puebla",
+      "short": "PUE",
+      "league": "mex",
+      "color": "#003DA5"
+    },
+    {
+      "id": "queretaro",
+      "name": "Querétaro",
+      "short": "QUE",
+      "league": "mex",
+      "color": "#0057A8"
+    },
+    {
+      "id": "atletico-san-luis",
+      "name": "Atlético San Luis",
+      "short": "ASL",
+      "league": "mex",
+      "color": "#002D62"
+    },
+    {
+      "id": "fc-juarez",
+      "name": "FC Juárez",
+      "short": "JUA",
+      "league": "mex",
+      "color": "#009444"
+    },
+    {
+      "id": "mazatlan",
+      "name": "Mazatlán",
+      "short": "MAZ",
+      "league": "mex",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "colo-colo",
+      "name": "Colo-Colo",
+      "short": "COL",
+      "league": "chi",
+      "color": "#111111"
+    },
+    {
+      "id": "universidad-de-chile",
+      "name": "Universidad de Chile",
+      "short": "UCH",
+      "league": "chi",
+      "color": "#002D62"
+    },
+    {
+      "id": "universidad-catolica",
+      "name": "Universidad Católica",
+      "short": "UCA",
+      "league": "chi",
+      "color": "#003DA5"
+    },
+    {
+      "id": "union-espanola",
+      "name": "Unión Española",
+      "short": "UES",
+      "league": "chi",
+      "color": "#E30613"
+    },
+    {
+      "id": "palestino",
+      "name": "Palestino",
+      "short": "PAL",
+      "league": "chi",
+      "color": "#009444"
+    },
+    {
+      "id": "ohiggins",
+      "name": "O'Higgins",
+      "short": "OHI",
+      "league": "chi",
+      "color": "#5BACE6"
+    },
+    {
+      "id": "everton-chile",
+      "name": "Everton",
+      "short": "EVE",
+      "league": "chi",
+      "color": "#003DA5"
+    },
+    {
+      "id": "huachipato",
+      "name": "Huachipato",
+      "short": "HUA",
+      "league": "chi",
+      "color": "#002D62"
+    },
+    {
+      "id": "audax-italiano",
+      "name": "Audax Italiano",
+      "short": "AUD",
+      "league": "chi",
+      "color": "#009444"
+    },
+    {
+      "id": "cobresal",
+      "name": "Cobresal",
+      "short": "COB",
+      "league": "chi",
+      "color": "#F26522"
+    },
+    {
+      "id": "coquimbo-unido",
+      "name": "Coquimbo Unido",
+      "short": "COQ",
+      "league": "chi",
+      "color": "#FFD100"
+    },
+    {
+      "id": "deportes-iquique",
+      "name": "Deportes Iquique",
+      "short": "IQU",
+      "league": "chi",
+      "color": "#0091DA"
+    },
+    {
+      "id": "union-la-calera",
+      "name": "Unión La Calera",
+      "short": "ULC",
+      "league": "chi",
+      "color": "#E30613"
+    },
+    {
+      "id": "nublense",
+      "name": "Ñublense",
+      "short": "NUB",
+      "league": "chi",
+      "color": "#E30613"
+    },
+    {
+      "id": "la-serena",
+      "name": "La Serena",
+      "short": "SER",
+      "league": "chi",
+      "color": "#722F37"
+    },
+    {
+      "id": "deportes-limache",
+      "name": "Deportes Limache",
+      "short": "LIM",
+      "league": "chi",
+      "color": "#E30613"
+    },
+    {
+      "id": "atletico-nacional",
+      "name": "Atlético Nacional",
+      "short": "NAC",
+      "league": "col",
+      "color": "#009444"
+    },
+    {
+      "id": "millonarios",
+      "name": "Millonarios",
+      "short": "MIL",
+      "league": "col",
+      "color": "#003DA5"
+    },
+    {
+      "id": "america-de-cali",
+      "name": "América de Cali",
+      "short": "AME",
+      "league": "col",
+      "color": "#E30613"
+    },
+    {
+      "id": "junior",
+      "name": "Junior",
+      "short": "JUN",
+      "league": "col",
+      "color": "#E30613"
+    },
+    {
+      "id": "independiente-medellin",
+      "name": "Independiente Medellín",
+      "short": "DIM",
+      "league": "col",
+      "color": "#C8102E"
+    },
+    {
+      "id": "santa-fe",
+      "name": "Santa Fe",
+      "short": "SFE",
+      "league": "col",
+      "color": "#E30613"
+    },
+    {
+      "id": "deportivo-cali",
+      "name": "Deportivo Cali",
+      "short": "CAL",
+      "league": "col",
+      "color": "#009444"
+    },
+    {
+      "id": "once-caldas",
+      "name": "Once Caldas",
+      "short": "ONC",
+      "league": "col",
+      "color": "#FFFFFF"
+    },
+    {
+      "id": "deportes-tolima",
+      "name": "Deportes Tolima",
+      "short": "TOL",
+      "league": "col",
+      "color": "#722F37"
+    },
+    {
+      "id": "atletico-bucaramanga",
+      "name": "Atlético Bucaramanga",
+      "short": "BUC",
+      "league": "col",
+      "color": "#FFD100"
+    },
+    {
+      "id": "deportivo-pereira",
+      "name": "Deportivo Pereira",
+      "short": "PER",
+      "league": "col",
+      "color": "#E30613"
+    },
+    {
+      "id": "deportivo-pasto",
+      "name": "Deportivo Pasto",
+      "short": "PAS",
+      "league": "col",
+      "color": "#D5001C"
+    },
+    {
+      "id": "la-equidad",
+      "name": "La Equidad",
+      "short": "EQU",
+      "league": "col",
+      "color": "#009444"
+    },
+    {
+      "id": "aguilas-doradas",
+      "name": "Águilas Doradas",
+      "short": "AGU",
+      "league": "col",
+      "color": "#FFB81C"
+    },
+    {
+      "id": "envigado",
+      "name": "Envigado",
+      "short": "ENV",
+      "league": "col",
+      "color": "#F26522"
+    },
+    {
+      "id": "boyaca-chico",
+      "name": "Boyacá Chicó",
+      "short": "BOY",
+      "league": "col",
+      "color": "#F26522"
+    },
+    {
+      "id": "alianza-fc",
+      "name": "Alianza FC",
+      "short": "ALI",
+      "league": "col",
+      "color": "#0057A8"
+    },
+    {
+      "id": "union-magdalena",
+      "name": "Unión Magdalena",
+      "short": "MAG",
+      "league": "col",
+      "color": "#0057A8"
+    },
+    {
+      "id": "fortaleza-ceif",
+      "name": "Fortaleza CEIF",
+      "short": "FOR",
+      "league": "col",
+      "color": "#E30613"
+    },
+    {
+      "id": "llaneros",
+      "name": "Llaneros",
+      "short": "LLA",
+      "league": "col",
+      "color": "#111111"
+    },
+    {
+      "id": "penarol",
+      "name": "Peñarol",
+      "short": "PEN",
+      "league": "uru",
+      "color": "#FFB81C"
+    },
+    {
+      "id": "nacional",
+      "name": "Nacional",
+      "short": "NAC",
+      "league": "uru",
+      "color": "#003DA5"
+    },
+    {
+      "id": "defensor-sporting",
+      "name": "Defensor Sporting",
+      "short": "DEF",
+      "league": "uru",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "danubio",
+      "name": "Danubio",
+      "short": "DAN",
+      "league": "uru",
+      "color": "#111111"
+    },
+    {
+      "id": "liverpool-uruguay",
+      "name": "Liverpool",
+      "short": "LIV",
+      "league": "uru",
+      "color": "#1A1A1A"
+    },
+    {
+      "id": "montevideo-city-torque",
+      "name": "Montevideo City Torque",
+      "short": "MCT",
+      "league": "uru",
+      "color": "#0091DA"
+    },
+    {
+      "id": "wanderers",
+      "name": "Wanderers",
+      "short": "WAN",
+      "league": "uru",
+      "color": "#111111"
+    },
+    {
+      "id": "racing-montevideo",
+      "name": "Racing Montevideo",
+      "short": "RAC",
+      "league": "uru",
+      "color": "#009444"
+    },
+    {
+      "id": "cerro",
+      "name": "Cerro",
+      "short": "CER",
+      "league": "uru",
+      "color": "#0091DA"
+    },
+    {
+      "id": "plaza-colonia",
+      "name": "Plaza Colonia",
+      "short": "PLA",
+      "league": "uru",
+      "color": "#009444"
+    },
+    {
+      "id": "boston-river",
+      "name": "Boston River",
+      "short": "BOS",
+      "league": "uru",
+      "color": "#E30613"
+    },
+    {
+      "id": "cerro-largo",
+      "name": "Cerro Largo",
+      "short": "CLA",
+      "league": "uru",
+      "color": "#003DA5"
+    },
+    {
+      "id": "progreso",
+      "name": "Progreso",
+      "short": "PRO",
+      "league": "uru",
+      "color": "#E30613"
+    },
+    {
+      "id": "juventud",
+      "name": "Juventud",
+      "short": "JUV",
+      "league": "uru",
+      "color": "#003DA5"
+    },
+    {
+      "id": "deportivo-maldonado",
+      "name": "Deportivo Maldonado",
+      "short": "MAL",
+      "league": "uru",
+      "color": "#E30613"
+    },
+    {
+      "id": "miramar-misiones",
+      "name": "Miramar Misiones",
+      "short": "MIR",
+      "league": "uru",
+      "color": "#111111"
+    },
+    {
+      "id": "olimpia",
+      "name": "Olimpia",
+      "short": "OLI",
+      "league": "par",
+      "color": "#000000"
+    },
+    {
+      "id": "cerro-porteno",
+      "name": "Cerro Porteño",
+      "short": "CCP",
+      "league": "par",
+      "color": "#E30613"
+    },
+    {
+      "id": "libertad",
+      "name": "Libertad",
+      "short": "LIB",
+      "league": "par",
+      "color": "#1A1A1A"
+    },
+    {
+      "id": "guarani",
+      "name": "Guaraní",
+      "short": "GUA",
+      "league": "par",
+      "color": "#FFD100"
+    },
+    {
+      "id": "nacional-paraguay",
+      "name": "Nacional",
+      "short": "NAC",
+      "league": "par",
+      "color": "#D5001C"
+    },
+    {
+      "id": "sportivo-luqueno",
+      "name": "Sportivo Luqueño",
+      "short": "LUQ",
+      "league": "par",
+      "color": "#003DA5"
+    },
+    {
+      "id": "sportivo-trinidense",
+      "name": "Sportivo Trinidense",
+      "short": "TRI",
+      "league": "par",
+      "color": "#FFD100"
+    },
+    {
+      "id": "sportivo-ameliano",
+      "name": "Sportivo Ameliano",
+      "short": "AML",
+      "league": "par",
+      "color": "#003DA5"
+    },
+    {
+      "id": "2-de-mayo",
+      "name": "2 de Mayo",
+      "short": "2DM",
+      "league": "par",
+      "color": "#0057A8"
+    },
+    {
+      "id": "general-caballero",
+      "name": "General Caballero",
+      "short": "GCA",
+      "league": "par",
+      "color": "#E30613"
+    },
+    {
+      "id": "atletico-tembetary",
+      "name": "Atlético Tembetary",
+      "short": "TEM",
+      "league": "par",
+      "color": "#C8102E"
+    },
+    {
+      "id": "deportivo-recoleta",
+      "name": "Deportivo Recoleta",
+      "short": "REC",
+      "league": "par",
+      "color": "#FFD100"
+    },
+    {
+      "id": "bolivar",
+      "name": "Bolívar",
+      "short": "BOL",
+      "league": "bol",
+      "color": "#5BACE6"
+    },
+    {
+      "id": "the-strongest",
+      "name": "The Strongest",
+      "short": "STR",
+      "league": "bol",
+      "color": "#FFD100"
+    },
+    {
+      "id": "always-ready",
+      "name": "Always Ready",
+      "short": "ALW",
+      "league": "bol",
+      "color": "#E30613"
+    },
+    {
+      "id": "blooming",
+      "name": "Blooming",
+      "short": "BLO",
+      "league": "bol",
+      "color": "#0091DA"
+    },
+    {
+      "id": "oriente-petrolero",
+      "name": "Oriente Petrolero",
+      "short": "ORI",
+      "league": "bol",
+      "color": "#009444"
+    },
+    {
+      "id": "wilstermann",
+      "name": "Wilstermann",
+      "short": "WIL",
+      "league": "bol",
+      "color": "#E30613"
+    },
+    {
+      "id": "nacional-potosi",
+      "name": "Nacional Potosí",
+      "short": "NAP",
+      "league": "bol",
+      "color": "#E30613"
+    },
+    {
+      "id": "aurora",
+      "name": "Aurora",
+      "short": "AUR",
+      "league": "bol",
+      "color": "#0091DA"
+    },
+    {
+      "id": "guabira",
+      "name": "Guabirá",
+      "short": "GUA",
+      "league": "bol",
+      "color": "#E30613"
+    },
+    {
+      "id": "independiente-petrolero",
+      "name": "Independiente Petrolero",
+      "short": "INP",
+      "league": "bol",
+      "color": "#E30613"
+    },
+    {
+      "id": "san-antonio",
+      "name": "San Antonio",
+      "short": "SAB",
+      "league": "bol",
+      "color": "#003DA5"
+    },
+    {
+      "id": "universitario-de-vinto",
+      "name": "Universitario de Vinto",
+      "short": "UVI",
+      "league": "bol",
+      "color": "#0057A8"
+    },
+    {
+      "id": "real-tomayapo",
+      "name": "Real Tomayapo",
+      "short": "TOM",
+      "league": "bol",
+      "color": "#009444"
+    },
+    {
+      "id": "gv-san-jose",
+      "name": "GV San José",
+      "short": "GVS",
+      "league": "bol",
+      "color": "#003DA5"
+    },
+    {
+      "id": "abb",
+      "name": "ABB",
+      "short": "ABB",
+      "league": "bol",
+      "color": "#FFD100"
+    },
+    {
+      "id": "real-oruro",
+      "name": "Real Oruro",
+      "short": "ROR",
+      "league": "bol",
+      "color": "#722F37"
+    },
+    {
+      "id": "barcelona-sc",
+      "name": "Barcelona SC",
+      "short": "BSC",
+      "league": "ecu",
+      "color": "#FFD100"
+    },
+    {
+      "id": "emelec",
+      "name": "Emelec",
+      "short": "EME",
+      "league": "ecu",
+      "color": "#003DA5"
+    },
+    {
+      "id": "liga-de-quito",
+      "name": "Liga de Quito",
+      "short": "LDU",
+      "league": "ecu",
+      "color": "#F5F5F5"
+    },
+    {
+      "id": "independiente-del-valle",
+      "name": "Independiente del Valle",
+      "short": "IDV",
+      "league": "ecu",
+      "color": "#1A1A1A"
+    },
+    {
+      "id": "el-nacional",
+      "name": "El Nacional",
+      "short": "NAC",
+      "league": "ecu",
+      "color": "#E30613"
+    },
+    {
+      "id": "aucas",
+      "name": "Aucas",
+      "short": "AUC",
+      "league": "ecu",
+      "color": "#FFD100"
+    },
+    {
+      "id": "deportivo-cuenca",
+      "name": "Deportivo Cuenca",
+      "short": "CUE",
+      "league": "ecu",
+      "color": "#E30613"
+    },
+    {
+      "id": "universidad-catolica-ecuador",
+      "name": "Universidad Católica",
+      "short": "UCA",
+      "league": "ecu",
+      "color": "#0091DA"
+    },
+    {
+      "id": "macara",
+      "name": "Macará",
+      "short": "MAC",
+      "league": "ecu",
+      "color": "#0091DA"
+    },
+    {
+      "id": "delfin",
+      "name": "Delfín",
+      "short": "DEL",
+      "league": "ecu",
+      "color": "#FFD100"
+    },
+    {
+      "id": "tecnico-universitario",
+      "name": "Técnico Universitario",
+      "short": "TEC",
+      "league": "ecu",
+      "color": "#E30613"
+    },
+    {
+      "id": "mushuc-runa",
+      "name": "Mushuc Runa",
+      "short": "MUS",
+      "league": "ecu",
+      "color": "#E30613"
+    },
+    {
+      "id": "orense",
+      "name": "Orense",
+      "short": "ORE",
+      "league": "ecu",
+      "color": "#009444"
+    },
+    {
+      "id": "libertad-fc",
+      "name": "Libertad FC",
+      "short": "LIB",
+      "league": "ecu",
+      "color": "#F26522"
+    },
+    {
+      "id": "vinotinto",
+      "name": "Vinotinto",
+      "short": "VIN",
+      "league": "ecu",
+      "color": "#722F37"
+    },
+    {
+      "id": "manta",
+      "name": "Manta",
+      "short": "MAN",
+      "league": "ecu",
+      "color": "#0091DA"
+    },
+    {
+      "id": "caracas",
+      "name": "Caracas",
+      "short": "CAR",
+      "league": "ven",
+      "color": "#E30613"
+    },
+    {
+      "id": "deportivo-tachira",
+      "name": "Deportivo Táchira",
+      "short": "TAC",
+      "league": "ven",
+      "color": "#FFD100"
+    },
+    {
+      "id": "carabobo",
+      "name": "Carabobo",
+      "short": "CBO",
+      "league": "ven",
+      "color": "#722F37"
+    },
+    {
+      "id": "deportivo-la-guaira",
+      "name": "Deportivo La Guaira",
+      "short": "DLG",
+      "league": "ven",
+      "color": "#F26522"
+    },
+    {
+      "id": "metropolitanos",
+      "name": "Metropolitanos",
+      "short": "MET",
+      "league": "ven",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "academia-puerto-cabello",
+      "name": "Academia Puerto Cabello",
+      "short": "APC",
+      "league": "ven",
+      "color": "#F26522"
+    },
+    {
+      "id": "monagas",
+      "name": "Monagas",
+      "short": "MON",
+      "league": "ven",
+      "color": "#003DA5"
+    },
+    {
+      "id": "estudiantes-de-merida",
+      "name": "Estudiantes de Mérida",
+      "short": "EST",
+      "league": "ven",
+      "color": "#E30613"
+    },
+    {
+      "id": "portuguesa",
+      "name": "Portuguesa",
+      "short": "POR",
+      "league": "ven",
+      "color": "#C8102E"
+    },
+    {
+      "id": "zamora",
+      "name": "Zamora",
+      "short": "ZAM",
+      "league": "ven",
+      "color": "#111111"
+    },
+    {
+      "id": "ucv",
+      "name": "UCV",
+      "short": "UCV",
+      "league": "ven",
+      "color": "#0057A8"
+    },
+    {
+      "id": "rayo-zuliano",
+      "name": "Rayo Zuliano",
+      "short": "RAY",
+      "league": "ven",
+      "color": "#FFD100"
+    },
+    {
+      "id": "anzoategui",
+      "name": "Anzoátegui",
+      "short": "ANZ",
+      "league": "ven",
+      "color": "#722F37"
+    },
+    {
+      "id": "yaracuyanos",
+      "name": "Yaracuyanos",
+      "short": "YAR",
+      "league": "ven",
+      "color": "#E30613"
+    },
+    {
+      "id": "universitario",
+      "name": "Universitario",
+      "short": "UNI",
+      "league": "per",
+      "color": "#F3EAD3"
+    },
+    {
+      "id": "alianza-lima",
+      "name": "Alianza Lima",
+      "short": "ALI",
+      "league": "per",
+      "color": "#003DA5"
+    },
+    {
+      "id": "sporting-cristal",
+      "name": "Sporting Cristal",
+      "short": "SCR",
+      "league": "per",
+      "color": "#0091DA"
+    },
+    {
+      "id": "melgar",
+      "name": "Melgar",
+      "short": "MEL",
+      "league": "per",
+      "color": "#E30613"
+    },
+    {
+      "id": "cienciano",
+      "name": "Cienciano",
+      "short": "CIE",
+      "league": "per",
+      "color": "#E30613"
+    },
+    {
+      "id": "cusco-fc",
+      "name": "Cusco FC",
+      "short": "CUS",
+      "league": "per",
+      "color": "#FFD100"
+    },
+    {
+      "id": "deportivo-garcilaso",
+      "name": "Deportivo Garcilaso",
+      "short": "GAR",
+      "league": "per",
+      "color": "#0091DA"
+    },
+    {
+      "id": "sport-huancayo",
+      "name": "Sport Huancayo",
+      "short": "SHU",
+      "league": "per",
+      "color": "#E30613"
+    },
+    {
+      "id": "adt",
+      "name": "ADT",
+      "short": "ADT",
+      "league": "per",
+      "color": "#0091DA"
+    },
+    {
+      "id": "alianza-atletico",
+      "name": "Alianza Atlético",
+      "short": "AAT",
+      "league": "per",
+      "color": "#5BACE6"
+    },
+    {
+      "id": "atletico-grau",
+      "name": "Atlético Grau",
+      "short": "GRA",
+      "league": "per",
+      "color": "#F5F5F5"
+    },
+    {
+      "id": "sport-boys",
+      "name": "Sport Boys",
+      "short": "SBO",
+      "league": "per",
+      "color": "#F472B6"
+    },
+    {
+      "id": "utc",
+      "name": "UTC",
+      "short": "UTC",
+      "league": "per",
+      "color": "#FFD100"
+    },
+    {
+      "id": "los-chankas",
+      "name": "Los Chankas",
+      "short": "CHA",
+      "league": "per",
+      "color": "#722F37"
+    },
+    {
+      "id": "ayacucho-fc",
+      "name": "Ayacucho FC",
+      "short": "AYA",
+      "league": "per",
+      "color": "#F26522"
+    },
+    {
+      "id": "binacional",
+      "name": "Binacional",
+      "short": "BIN",
+      "league": "per",
+      "color": "#0091DA"
+    },
+    {
+      "id": "comerciantes-unidos",
+      "name": "Comerciantes Unidos",
+      "short": "COM",
+      "league": "per",
+      "color": "#009444"
+    },
+    {
+      "id": "juan-pablo-ii",
+      "name": "Juan Pablo II",
+      "short": "JPI",
+      "league": "per",
+      "color": "#FFD100"
+    },
+    {
+      "id": "inter-miami",
+      "name": "Inter Miami",
+      "short": "MIA",
+      "league": "usa",
+      "color": "#F7A8B8"
+    },
+    {
+      "id": "la-galaxy",
+      "name": "LA Galaxy",
+      "short": "LAG",
+      "league": "usa",
+      "color": "#002D62"
+    },
+    {
+      "id": "lafc",
+      "name": "LAFC",
+      "short": "LAFC",
+      "league": "usa",
+      "color": "#000000"
+    },
+    {
+      "id": "new-york-city-fc",
+      "name": "New York City FC",
+      "short": "NYC",
+      "league": "usa",
+      "color": "#0091DA"
+    },
+    {
+      "id": "ny-red-bulls",
+      "name": "NY Red Bulls",
+      "short": "RBNY",
+      "league": "usa",
+      "color": "#E30613"
+    },
+    {
+      "id": "columbus-crew",
+      "name": "Columbus Crew",
+      "short": "CLB",
+      "league": "usa",
+      "color": "#FFD100"
+    },
+    {
+      "id": "fc-cincinnati",
+      "name": "FC Cincinnati",
+      "short": "CIN",
+      "league": "usa",
+      "color": "#F26522"
+    },
+    {
+      "id": "seattle-sounders",
+      "name": "Seattle Sounders",
+      "short": "SEA",
+      "league": "usa",
+      "color": "#658D1B"
+    },
+    {
+      "id": "portland-timbers",
+      "name": "Portland Timbers",
+      "short": "POR",
+      "league": "usa",
+      "color": "#009444"
+    },
+    {
+      "id": "atlanta-united",
+      "name": "Atlanta United",
+      "short": "ATL",
+      "league": "usa",
+      "color": "#910F28"
+    },
+    {
+      "id": "toronto-fc",
+      "name": "Toronto FC",
+      "short": "TOR",
+      "league": "usa",
+      "color": "#E30613"
+    },
+    {
+      "id": "chicago-fire",
+      "name": "Chicago Fire",
+      "short": "CHI",
+      "league": "usa",
+      "color": "#E30613"
+    },
+    {
+      "id": "dc-united",
+      "name": "DC United",
+      "short": "DCU",
+      "league": "usa",
+      "color": "#000000"
+    },
+    {
+      "id": "orlando-city",
+      "name": "Orlando City",
+      "short": "ORL",
+      "league": "usa",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "philadelphia-union",
+      "name": "Philadelphia Union",
+      "short": "PHI",
+      "league": "usa",
+      "color": "#002D62"
+    },
+    {
+      "id": "nashville-sc",
+      "name": "Nashville SC",
+      "short": "NSH",
+      "league": "usa",
+      "color": "#FFD100"
+    },
+    {
+      "id": "austin-fc",
+      "name": "Austin FC",
+      "short": "ATX",
+      "league": "usa",
+      "color": "#009444"
+    },
+    {
+      "id": "houston-dynamo",
+      "name": "Houston Dynamo",
+      "short": "HOU",
+      "league": "usa",
+      "color": "#F26522"
+    },
+    {
+      "id": "fc-dallas",
+      "name": "FC Dallas",
+      "short": "DAL",
+      "league": "usa",
+      "color": "#E30613"
+    },
+    {
+      "id": "sporting-kc",
+      "name": "Sporting KC",
+      "short": "SKC",
+      "league": "usa",
+      "color": "#93B1D7"
+    },
+    {
+      "id": "real-salt-lake",
+      "name": "Real Salt Lake",
+      "short": "RSL",
+      "league": "usa",
+      "color": "#B30838"
+    },
+    {
+      "id": "san-jose-earthquakes",
+      "name": "San Jose Earthquakes",
+      "short": "SJE",
+      "league": "usa",
+      "color": "#003DA5"
+    },
+    {
+      "id": "vancouver-whitecaps",
+      "name": "Vancouver Whitecaps",
+      "short": "VAN",
+      "league": "usa",
+      "color": "#003DA5"
+    },
+    {
+      "id": "minnesota-united",
+      "name": "Minnesota United",
+      "short": "MIN",
+      "league": "usa",
+      "color": "#0091DA"
+    },
+    {
+      "id": "charlotte-fc",
+      "name": "Charlotte FC",
+      "short": "CHA",
+      "league": "usa",
+      "color": "#003DA5"
+    },
+    {
+      "id": "st-louis-city",
+      "name": "St. Louis City",
+      "short": "STL",
+      "league": "usa",
+      "color": "#E31837"
+    },
+    {
+      "id": "cf-montreal",
+      "name": "CF Montréal",
+      "short": "MTL",
+      "league": "usa",
+      "color": "#003DA5"
+    },
+    {
+      "id": "new-england-revolution",
+      "name": "New England Revolution",
+      "short": "NER",
+      "league": "usa",
+      "color": "#002D62"
+    },
+    {
+      "id": "colorado-rapids",
+      "name": "Colorado Rapids",
+      "short": "COL",
+      "league": "usa",
+      "color": "#862633"
+    },
+    {
+      "id": "san-diego-fc",
+      "name": "San Diego FC",
+      "short": "SDF",
+      "league": "usa",
+      "color": "#0057A8"
+    },
+    {
+      "id": "arsenal",
+      "name": "Arsenal",
+      "short": "ARS",
+      "league": "eng",
+      "color": "#EF0107"
+    },
+    {
+      "id": "liverpool",
+      "name": "Liverpool",
+      "short": "LIV",
+      "league": "eng",
+      "color": "#C8102E"
+    },
+    {
+      "id": "manchester-city",
+      "name": "Manchester City",
+      "short": "MCI",
+      "league": "eng",
+      "color": "#6CABDD"
+    },
+    {
+      "id": "manchester-united",
+      "name": "Manchester United",
+      "short": "MUN",
+      "league": "eng",
+      "color": "#DA291C"
+    },
+    {
+      "id": "chelsea",
+      "name": "Chelsea",
+      "short": "CHE",
+      "league": "eng",
+      "color": "#034694"
+    },
+    {
+      "id": "tottenham-hotspur",
+      "name": "Tottenham Hotspur",
+      "short": "TOT",
+      "league": "eng",
+      "color": "#132257"
+    },
+    {
+      "id": "newcastle-united",
+      "name": "Newcastle United",
+      "short": "NEW",
+      "league": "eng",
+      "color": "#000000"
+    },
+    {
+      "id": "aston-villa",
+      "name": "Aston Villa",
+      "short": "AVL",
+      "league": "eng",
+      "color": "#670E36"
+    },
+    {
+      "id": "west-ham",
+      "name": "West Ham",
+      "short": "WHU",
+      "league": "eng",
+      "color": "#7A263A"
+    },
+    {
+      "id": "brighton",
+      "name": "Brighton",
+      "short": "BHA",
+      "league": "eng",
+      "color": "#0057B8"
+    },
+    {
+      "id": "everton",
+      "name": "Everton",
+      "short": "EVE",
+      "league": "eng",
+      "color": "#003399"
+    },
+    {
+      "id": "fulham",
+      "name": "Fulham",
+      "short": "FUL",
+      "league": "eng",
+      "color": "#000000"
+    },
+    {
+      "id": "crystal-palace",
+      "name": "Crystal Palace",
+      "short": "CRY",
+      "league": "eng",
+      "color": "#1B458F"
+    },
+    {
+      "id": "brentford",
+      "name": "Brentford",
+      "short": "BRE",
+      "league": "eng",
+      "color": "#E30613"
+    },
+    {
+      "id": "nottingham-forest",
+      "name": "Nottingham Forest",
+      "short": "NFO",
+      "league": "eng",
+      "color": "#DD0000"
+    },
+    {
+      "id": "bournemouth",
+      "name": "Bournemouth",
+      "short": "BOU",
+      "league": "eng",
+      "color": "#DA291C"
+    },
+    {
+      "id": "wolves",
+      "name": "Wolves",
+      "short": "WOL",
+      "league": "eng",
+      "color": "#FDB913"
+    },
+    {
+      "id": "leeds-united",
+      "name": "Leeds United",
+      "short": "LEE",
+      "league": "eng",
+      "color": "#FFCD00"
+    },
+    {
+      "id": "burnley",
+      "name": "Burnley",
+      "short": "BUR",
+      "league": "eng",
+      "color": "#6C1D45"
+    },
+    {
+      "id": "sunderland",
+      "name": "Sunderland",
+      "short": "SUN",
+      "league": "eng",
+      "color": "#EB172B"
+    },
+    {
+      "id": "real-madrid",
+      "name": "Real Madrid",
+      "short": "RMA",
+      "league": "esp",
+      "color": "#FFFFFF"
+    },
+    {
+      "id": "barcelona",
+      "name": "Barcelona",
+      "short": "BAR",
+      "league": "esp",
+      "color": "#A50044"
+    },
+    {
+      "id": "atletico-madrid",
+      "name": "Atlético Madrid",
+      "short": "ATM",
+      "league": "esp",
+      "color": "#CB3524"
+    },
+    {
+      "id": "athletic-club",
+      "name": "Athletic Club",
+      "short": "ATH",
+      "league": "esp",
+      "color": "#EE2523"
+    },
+    {
+      "id": "villarreal",
+      "name": "Villarreal",
+      "short": "VIL",
+      "league": "esp",
+      "color": "#FFDF00"
+    },
+    {
+      "id": "real-betis",
+      "name": "Real Betis",
+      "short": "BET",
+      "league": "esp",
+      "color": "#00954C"
+    },
+    {
+      "id": "real-sociedad",
+      "name": "Real Sociedad",
+      "short": "RSO",
+      "league": "esp",
+      "color": "#0067B1"
+    },
+    {
+      "id": "valencia",
+      "name": "Valencia",
+      "short": "VAL",
+      "league": "esp",
+      "color": "#F5A300"
+    },
+    {
+      "id": "sevilla",
+      "name": "Sevilla",
+      "short": "SEV",
+      "league": "esp",
+      "color": "#ED1C24"
+    },
+    {
+      "id": "celta-vigo",
+      "name": "Celta Vigo",
+      "short": "CEL",
+      "league": "esp",
+      "color": "#8AC3EE"
+    },
+    {
+      "id": "osasuna",
+      "name": "Osasuna",
+      "short": "OSA",
+      "league": "esp",
+      "color": "#D00027"
+    },
+    {
+      "id": "getafe",
+      "name": "Getafe",
+      "short": "GET",
+      "league": "esp",
+      "color": "#003DA5"
+    },
+    {
+      "id": "espanyol",
+      "name": "Espanyol",
+      "short": "ESP",
+      "league": "esp",
+      "color": "#007FC8"
+    },
+    {
+      "id": "rayo-vallecano",
+      "name": "Rayo Vallecano",
+      "short": "RAY",
+      "league": "esp",
+      "color": "#D5001C"
+    },
+    {
+      "id": "girona",
+      "name": "Girona",
+      "short": "GIR",
+      "league": "esp",
+      "color": "#CD2534"
+    },
+    {
+      "id": "alaves",
+      "name": "Alavés",
+      "short": "ALA",
+      "league": "esp",
+      "color": "#003DA5"
+    },
+    {
+      "id": "mallorca",
+      "name": "Mallorca",
+      "short": "MLL",
+      "league": "esp",
+      "color": "#E20613"
+    },
+    {
+      "id": "levante",
+      "name": "Levante",
+      "short": "LEV",
+      "league": "esp",
+      "color": "#004B93"
+    },
+    {
+      "id": "elche",
+      "name": "Elche",
+      "short": "ELC",
+      "league": "esp",
+      "color": "#009444"
+    },
+    {
+      "id": "real-oviedo",
+      "name": "Real Oviedo",
+      "short": "OVI",
+      "league": "esp",
+      "color": "#0057A8"
+    },
+    {
+      "id": "inter",
+      "name": "Inter",
+      "short": "INT",
+      "league": "ita",
+      "color": "#0068A8"
+    },
+    {
+      "id": "milan",
+      "name": "Milan",
+      "short": "MIL",
+      "league": "ita",
+      "color": "#FB090B"
+    },
+    {
+      "id": "juventus",
+      "name": "Juventus",
+      "short": "JUV",
+      "league": "ita",
+      "color": "#000000"
+    },
+    {
+      "id": "napoli",
+      "name": "Napoli",
+      "short": "NAP",
+      "league": "ita",
+      "color": "#12A0D7"
+    },
+    {
+      "id": "roma",
+      "name": "Roma",
+      "short": "ROM",
+      "league": "ita",
+      "color": "#A6192E"
+    },
+    {
+      "id": "atalanta",
+      "name": "Atalanta",
+      "short": "ATA",
+      "league": "ita",
+      "color": "#1E71B8"
+    },
+    {
+      "id": "lazio",
+      "name": "Lazio",
+      "short": "LAZ",
+      "league": "ita",
+      "color": "#87D8F7"
+    },
+    {
+      "id": "fiorentina",
+      "name": "Fiorentina",
+      "short": "FIO",
+      "league": "ita",
+      "color": "#582C83"
+    },
+    {
+      "id": "bologna",
+      "name": "Bologna",
+      "short": "BOL",
+      "league": "ita",
+      "color": "#A21C26"
+    },
+    {
+      "id": "torino",
+      "name": "Torino",
+      "short": "TOR",
+      "league": "ita",
+      "color": "#881B1B"
+    },
+    {
+      "id": "udinese",
+      "name": "Udinese",
+      "short": "UDI",
+      "league": "ita",
+      "color": "#000000"
+    },
+    {
+      "id": "genoa",
+      "name": "Genoa",
+      "short": "GEN",
+      "league": "ita",
+      "color": "#C8102E"
+    },
+    {
+      "id": "cagliari",
+      "name": "Cagliari",
+      "short": "CAG",
+      "league": "ita",
+      "color": "#AD002A"
+    },
+    {
+      "id": "parma",
+      "name": "Parma",
+      "short": "PAR",
+      "league": "ita",
+      "color": "#FFD100"
+    },
+    {
+      "id": "hellas-verona",
+      "name": "Hellas Verona",
+      "short": "VER",
+      "league": "ita",
+      "color": "#FCE405"
+    },
+    {
+      "id": "como",
+      "name": "Como",
+      "short": "COM",
+      "league": "ita",
+      "color": "#0064AA"
+    },
+    {
+      "id": "sassuolo",
+      "name": "Sassuolo",
+      "short": "SAS",
+      "league": "ita",
+      "color": "#00A651"
+    },
+    {
+      "id": "lecce",
+      "name": "Lecce",
+      "short": "LEC",
+      "league": "ita",
+      "color": "#FFED00"
+    },
+    {
+      "id": "pisa",
+      "name": "Pisa",
+      "short": "PIS",
+      "league": "ita",
+      "color": "#1A1A1A"
+    },
+    {
+      "id": "cremonese",
+      "name": "Cremonese",
+      "short": "CRE",
+      "league": "ita",
+      "color": "#A6192E"
+    },
+    {
+      "id": "bayern-munchen",
+      "name": "Bayern München",
+      "short": "FCB",
+      "league": "ger",
+      "color": "#DC052D"
+    },
+    {
+      "id": "borussia-dortmund",
+      "name": "Borussia Dortmund",
+      "short": "BVB",
+      "league": "ger",
+      "color": "#FDE100"
+    },
+    {
+      "id": "bayer-leverkusen",
+      "name": "Bayer Leverkusen",
+      "short": "B04",
+      "league": "ger",
+      "color": "#E32219"
+    },
+    {
+      "id": "rb-leipzig",
+      "name": "RB Leipzig",
+      "short": "RBL",
+      "league": "ger",
+      "color": "#DD001F"
+    },
+    {
+      "id": "vfb-stuttgart",
+      "name": "VfB Stuttgart",
+      "short": "VFB",
+      "league": "ger",
+      "color": "#E32219"
+    },
+    {
+      "id": "eintracht-frankfurt",
+      "name": "Eintracht Frankfurt",
+      "short": "SGE",
+      "league": "ger",
+      "color": "#E1000F"
+    },
+    {
+      "id": "wolfsburg",
+      "name": "Wolfsburg",
+      "short": "WOB",
+      "league": "ger",
+      "color": "#65B32E"
+    },
+    {
+      "id": "borussia-monchengladbach",
+      "name": "Borussia Mönchengladbach",
+      "short": "BMG",
+      "league": "ger",
+      "color": "#000000"
+    },
+    {
+      "id": "freiburg",
+      "name": "Freiburg",
+      "short": "SCF",
+      "league": "ger",
+      "color": "#E2001A"
+    },
+    {
+      "id": "hoffenheim",
+      "name": "Hoffenheim",
+      "short": "TSG",
+      "league": "ger",
+      "color": "#1961B5"
+    },
+    {
+      "id": "werder-bremen",
+      "name": "Werder Bremen",
+      "short": "SVW",
+      "league": "ger",
+      "color": "#1D9053"
+    },
+    {
+      "id": "augsburg",
+      "name": "Augsburg",
+      "short": "FCA",
+      "league": "ger",
+      "color": "#BA3733"
+    },
+    {
+      "id": "union-berlin",
+      "name": "Union Berlin",
+      "short": "FCU",
+      "league": "ger",
+      "color": "#E30613"
+    },
+    {
+      "id": "mainz-05",
+      "name": "Mainz 05",
+      "short": "M05",
+      "league": "ger",
+      "color": "#C8102E"
+    },
+    {
+      "id": "st-pauli",
+      "name": "St. Pauli",
+      "short": "STP",
+      "league": "ger",
+      "color": "#6F4E37"
+    },
+    {
+      "id": "heidenheim",
+      "name": "Heidenheim",
+      "short": "FCH",
+      "league": "ger",
+      "color": "#E2001A"
+    },
+    {
+      "id": "fc-koln",
+      "name": "FC Köln",
+      "short": "KOE",
+      "league": "ger",
+      "color": "#ED1C24"
+    },
+    {
+      "id": "hamburger-sv",
+      "name": "Hamburger SV",
+      "short": "HSV",
+      "league": "ger",
+      "color": "#0057A8"
+    },
+    {
+      "id": "paris-saint-germain",
+      "name": "Paris Saint-Germain",
+      "short": "PSG",
+      "league": "fra",
+      "color": "#004170"
+    },
+    {
+      "id": "marseille",
+      "name": "Marseille",
+      "short": "OM",
+      "league": "fra",
+      "color": "#2FAEE0"
+    },
+    {
+      "id": "monaco",
+      "name": "Monaco",
+      "short": "ASM",
+      "league": "fra",
+      "color": "#E63312"
+    },
+    {
+      "id": "lille",
+      "name": "Lille",
+      "short": "LIL",
+      "league": "fra",
+      "color": "#E01E13"
+    },
+    {
+      "id": "lyon",
+      "name": "Lyon",
+      "short": "LYO",
+      "league": "fra",
+      "color": "#003DA5"
+    },
+    {
+      "id": "nice",
+      "name": "Nice",
+      "short": "NIC",
+      "league": "fra",
+      "color": "#E30613"
+    },
+    {
+      "id": "lens",
+      "name": "Lens",
+      "short": "RCL",
+      "league": "fra",
+      "color": "#E30613"
+    },
+    {
+      "id": "rennes",
+      "name": "Rennes",
+      "short": "REN",
+      "league": "fra",
+      "color": "#E30613"
+    },
+    {
+      "id": "strasbourg",
+      "name": "Strasbourg",
+      "short": "STR",
+      "league": "fra",
+      "color": "#0091DA"
+    },
+    {
+      "id": "toulouse",
+      "name": "Toulouse",
+      "short": "TFC",
+      "league": "fra",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "brest",
+      "name": "Brest",
+      "short": "BRE",
+      "league": "fra",
+      "color": "#E30613"
+    },
+    {
+      "id": "nantes",
+      "name": "Nantes",
+      "short": "NAN",
+      "league": "fra",
+      "color": "#00874C"
+    },
+    {
+      "id": "auxerre",
+      "name": "Auxerre",
+      "short": "AJA",
+      "league": "fra",
+      "color": "#0057A8"
+    },
+    {
+      "id": "angers",
+      "name": "Angers",
+      "short": "SCO",
+      "league": "fra",
+      "color": "#000000"
+    },
+    {
+      "id": "le-havre",
+      "name": "Le Havre",
+      "short": "HAC",
+      "league": "fra",
+      "color": "#0091DA"
+    },
+    {
+      "id": "lorient",
+      "name": "Lorient",
+      "short": "LOR",
+      "league": "fra",
+      "color": "#F26522"
+    },
+    {
+      "id": "metz",
+      "name": "Metz",
+      "short": "MET",
+      "league": "fra",
+      "color": "#722F37"
+    },
+    {
+      "id": "paris-fc",
+      "name": "Paris FC",
+      "short": "PFC",
+      "league": "fra",
+      "color": "#003DA5"
+    },
+    {
+      "id": "ajax",
+      "name": "Ajax",
+      "short": "AJA",
+      "league": "ned",
+      "color": "#D2122E"
+    },
+    {
+      "id": "psv",
+      "name": "PSV",
+      "short": "PSV",
+      "league": "ned",
+      "color": "#ED1C24"
+    },
+    {
+      "id": "feyenoord",
+      "name": "Feyenoord",
+      "short": "FEY",
+      "league": "ned",
+      "color": "#FF0000"
+    },
+    {
+      "id": "utrecht",
+      "name": "Utrecht",
+      "short": "UTR",
+      "league": "ned",
+      "color": "#E30613"
+    },
+    {
+      "id": "az",
+      "name": "AZ",
+      "short": "AZ",
+      "league": "ned",
+      "color": "#ED1C24"
+    },
+    {
+      "id": "twente",
+      "name": "Twente",
+      "short": "TWE",
+      "league": "ned",
+      "color": "#E30613"
+    },
+    {
+      "id": "heerenveen",
+      "name": "Heerenveen",
+      "short": "HEE",
+      "league": "ned",
+      "color": "#003DA5"
+    },
+    {
+      "id": "nec",
+      "name": "NEC",
+      "short": "NEC",
+      "league": "ned",
+      "color": "#E30613"
+    },
+    {
+      "id": "sparta-rotterdam",
+      "name": "Sparta Rotterdam",
+      "short": "SPA",
+      "league": "ned",
+      "color": "#E30613"
+    },
+    {
+      "id": "go-ahead-eagles",
+      "name": "Go Ahead Eagles",
+      "short": "GAE",
+      "league": "ned",
+      "color": "#E30613"
+    },
+    {
+      "id": "fortuna-sittard",
+      "name": "Fortuna Sittard",
+      "short": "FOR",
+      "league": "ned",
+      "color": "#FFD100"
+    },
+    {
+      "id": "groningen",
+      "name": "Groningen",
+      "short": "GRO",
+      "league": "ned",
+      "color": "#009444"
+    },
+    {
+      "id": "pec-zwolle",
+      "name": "PEC Zwolle",
+      "short": "PEC",
+      "league": "ned",
+      "color": "#003DA5"
+    },
+    {
+      "id": "heracles",
+      "name": "Heracles",
+      "short": "HER",
+      "league": "ned",
+      "color": "#000000"
+    },
+    {
+      "id": "nac-breda",
+      "name": "NAC Breda",
+      "short": "NAC",
+      "league": "ned",
+      "color": "#FFD100"
+    },
+    {
+      "id": "excelsior",
+      "name": "Excelsior",
+      "short": "EXC",
+      "league": "ned",
+      "color": "#E30613"
+    },
+    {
+      "id": "volendam",
+      "name": "Volendam",
+      "short": "VOL",
+      "league": "ned",
+      "color": "#F26522"
+    },
+    {
+      "id": "telstar",
+      "name": "Telstar",
+      "short": "TEL",
+      "league": "ned",
+      "color": "#F5F5F5"
+    },
+    {
+      "id": "sporting-cp",
+      "name": "Sporting CP",
+      "short": "SCP",
+      "league": "por",
+      "color": "#008057"
+    },
+    {
+      "id": "benfica",
+      "name": "Benfica",
+      "short": "SLB",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "porto",
+      "name": "Porto",
+      "short": "FCP",
+      "league": "por",
+      "color": "#003DA5"
+    },
+    {
+      "id": "braga",
+      "name": "Braga",
+      "short": "SCB",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "vitoria-guimaraes",
+      "name": "Vitória Guimarães",
+      "short": "VSC",
+      "league": "por",
+      "color": "#000000"
+    },
+    {
+      "id": "santa-clara",
+      "name": "Santa Clara",
+      "short": "SCL",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "famalicao",
+      "name": "Famalicão",
+      "short": "FAM",
+      "league": "por",
+      "color": "#003DA5"
+    },
+    {
+      "id": "moreirense",
+      "name": "Moreirense",
+      "short": "MOR",
+      "league": "por",
+      "color": "#009444"
+    },
+    {
+      "id": "rio-ave",
+      "name": "Rio Ave",
+      "short": "RAV",
+      "league": "por",
+      "color": "#009444"
+    },
+    {
+      "id": "gil-vicente",
+      "name": "Gil Vicente",
+      "short": "GIL",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "casa-pia",
+      "name": "Casa Pia",
+      "short": "CAS",
+      "league": "por",
+      "color": "#000000"
+    },
+    {
+      "id": "estoril",
+      "name": "Estoril",
+      "short": "EST",
+      "league": "por",
+      "color": "#FFD100"
+    },
+    {
+      "id": "arouca",
+      "name": "Arouca",
+      "short": "ARO",
+      "league": "por",
+      "color": "#FFD100"
+    },
+    {
+      "id": "estrela-amadora",
+      "name": "Estrela Amadora",
+      "short": "ETA",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "cd-nacional",
+      "name": "CD Nacional",
+      "short": "NAC",
+      "league": "por",
+      "color": "#000000"
+    },
+    {
+      "id": "avs",
+      "name": "AVS",
+      "short": "AVS",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "tondela",
+      "name": "Tondela",
+      "short": "TON",
+      "league": "por",
+      "color": "#FFD100"
+    },
+    {
+      "id": "alverca",
+      "name": "Alverca",
+      "short": "ALV",
+      "league": "por",
+      "color": "#E30613"
+    },
+    {
+      "id": "celtic",
+      "name": "Celtic",
+      "short": "CEL",
+      "league": "sco",
+      "color": "#009444"
+    },
+    {
+      "id": "rangers",
+      "name": "Rangers",
+      "short": "RAN",
+      "league": "sco",
+      "color": "#1B458F"
+    },
+    {
+      "id": "hearts",
+      "name": "Hearts",
+      "short": "HEA",
+      "league": "sco",
+      "color": "#722F37"
+    },
+    {
+      "id": "hibernian",
+      "name": "Hibernian",
+      "short": "HIB",
+      "league": "sco",
+      "color": "#009444"
+    },
+    {
+      "id": "aberdeen",
+      "name": "Aberdeen",
+      "short": "ABE",
+      "league": "sco",
+      "color": "#E30613"
+    },
+    {
+      "id": "dundee-united",
+      "name": "Dundee United",
+      "short": "DNU",
+      "league": "sco",
+      "color": "#F26522"
+    },
+    {
+      "id": "motherwell",
+      "name": "Motherwell",
+      "short": "MOT",
+      "league": "sco",
+      "color": "#FFB81C"
+    },
+    {
+      "id": "kilmarnock",
+      "name": "Kilmarnock",
+      "short": "KIL",
+      "league": "sco",
+      "color": "#003DA5"
+    },
+    {
+      "id": "st-mirren",
+      "name": "St Mirren",
+      "short": "STM",
+      "league": "sco",
+      "color": "#000000"
+    },
+    {
+      "id": "dundee",
+      "name": "Dundee",
+      "short": "DUN",
+      "league": "sco",
+      "color": "#003DA5"
+    },
+    {
+      "id": "livingston",
+      "name": "Livingston",
+      "short": "LIV",
+      "league": "sco",
+      "color": "#FFB81C"
+    },
+    {
+      "id": "falkirk",
+      "name": "Falkirk",
+      "short": "FAL",
+      "league": "sco",
+      "color": "#003DA5"
+    },
+    {
+      "id": "galatasaray",
+      "name": "Galatasaray",
+      "short": "GS",
+      "league": "tur",
+      "color": "#E30613"
+    },
+    {
+      "id": "fenerbahce",
+      "name": "Fenerbahçe",
+      "short": "FB",
+      "league": "tur",
+      "color": "#FFED00"
+    },
+    {
+      "id": "besiktas",
+      "name": "Beşiktaş",
+      "short": "BJK",
+      "league": "tur",
+      "color": "#000000"
+    },
+    {
+      "id": "trabzonspor",
+      "name": "Trabzonspor",
+      "short": "TS",
+      "league": "tur",
+      "color": "#7A1F3D"
+    },
+    {
+      "id": "basaksehir",
+      "name": "Başakşehir",
+      "short": "BAS",
+      "league": "tur",
+      "color": "#F26522"
+    },
+    {
+      "id": "samsunspor",
+      "name": "Samsunspor",
+      "short": "SAM",
+      "league": "tur",
+      "color": "#E30613"
+    },
+    {
+      "id": "eyupspor",
+      "name": "Eyüpspor",
+      "short": "EYU",
+      "league": "tur",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "goztepe",
+      "name": "Göztepe",
+      "short": "GOZ",
+      "league": "tur",
+      "color": "#FFD100"
+    },
+    {
+      "id": "konyaspor",
+      "name": "Konyaspor",
+      "short": "KON",
+      "league": "tur",
+      "color": "#009444"
+    },
+    {
+      "id": "alanyaspor",
+      "name": "Alanyaspor",
+      "short": "ALN",
+      "league": "tur",
+      "color": "#F26522"
+    },
+    {
+      "id": "kasimpasa",
+      "name": "Kasımpaşa",
+      "short": "KAS",
+      "league": "tur",
+      "color": "#0091DA"
+    },
+    {
+      "id": "antalyaspor",
+      "name": "Antalyaspor",
+      "short": "ANT",
+      "league": "tur",
+      "color": "#E30613"
+    },
+    {
+      "id": "caykur-rizespor",
+      "name": "Çaykur Rizespor",
+      "short": "RIZ",
+      "league": "tur",
+      "color": "#009444"
+    },
+    {
+      "id": "gaziantep-fk",
+      "name": "Gaziantep FK",
+      "short": "GAZ",
+      "league": "tur",
+      "color": "#E30613"
+    },
+    {
+      "id": "kayserispor",
+      "name": "Kayserispor",
+      "short": "KAY",
+      "league": "tur",
+      "color": "#E30613"
+    },
+    {
+      "id": "sivasspor",
+      "name": "Sivasspor",
+      "short": "SIV",
+      "league": "tur",
+      "color": "#E30613"
+    },
+    {
+      "id": "hatayspor",
+      "name": "Hatayspor",
+      "short": "HAT",
+      "league": "tur",
+      "color": "#722F37"
+    },
+    {
+      "id": "bodrum-fk",
+      "name": "Bodrum FK",
+      "short": "BOD",
+      "league": "tur",
+      "color": "#009444"
+    },
+    {
+      "id": "adana-demirspor",
+      "name": "Adana Demirspor",
+      "short": "ADS",
+      "league": "tur",
+      "color": "#003DA5"
+    },
+    {
+      "id": "club-brugge",
+      "name": "Club Brugge",
+      "short": "BRU",
+      "league": "bel",
+      "color": "#003DA5"
+    },
+    {
+      "id": "union-sg",
+      "name": "Union SG",
+      "short": "USG",
+      "league": "bel",
+      "color": "#FFD100"
+    },
+    {
+      "id": "anderlecht",
+      "name": "Anderlecht",
+      "short": "AND",
+      "league": "bel",
+      "color": "#5B2D8E"
+    },
+    {
+      "id": "genk",
+      "name": "Genk",
+      "short": "GNK",
+      "league": "bel",
+      "color": "#003DA5"
+    },
+    {
+      "id": "gent",
+      "name": "Gent",
+      "short": "GNT",
+      "league": "bel",
+      "color": "#0057A8"
+    },
+    {
+      "id": "antwerp",
+      "name": "Antwerp",
+      "short": "ANT",
+      "league": "bel",
+      "color": "#E30613"
+    },
+    {
+      "id": "standard-liege",
+      "name": "Standard Liège",
+      "short": "STA",
+      "league": "bel",
+      "color": "#E30613"
+    },
+    {
+      "id": "westerlo",
+      "name": "Westerlo",
+      "short": "WES",
+      "league": "bel",
+      "color": "#FFD100"
+    },
+    {
+      "id": "mechelen",
+      "name": "Mechelen",
+      "short": "MEC",
+      "league": "bel",
+      "color": "#FFD100"
+    },
+    {
+      "id": "charleroi",
+      "name": "Charleroi",
+      "short": "CHA",
+      "league": "bel",
+      "color": "#000000"
+    },
+    {
+      "id": "sint-truiden",
+      "name": "Sint-Truiden",
+      "short": "STV",
+      "league": "bel",
+      "color": "#FFD100"
+    },
+    {
+      "id": "cercle-brugge",
+      "name": "Cercle Brugge",
+      "short": "CER",
+      "league": "bel",
+      "color": "#009444"
+    },
+    {
+      "id": "oh-leuven",
+      "name": "OH Leuven",
+      "short": "OHL",
+      "league": "bel",
+      "color": "#E30613"
+    },
+    {
+      "id": "dender",
+      "name": "Dender",
+      "short": "DEN",
+      "league": "bel",
+      "color": "#0057A8"
+    },
+    {
+      "id": "zulte-waregem",
+      "name": "Zulte Waregem",
+      "short": "ZWA",
+      "league": "bel",
+      "color": "#E30613"
+    },
+    {
+      "id": "raal-la-louviere",
+      "name": "RAAL La Louvière",
+      "short": "RAL",
+      "league": "bel",
+      "color": "#009444"
+    }
+  ]
+}

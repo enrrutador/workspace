@@ -1,0 +1,39 @@
+# Configuración del proxy LiteLLM — puerta única de los agentes a los modelos
+#
+# Cómo funciona:
+#   1. Copiá `.env.ejemplo` a `.env` y completá tu API key y los modelos que elegís.
+#   2. Levantá el proxy: `litellm --config config.yaml --port 4000`
+#   3. Los agentes hablan SIEMPRE contra http://localhost:4000/v1 (compatible OpenAI).
+#
+# La key vive solo en el `.env` local. Nunca se sube al repo (.gitignore la excluye).
+
+model_list:
+  # Modelo base: el que usan los agentes por defecto.
+  - model_name: empresa-base
+    litellm_params:
+      model: ${MODELO_BASE}
+      api_key: ${LLM_API_KEY}
+
+  # Modelo de razonamiento: análisis pesado, decisiones, equipo rojo.
+  - model_name: empresa-razonamiento
+    litellm_params:
+      model: ${MODELO_RAZONAMIENTO}
+      api_key: ${LLM_API_KEY}
+
+  # Modelo ligero: tareas de alto volumen y bajo costo (soporte N1, borradores).
+  - model_name: empresa-ligero
+    litellm_params:
+      model: ${MODELO_LIGERO}
+      api_key: ${LLM_API_KEY}
+
+general_settings:
+  # Clave maestra del proxy (solo local). Los agentes la usan para autenticarse
+  # contra el proxy, NO es tu key del proveedor.
+  master_key: ${LITELLM_MASTER_KEY}
+
+litellm_settings:
+  num_retries: 2
+  request_timeout: 120
+  # Registro de cada llamada (para la auditoría de la empresa)
+  success_callback: []
+  failure_callback: []

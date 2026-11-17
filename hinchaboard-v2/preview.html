@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hinchaboard — The Fans' Ranking</title>
+<meta name="description" content="The ranking the fans decide. Push from $1, lift your club in its country table or the independent global table, and the winner stays in the Hall of Fame forever.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Hinchaboard — night-stadium theme: deep green-black, floodlights, emerald + gold. */
+:root {
+  --bg: #050f0a;
+  --panel: #0b2014;
+  --panel2: #0e2a1a;
+  --line: #1d4230;
+  --ink: #f2f7f0;
+  --muted: #9db8a4;
+  --green: #22c55e;
+  --green-bright: #4ade80;
+  --gold: #d4af37;
+  --gold-bright: #f3d27a;
+  --red: #f87171;
+  --radius: 16px;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(900px 420px at 15% -60px, rgba(74, 222, 128, .14), transparent 60%),
+    radial-gradient(900px 420px at 85% -60px, rgba(212, 175, 55, .10), transparent 60%),
+    repeating-linear-gradient(90deg, #06150c 0 90px, #071a0f 90px 180px),
+    var(--bg);
+  min-height: 100vh;
+}
+h1, h2, h3, .brand-name, .stat-num, .pod-total, .board-total {
+  font-family: "Oswald", "Inter", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+/* ---------- ticker ---------- */
+.ticker-wrap {
+  display: flex; align-items: stretch;
+  background: #03130a; border-bottom: 1px solid var(--line);
+  overflow: hidden; height: 38px;
+}
+.live-badge {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(90deg, #7f1d1d, #991b1b);
+  font-family: "Oswald"; font-size: .8rem; letter-spacing: .14em; z-index: 2;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  padding: 0 22px 0 14px;
+}
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #ff5252;
+  box-shadow: 0 0 0 0 rgba(255, 82, 82, .7); animation: pulse 1.6s infinite;
+  display: inline-block;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, .6); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 82, 82, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+}
+.ticker { overflow: hidden; flex: 1; display: flex; align-items: center; }
+.ticker-track {
+  display: inline-flex; white-space: nowrap; will-change: transform;
+  animation: marquee 40s linear infinite;
+}
+.ticker:hover .ticker-track { animation-play-state: paused; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.tick { padding: 0 18px; font-size: .85rem; color: var(--muted); }
+.tick b { color: var(--ink); }
+.tick .up { color: var(--green-bright); font-weight: 700; }
+
+/* ---------- header ---------- */
+.site-header {
+  max-width: 1200px; margin: 0 auto; padding: 18px 20px 4px;
+  display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand-ball { font-size: 1.7rem; animation: bounce 3s ease-in-out infinite; display: inline-block; }
+@keyframes bounce { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-5px) rotate(24deg); } }
+.brand-name { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; white-space: nowrap; }
+.brand-name em { font-style: normal; color: var(--green-bright); }
+.brand-sub { font-size: .68rem; letter-spacing: .22em; color: var(--gold); font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.season-chip {
+  border: 1px solid var(--line); background: rgba(11, 32, 20, .8);
+  padding: 8px 14px; border-radius: 999px; font-size: .82rem; color: var(--muted);
+}
+.season-chip strong { color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+.lang-switch { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.lang-switch button {
+  background: transparent; color: var(--muted); border: 0; padding: 8px 14px;
+  font: 600 .8rem "Inter"; cursor: pointer;
+}
+.lang-switch button.active { background: var(--green); color: #04120a; }
+
+/* ---------- layout ---------- */
+main { max-width: 1200px; margin: 0 auto; padding: 8px 20px 40px; }
+.section-title { font-size: 1.45rem; margin: 0 0 14px; display: flex; align-items: center; gap: 12px; }
+.section-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+.section-title.gold { color: var(--gold-bright); }
+
+/* ---------- hero ---------- */
+.hero { position: relative; text-align: center; padding: 42px 12px 10px; overflow: hidden; }
+.hero-glow {
+  position: absolute; inset: -40% 10% auto; height: 380px; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(74, 222, 128, .16), transparent);
+  animation: glowfloat 7s ease-in-out infinite alternate;
+}
+@keyframes glowfloat { from { transform: translateX(-26px); } to { transform: translateX(26px); } }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1.02; margin: 0 0 14px; font-weight: 700; position: relative; }
+.hero-sub { max-width: 720px; margin: 0 auto; color: var(--muted); font-size: 1.05rem; line-height: 1.55; position: relative; }
+.stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 30px 0 8px; position: relative; }
+.stat {
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 16px 22px; min-width: 150px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+.stat-num { display: block; font-size: 1.9rem; font-weight: 700; color: var(--green-bright); }
+.stat:nth-child(1) .stat-num { color: var(--gold-bright); }
+.stat-label { font-size: .66rem; letter-spacing: .18em; color: var(--muted); font-weight: 600; }
+.rules { color: var(--muted); font-size: .9rem; }
+.rules strong { color: var(--ink); }
+
+/* ---------- podium ---------- */
+.podium-section { margin-top: 34px; position: relative; }
+.podium-section::before {
+  content: ""; position: absolute; inset: -30px -10px auto; height: 300px; pointer-events: none;
+  background: radial-gradient(ellipse 55% 90% at 50% 0%, rgba(245, 185, 33, .16), transparent 70%);
+}
+.podium { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 14px; align-items: end; position: relative; }
+.podium::after {
+  content: ""; position: absolute; left: 6%; right: 6%; bottom: -14px; height: 34px; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(245, 185, 33, .28), transparent 70%);
+  filter: blur(7px);
+}
+.pod {
+  position: relative; text-align: center; overflow: hidden;
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 10px 0;
+}
+.pod > * { position: relative; z-index: 1; }
+/* sweeping light across every card */
+.pod::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .13) 48%, rgba(255, 255, 255, .02) 52%, transparent 70%);
+  transform: translateX(-130%); animation: sheen 5.5s ease-in-out infinite;
+}
+@keyframes sheen { 0%, 55% { transform: translateX(-130%); } 85%, 100% { transform: translateX(130%); } }
+.pod-2::after { animation-delay: 1.4s; } .pod-3::after { animation-delay: 2.6s; }
+
+/* champion: golden frame, halo and rotating rays */
+.pod-1 {
+  background: linear-gradient(180deg, #2a2008, #171204) padding-box,
+              linear-gradient(180deg, #ffec9e, #f5b921 55%, #8a6d1f) border-box;
+  border: 1.5px solid transparent;
+  animation: halo 2.8s ease-in-out infinite;
+}
+@keyframes halo {
+  0%, 100% { box-shadow: 0 0 26px rgba(245, 185, 33, .28), 0 0 64px rgba(245, 185, 33, .10); }
+  50% { box-shadow: 0 0 44px rgba(245, 185, 33, .5), 0 0 96px rgba(245, 185, 33, .2); }
+}
+.pod-1::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  width: 340px; height: 340px; left: 50%; top: -150px; transform: translateX(-50%);
+  background: repeating-conic-gradient(from 0deg, rgba(255, 217, 77, .13) 0deg 9deg, transparent 9deg 22deg);
+  border-radius: 50%; animation: spin 26s linear infinite;
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 68%);
+  mask-image: radial-gradient(circle, #000 0%, transparent 68%);
+}
+@keyframes spin { to { transform: translateX(-50%) rotate(360deg); } }
+.pod-2 {
+  background: linear-gradient(180deg, #23272e, #12151a) padding-box,
+              linear-gradient(180deg, #ffffff, #9ca3af 55%, #4b5563) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 0 22px rgba(209, 213, 219, .14);
+}
+.pod-3 {
+  background: linear-gradient(180deg, #2a1a0c, #170e05) padding-box,
+              linear-gradient(180deg, #ffc98a, #c47b33 55%, #6e3c14) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 0 22px rgba(232, 160, 106, .16);
+}
+.pod .crown { font-size: 2rem; display: block; animation: bounce 2.6s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255, 215, 64, .85)); }
+.pod-name { font-weight: 700; margin-top: 8px; font-size: 1rem; }
+.pod-1 .pod-name { font-size: 1.14rem; }
+.pod-league { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; }
+.pod-total { font-size: 1.7rem; font-weight: 700; color: var(--gold-bright); margin-top: 4px; }
+.pod-1 .pod-total { font-size: 2.15rem; color: var(--gold-bright); }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .pod-1 .pod-total {
+    background: linear-gradient(180deg, #fff6c4, #ffd94d 45%, #c07f0d);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 2px 12px rgba(245, 185, 33, .45));
+  }
+}
+.pod-2 .pod-total { font-size: 1.85rem; color: #d1d5db; }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .pod-2 .pod-total {
+    background: linear-gradient(180deg, #ffffff, #d1d5db 45%, #6b7280);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(209, 213, 219, .35));
+  }
+}
+.pod-3 .pod-total { font-size: 1.85rem; color: #f0a35e; }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .pod-3 .pod-total {
+    background: linear-gradient(180deg, #ffe3b3, #f0a35e 45%, #8a4b1f);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(232, 160, 106, .35));
+  }
+}
+.pod-bar {
+  margin: 14px auto 0; width: 58%; border-radius: 8px 8px 0 0; transform-origin: bottom;
+  animation: grow 1s cubic-bezier(.2, .9, .25, 1.2) both;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .55), inset 0 -10px 18px rgba(0, 0, 0, .28);
+}
+@keyframes grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.pod-1 .pod-bar { height: 92px; background: linear-gradient(90deg, rgba(255,255,255,0) 20%, rgba(255,255,255,.4) 50%, rgba(255,255,255,0) 80%), linear-gradient(180deg, #ffe97a, #f5b921 55%, #8a6d1f); }
+.pod-2 .pod-bar { height: 62px; background: linear-gradient(90deg, rgba(255,255,255,0) 20%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 80%), linear-gradient(180deg, #f9fafb, #9ca3af 55%, #4b5563); }
+.pod-3 .pod-bar { height: 44px; background: linear-gradient(90deg, rgba(255,255,255,0) 20%, rgba(255,255,255,.4) 50%, rgba(255,255,255,0) 80%), linear-gradient(180deg, #ffc98a, #c47b33 55%, #6e3c14); }
+.pod-pos { font-family: "Oswald"; font-size: 1rem; color: #0a0f0a; font-weight: 700; padding-top: 6px; }
+@media (prefers-reduced-motion: reduce) {
+  .pod::after, .pod-1::before, .pod-1, .pod .crown,
+  .pod-bar, .row, .row::after, .row.flash, .live-dot { animation: none; transition: none; }
+}
+
+/* ---------- board ---------- */
+.board-section { margin-top: 38px; }
+.tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 12px; scrollbar-width: thin; }
+.tab {
+  flex: 0 0 auto; border: 1px solid var(--line); background: var(--panel); color: var(--muted);
+  padding: 8px 14px; border-radius: 999px; font: 600 .8rem "Inter"; cursor: pointer; transition: all .18s;
+}
+.tab:hover { color: var(--ink); border-color: var(--green); }
+.tab.active { background: var(--green); color: #04120a; border-color: var(--green); }
+.board { display: flex; flex-direction: column; gap: 10px; }
+.row {
+  --club: #22c55e; --w: 0%;
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 52px 54px 1fr auto;
+  grid-template-areas: "pos shield main nums" "pos shield shout shout";
+  align-items: center; column-gap: 12px; row-gap: 0;
+  background: linear-gradient(90deg, #12241a, #0b1710 60%, #0a140d);
+  border: 1px solid #1e3a28; border-radius: 16px; padding: 12px 16px 13px 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+  animation: rise .45s both; transition: transform .18s, border-color .18s, box-shadow .18s;
+}
+.row:nth-child(even) { background: linear-gradient(90deg, #0f2016, #0a150e 60%, #091209); }
+.row::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--club), transparent 135%); opacity: .9;
+}
+.row::after {
+  content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: var(--w);
+  background: linear-gradient(90deg, var(--club), rgba(255, 255, 255, .4));
+  box-shadow: 0 0 9px var(--club); opacity: .8;
+}
+@media (hover: hover) {
+  .row:hover { transform: translateX(4px); border-color: #2f5c3e; box-shadow: 0 8px 24px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .06); }
+}
+.row.top1 {
+  background: linear-gradient(90deg, #2b2107, #1a1405 55%, #120d03) padding-box,
+              linear-gradient(90deg, #ffec9e, #f5b921 60%, #8a6d1f) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 0 28px rgba(245, 185, 33, .2), inset 0 1px 0 rgba(255, 236, 158, .25);
+}
+.row.top2 { border-color: rgba(209, 213, 219, .42); background: linear-gradient(90deg, #1e2229, #12151a 60%, #0e1114); }
+.row.top3 { border-color: rgba(232, 160, 106, .4); background: linear-gradient(90deg, #251809, #150d05 60%, #100a04); }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.row.flash { animation: flash 1.2s; }
+@keyframes flash { 0% { background: #14532d; } 100% { background: var(--panel); } }
+.pos {
+  font-family: "Oswald"; font-size: 1.22rem; font-weight: 700; text-align: center;
+  width: 40px; height: 40px; line-height: 40px; margin: 0 auto; border-radius: 12px;
+  color: #b9d6c2; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .08);
+}
+.row.p1 .pos { background: linear-gradient(180deg, #ffe97a, #f5b921 55%, #8a6d1f); color: #231a02; border-color: transparent; box-shadow: 0 0 16px rgba(245, 185, 33, .55); font-size: 1.42rem; }
+.row.p2 .pos { background: linear-gradient(180deg, #ffffff, #9ca3af 60%, #4b5563); color: #14181d; border-color: transparent; box-shadow: 0 0 11px rgba(209, 213, 219, .4); }
+.row.p3 .pos { background: linear-gradient(180deg, #ffc98a, #c47b33 60%, #6e3c14); color: #221102; border-color: transparent; box-shadow: 0 0 11px rgba(232, 160, 106, .4); }
+.row .shield { filter: drop-shadow(0 0 7px var(--club)) drop-shadow(0 3px 5px rgba(0, 0, 0, .4)); }
+.club-name { font-weight: 700; font-size: 1.05rem; line-height: 1.18; }
+.row.top1 .club-name { font-size: 1.14rem; }
+.club-meta { color: var(--muted); font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pos { grid-area: pos; align-self: center; }
+.row-shield { grid-area: shield; align-self: center; text-align: center; }
+.row-main { grid-area: main; min-width: 0; }
+.board-nums { grid-area: nums; }
+.row-shout { grid-area: shout; min-width: 0; margin-top: 6px; }
+.shout {
+  position: relative; display: block;
+  background: linear-gradient(90deg, rgba(34, 197, 94, .18), rgba(34, 197, 94, .05));
+  border: 1px solid rgba(34, 197, 94, .28); padding: 6px 11px; border-radius: 4px 12px 12px 12px;
+  font-size: .85rem; color: #dcf7e5;
+}
+.shout .shout-fan { color: var(--green-bright); font-weight: 600; }
+.board-nums { text-align: right; }
+.board-total { font-size: 1.55rem; font-weight: 700; color: #eafff1; text-shadow: 0 0 18px rgba(34, 197, 94, .28); }
+.row.top1 .board-total { color: var(--gold-bright); }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .row.top1 .board-total {
+    background: linear-gradient(180deg, #fff6c4, #ffd94d 45%, #c07f0d);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(245, 185, 33, .4)); text-shadow: none;
+  }
+}
+.board-sub { color: var(--muted); font-size: .75rem; }
+.board-need {
+  display: inline-block; margin-top: 3px; padding: 2px 9px; border-radius: 999px;
+  background: rgba(245, 185, 33, .13); border: 1px solid rgba(245, 185, 33, .38);
+  color: var(--gold-bright); font-size: .72rem; font-weight: 700; white-space: nowrap;
+}
+.board-empty { color: var(--muted); text-align: center; padding: 22px; border: 1px dashed var(--line); border-radius: var(--radius); }
+.btn-more {
+  display: block; width: 100%; margin-top: 12px; padding: 13px; cursor: pointer;
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+  border: 1px solid var(--line); border-radius: 14px;
+  color: var(--ink); font: 700 .92rem "Inter"; transition: all .18s;
+}
+.btn-more:hover { border-color: var(--green); color: var(--green-bright); }
+.shield { filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .45)); vertical-align: middle; }
+
+/* ---------- action grid: push form + feed + chat ---------- */
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 38px; align-items: start; }
+.card {
+  background: linear-gradient(180deg, var(--panel2), var(--panel));
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 20px;
+}
+.card h2, .card h3 { margin: 0 0 14px; }
+.push-card label { display: block; margin-bottom: 12px; font-size: .85rem; color: var(--muted); font-weight: 600; }
+.push-card input, .push-card select, .chat-form input, .chat-form select {
+  width: 100%; margin-top: 5px; background: #04120a; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; font: 500 .95rem "Inter";
+}
+.push-card input:focus, .push-card select:focus, .chat-form input:focus, .chat-form select:focus {
+  outline: 2px solid var(--green); border-color: var(--green);
+}
+.scope-switch {
+  display: inline-flex; gap: 6px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 999px; padding: 4px; margin: 2px 0 6px;
+}
+.scope-btn {
+  border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  padding: 9px 18px; border-radius: 999px; font: 700 .88rem "Inter"; transition: all .18s;
+}
+.scope-btn.active { background: var(--gold); color: #171106; }
+.scope-note { color: var(--muted); font-size: .85rem; margin: 0 0 8px; }
+.form-scope-label { display: block; font-size: .85rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+.form-scope { margin-bottom: 10px; }
+.form-scope-note { color: var(--muted); font-size: .78rem; margin: 0 0 10px; }
+.hint { color: var(--gold-bright); font-size: .88rem; min-height: 1.2em; margin: 4px 0 10px; }
+.form-msg { color: var(--red); font-size: .88rem; min-height: 1.1em; margin: 6px 0; }
+.form-msg.ok { color: var(--green-bright); }
+.btn-push {
+  width: 100%; border: 0; cursor: pointer; padding: 14px; border-radius: 12px;
+  background: linear-gradient(90deg, #16a34a, var(--green-bright)); color: #04120a;
+  font: 700 1.05rem "Oswald"; text-transform: uppercase; letter-spacing: .08em;
+  transition: transform .12s, box-shadow .12s; box-shadow: 0 6px 22px rgba(34, 197, 94, .3);
+}
+.btn-push:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(34, 197, 94, .4); }
+.side-stack { display: flex; flex-direction: column; gap: 16px; }
+.feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; max-height: 300px; overflow-y: auto; }
+.feed li { display: flex; gap: 10px; align-items: center; font-size: .9rem; animation: rise .4s both; }
+.feed .feed-amt { color: var(--green-bright); font-weight: 700; white-space: nowrap; }
+.feed .feed-msg { color: var(--muted); font-style: italic; }
+.feed .feed-fan { color: var(--muted); font-size: .78rem; }
+
+/* ---------- chat ---------- */
+.chat-msgs { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 9px; max-height: 320px; overflow-y: auto; }
+.chat-msgs li { display: flex; gap: 9px; align-items: flex-start; animation: rise .35s both; }
+.chat-body { background: rgba(4, 18, 10, .65); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 7px 11px; font-size: .9rem; }
+.chat-fan { color: var(--green-bright); font-weight: 700; font-size: .8rem; }
+.chat-club { color: var(--gold-bright); font-size: .75rem; font-weight: 600; }
+.chat-form .chat-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.chat-form .chat-row input, .chat-form .chat-row select { margin-top: 0; }
+.chat-wallet {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-bottom: 10px; padding: 7px 10px; background: rgba(4, 18, 10, .55);
+  border: 1px solid var(--line); border-radius: 9px;
+}
+.chat-balance { color: var(--muted); font-size: .82rem; font-weight: 600; }
+.btn-credit {
+  border: 1px solid rgba(212, 175, 55, .55); background: rgba(212, 175, 55, .10);
+  color: var(--gold-bright); font: 700 .76rem "Inter"; cursor: pointer;
+  padding: 5px 10px; border-radius: 7px;
+}
+.btn-credit:hover { background: rgba(212, 175, 55, .2); }
+.credit-panel {
+  margin-bottom: 10px; padding: 10px; border: 1px dashed var(--line);
+  border-radius: 9px; background: rgba(4, 18, 10, .4);
+}
+.credit-note { margin: 0 0 8px; color: var(--muted); font-size: .76rem; }
+.credit-options { display: flex; flex-wrap: wrap; gap: 7px; }
+.credit-options button {
+  border: 1px solid var(--line); background: var(--panel2); color: var(--ink);
+  font: 600 .78rem "Inter"; cursor: pointer; padding: 6px 9px; border-radius: 7px;
+}
+.credit-options button:hover { border-color: var(--gold); color: var(--gold-bright); }
+.btn-send {
+  border: 0; cursor: pointer; background: var(--green); color: #04120a; font: 700 .9rem "Inter";
+  padding: 0 18px; border-radius: 10px; flex: 0 0 auto;
+}
+
+/* ---------- showcase carousels ---------- */
+.showcase { margin-top: 42px; }
+.show-sub { color: var(--muted); margin-top: -6px; }
+.row-label { font-family: "Oswald"; text-transform: uppercase; letter-spacing: .14em; color: var(--gold); font-size: .85rem; margin: 18px 0 8px; }
+.carousel { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.carousel-track { display: inline-flex; gap: 12px; white-space: nowrap; padding: 6px 0; animation: marquee var(--dur, 60s) linear infinite; will-change: transform; }
+.carousel.rev .carousel-track { animation-direction: reverse; }
+.carousel:hover .carousel-track { animation-play-state: paused; }
+.chip-club {
+  display: inline-flex; align-items: center; gap: 10px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px 7px 8px;
+  font-weight: 600; font-size: .92rem;
+}
+
+/* ---------- hall of fame ---------- */
+.hof { margin-top: 46px; text-align: center; }
+.hof .section-title { justify-content: center; }
+.hof .section-title::after { display: none; }
+.hof-text { color: var(--muted); max-width: 640px; margin: 0 auto 18px; }
+.hof-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.hof-card {
+  border: 1px solid rgba(212, 175, 55, .45); border-radius: var(--radius); padding: 22px 14px;
+  background: linear-gradient(180deg, rgba(212, 175, 55, .09), rgba(11, 32, 20, .6));
+  position: relative; overflow: hidden;
+}
+.hof-card::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(243, 210, 122, .14) 48%, transparent 62%);
+  animation: shimmer 3.4s infinite;
+}
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.hof-card .laurel { font-size: 1.7rem; }
+.hof-card .hof-slot { font-family: "Oswald"; text-transform: uppercase; letter-spacing: .1em; color: var(--gold-bright); margin-top: 8px; }
+.hof-card .hof-tbd { color: var(--muted); font-size: .85rem; margin-top: 5px; }
+
+footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 22px 20px 30px; text-align: center; color: var(--muted); font-size: .85rem; }
+
+/* ---------- pay page ---------- */
+.pay-card { max-width: 560px; margin: 30px auto; text-align: center; }
+.pay-card .amount { font-family: "Oswald"; font-size: 2.2rem; color: var(--gold-bright); margin: 6px 0; }
+.notice { background: rgba(212, 175, 55, .08); border: 1px solid rgba(212, 175, 55, .4); border-radius: 12px; padding: 14px; font-size: .9rem; color: var(--muted); text-align: left; margin: 16px 0; }
+.admin-box { border: 1px dashed var(--line); border-radius: 12px; padding: 14px; margin-top: 14px; }
+.admin-box input { width: 100%; background: #04120a; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+.status-pill { padding: 4px 12px; border-radius: 999px; font-size: .8rem; font-weight: 700; background: #713f12; color: #fde68a; }
+.status-paid { background: #14532d; color: #86efac; }
+.btn { display: inline-block; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 10px 16px; border-radius: 10px; text-decoration: none; cursor: pointer; font: 600 .9rem "Inter"; }
+.btn.primary { background: var(--green); color: #04120a; border-color: var(--green); width: 100%; }
+.error { color: var(--red); }
+.muted { color: var(--muted); }
+
+@media (max-width: 820px) {
+  .action-grid { grid-template-columns: 1fr; }
+  .podium { gap: 8px; }
+  .row { grid-template-columns: 38px 44px 1fr auto; column-gap: 8px; row-gap: 0; padding: 10px 10px 11px 6px; }
+  .pos { width: 34px; height: 34px; line-height: 34px; font-size: 1.02rem; border-radius: 10px; }
+  .row.p1 .pos { font-size: 1.14rem; }
+  .row-shield .shield { width: 40px; height: auto; }
+  .club-name { font-size: .99rem; }
+  .board-total { font-size: 1.28rem; }
+  .board-need { max-width: 42vw; overflow: hidden; text-overflow: ellipsis; font-size: .68rem; }
+  .brand-sub { display: none; }
+  .hero { padding-top: 26px; }
+}
+
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:50;background:#7f1d1d;color:#fff;text-align:center;padding:7px 12px;font:600 .82rem Inter,system-ui,sans-serif">
+  VISTA PREVIA · PREVIEW — Datos de ejemplo / Sample data · Los pagos no están activos / Payments are not live yet
+</div>
+
+
+<div class="ticker-wrap" aria-hidden="true">
+  <span class="live-badge"><span class="live-dot"></span><span data-i18n="tickerLabel">LIVE</span></span>
+  <div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+</div>
+
+<header class="site-header">
+  <div class="brand">
+    <span class="brand-ball">⚽</span>
+    <span class="brand-name">HINCHA<em>BOARD</em></span>
+    <span class="brand-sub" data-i18n="brandSub">THE FANS' RANKING</span>
+  </div>
+  <div class="header-right">
+    <div class="season-chip">🏆 <span data-i18n="season">SEASON</span> <span id="seasonYear">2026</span> · <span data-i18n="endsIn">ends in</span> <strong id="countdown">—</strong></div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="en" class="active">EN</button>
+      <button type="button" data-lang="es">ES</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <h1 data-i18n="headline">The ranking the fans decide.</h1>
+    <p class="hero-sub" data-i18n="sub">Every dollar is a push. Push from $1, lift your club, and the club on top when the year ends stays in the Hall of Fame forever.</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-num" id="statPool">$0</span><span class="stat-label" data-i18n="statPool">TOTAL PUSHED</span></div>
+      <div class="stat"><span class="stat-num" id="statPushes">0</span><span class="stat-label" data-i18n="statPushes">FAN PUSHES</span></div>
+      <div class="stat"><span class="stat-num" id="statClubs">0</span><span class="stat-label" data-i18n="statClubs">CLUBS RANKED</span></div>
+      <div class="stat"><span class="stat-num" id="statListed">0</span><span class="stat-label" data-i18n="statListed">CLUBS LISTED</span></div>
+    </div>
+    <p class="rules" data-i18n-html="rules">Minimum push <strong>$1</strong> · Pushes pool into your club's total · Pass the club above by <strong>$1 or more</strong> · <strong>Two separate competitions</strong>: country and world</p>
+  </section>
+
+  <section class="podium-section">
+    <h2 class="section-title" id="podiumTitle">Top of the world</h2>
+    <div class="podium" id="podium"></div>
+  </section>
+
+  <section class="board-section">
+    <div class="board-head">
+      <h2 class="section-title" id="boardTitle">The table</h2>
+      <div class="scope-switch" role="group" aria-label="Competition">
+        <button type="button" id="boardScopeGlobal" class="scope-btn active">🌍 <span data-i18n="scopeGlobal">World ranking</span></button>
+        <button type="button" id="boardScopeCountry" class="scope-btn">🏳️ <span data-i18n="scopeCountry">By country</span></button>
+      </div>
+      <p class="scope-note" data-i18n="scopeNote">Two separate competitions — pushes in one never move the other.</p>
+      <div class="tabs" id="leagueTabs" hidden></div>
+    </div>
+    <div class="board" id="board"></div>
+    <p class="board-empty" id="boardEmpty" hidden data-i18n="boardEmpty">No pushes yet here — the first fan puts their club on top for $1.</p>
+    <button type="button" id="boardMore" class="btn-more" hidden aria-expanded="false" aria-controls="board">Show more</button>
+  </section>
+
+  <section class="action-grid">
+    <form id="pushForm" class="card push-card">
+      <h2 data-i18n="pushTitle">Push your club</h2>
+      <label><span data-i18n="fLeague">League</span>
+        <select id="fLeague"></select>
+      </label>
+      <label><span data-i18n="fClub">Club</span>
+        <select id="fClub"></select>
+      </label>
+      <label><span data-i18n="fFan">Your fan name (optional)</span>
+        <input id="fFan" type="text" maxlength="40" autocomplete="nickname">
+      </label>
+      <label><span data-i18n="fMessage">Message next to your club (optional)</span>
+        <input id="fMessage" type="text" maxlength="140" data-i18n-ph="fMessagePh" placeholder="Say it loud — rivals will read it">
+      </label>
+      <label><span data-i18n="fAmount">Your push (USD)</span>
+        <input id="fAmount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="1.00" required>
+      </label>
+      <span class="form-scope-label" data-i18n="formScope">Where does your push count?</span>
+      <div class="scope-switch form-scope" role="group" aria-label="Push scope">
+        <button type="button" id="fScopeCountry" class="scope-btn active">🏳️ <span data-i18n="formScopeCountry">Club's country</span></button>
+        <button type="button" id="fScopeGlobal" class="scope-btn">🌍 <span data-i18n="formScopeGlobal">The world</span></button>
+      </div>
+      <p class="form-scope-note" id="formScopeNote"></p>
+      <p class="hint" id="pushHint"></p>
+      <p class="form-msg" id="formMsg" role="alert"></p>
+      <button type="submit" class="btn-push" data-i18n="pushBtn">Push now</button>
+    </form>
+
+    <div class="side-stack">
+      <aside class="card feed-card">
+        <h3><span class="live-dot"></span> <span data-i18n="feedTitle">Live from the stands</span></h3>
+        <ul class="feed" id="feed"></ul>
+      </aside>
+
+      <aside class="card chat-card">
+        <h3>💬 <span data-i18n="chatTitle">La Tribuna — fan chat</span></h3>
+        <div class="chat-wallet">
+          <span class="chat-balance" id="chatBalance">Messages: —</span>
+          <button type="button" class="btn-credit" id="creditBtn" data-i18n="creditBtn">Add messages</button>
+        </div>
+        <div class="credit-panel" id="creditPanel" hidden>
+          <p class="credit-note" data-i18n="creditNote">USD 1 = 3 messages. Chat credit is separate from the rankings.</p>
+          <div class="credit-options">
+            <button type="button" data-amount="1">USD 1 · 3</button>
+            <button type="button" data-amount="5">USD 5 · 15</button>
+            <button type="button" data-amount="10">USD 10 · 30</button>
+          </div>
+        </div>
+        <ul class="chat-msgs" id="chatMsgs"></ul>
+        <form id="chatForm" class="chat-form">
+          <div class="chat-row">
+            <input id="cFan" type="text" maxlength="40" data-i18n-ph="cFanPh" placeholder="Your fan name">
+            <select id="cClub"></select>
+          </div>
+          <div class="chat-row">
+            <input id="cText" type="text" maxlength="200" data-i18n-ph="cTextPh" placeholder="Talk to the stands…" required>
+            <button type="submit" class="btn-send" data-i18n="chatSend">Send</button>
+          </div>
+          <p class="form-msg" id="chatMsg" role="alert"></p>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <section class="showcase">
+    <h2 class="section-title"><span data-i18n="showTitle">Every club. Every league.</span></h2>
+    <p class="show-sub" data-i18n="showSub">405 clubs across Latin America, the MLS and Europe — listed free, forever. The ranked table above is where the fans fight.</p>
+    <div id="rows"></div>
+  </section>
+
+  <section class="hof">
+    <h2 class="section-title gold"><span data-i18n="hofTitle">Hall of Fame</span></h2>
+    <p class="hof-text" data-i18n="hofText">When the season ends, the world champion and the champion of every country enter here and stay forever. The first class is crowned on December 31.</p>
+    <div class="hof-cards" id="hofCards"></div>
+  </section>
+</main>
+
+<footer>
+  <p data-i18n="footer">Transparent fan ranking — every push is public. Seasons run January 1 to December 31; champions are forever.</p>
+</footer>
+
+<script>window.__HINCHABOARD__ = {"clubs": {"leagues": [{"id": "arg", "region": "latam", "name_en": "Liga Profesional", "name_es": "Liga Profesional", "country_en": "Argentina", "country_es": "Argentina"}, {"id": "bra", "region": "latam", "name_en": "Brasileirão", "name_es": "Brasileirão", "country_en": "Brazil", "country_es": "Brasil"}, {"id": "mex", "region": "latam", "name_en": "Liga MX", "name_es": "Liga MX", "country_en": "Mexico", "country_es": "México"}, {"id": "chi", "region": "latam", "name_en": "Primera División", "name_es": "Primera División", "country_en": "Chile", "country_es": "Chile"}, {"id": "col", "region": "latam", "name_en": "Primera A", "name_es": "Primera A", "country_en": "Colombia", "country_es": "Colombia"}, {"id": "uru", "region": "latam", "name_en": "Primera División", "name_es": "Primera División", "country_en": "Uruguay", "country_es": "Uruguay"}, {"id": "par", "region": "latam", "name_en": "Primera División", "name_es": "Primera División", "country_en": "Paraguay", "country_es": "Paraguay"}, {"id": "bol", "region": "latam", "name_en": "División Profesional", "name_es": "División Profesional", "country_en": "Bolivia", "country_es": "Bolivia"}, {"id": "ecu", "region": "latam", "name_en": "LigaPro", "name_es": "LigaPro", "country_en": "Ecuador", "country_es": "Ecuador"}, {"id": "ven", "region": "latam", "name_en": "Liga FUTVE", "name_es": "Liga FUTVE", "country_en": "Venezuela", "country_es": "Venezuela"}, {"id": "per", "region": "latam", "name_en": "Liga 1", "name_es": "Liga 1", "country_en": "Peru", "country_es": "Perú"}, {"id": "usa", "region": "usa", "name_en": "MLS", "name_es": "MLS", "country_en": "United States", "country_es": "Estados Unidos"}, {"id": "eng", "region": "europe", "name_en": "Premier League", "name_es": "Premier League", "country_en": "England", "country_es": "Inglaterra"}, {"id": "esp", "region": "europe", "name_en": "La Liga", "name_es": "La Liga", "country_en": "Spain", "country_es": "España"}, {"id": "ita", "region": "europe", "name_en": "Serie A", "name_es": "Serie A", "country_en": "Italy", "country_es": "Italia"}, {"id": "ger", "region": "europe", "name_en": "Bundesliga", "name_es": "Bundesliga", "country_en": "Germany", "country_es": "Alemania"}, {"id": "fra", "region": "europe", "name_en": "Ligue 1", "name_es": "Ligue 1", "country_en": "France", "country_es": "Francia"}, {"id": "ned", "region": "europe", "name_en": "Eredivisie", "name_es": "Eredivisie", "country_en": "Netherlands", "country_es": "Países Bajos"}, {"id": "por", "region": "europe", "name_en": "Primeira Liga", "name_es": "Primeira Liga", "country_en": "Portugal", "country_es": "Portugal"}, {"id": "sco", "region": "europe", "name_en": "Premiership", "name_es": "Premiership", "country_en": "Scotland", "country_es": "Escocia"}, {"id": "tur", "region": "europe", "name_en": "Süper Lig", "name_es": "Süper Lig", "country_en": "Turkey", "country_es": "Turquía"}, {"id": "bel", "region": "europe", "name_en": "Pro League", "name_es": "Pro League", "country_en": "Belgium", "country_es": "Bélgica"}], "clubs": [{"id": "river-plate", "name": "River Plate", "short": "RIV", "league": "arg", "color": "#E30613"}, {"id": "boca-juniors", "name": "Boca Juniors", "short": "BOC", "league": "arg", "color": "#003DA5"}, {"id": "racing", "name": "Racing", "short": "RAC", "league": "arg", "color": "#6EC1E4"}, {"id": "independiente", "name": "Independiente", "short": "IND", "league": "arg", "color": "#E30613"}, {"id": "san-lorenzo", "name": "San Lorenzo", "short": "SLO", "league": "arg", "color": "#1C2D5A"}, {"id": "huracan", "name": "Huracán", "short": "HUR", "league": "arg", "color": "#D22630"}, {"id": "velez-sarsfield", "name": "Vélez Sarsfield", "short": "VEL", "league": "arg", "color": "#003DA5"}, {"id": "estudiantes", "name": "Estudiantes", "short": "EST", "league": "arg", "color": "#E30613"}, {"id": "gimnasia", "name": "Gimnasia", "short": "GIM", "league": "arg", "color": "#1B2A6B"}, {"id": "rosario-central", "name": "Rosario Central", "short": "ROS", "league": "arg", "color": "#003DA5"}, {"id": "newells-old-boys", "name": "Newell's Old Boys", "short": "NOB", "league": "arg", "color": "#E30613"}, {"id": "lanus", "name": "Lanús", "short": "LAN", "league": "arg", "color": "#722F37"}, {"id": "talleres", "name": "Talleres", "short": "TAL", "league": "arg", "color": "#002D62"}, {"id": "argentinos-juniors", "name": "Argentinos Juniors", "short": "ARJ", "league": "arg", "color": "#E30613"}, {"id": "defensa-y-justicia", "name": "Defensa y Justicia", "short": "DYJ", "league": "arg", "color": "#F7D117"}, {"id": "tigre", "name": "Tigre", "short": "TIG", "league": "arg", "color": "#004B93"}, {"id": "platense", "name": "Platense", "short": "PLA", "league": "arg", "color": "#795548"}, {"id": "godoy-cruz", "name": "Godoy Cruz", "short": "GOD", "league": "arg", "color": "#0057A8"}, {"id": "belgrano", "name": "Belgrano", "short": "BEL", "league": "arg", "color": "#65B2E8"}, {"id": "union", "name": "Unión", "short": "UNI", "league": "arg", "color": "#E30613"}, {"id": "atletico-tucuman", "name": "Atlético Tucumán", "short": "ATU", "league": "arg", "color": "#5BACE6"}, {"id": "banfield", "name": "Banfield", "short": "BAN", "league": "arg", "color": "#009444"}, {"id": "sarmiento", "name": "Sarmiento", "short": "SAR", "league": "arg", "color": "#009444"}, {"id": "instituto", "name": "Instituto", "short": "INS", "league": "arg", "color": "#E30613"}, {"id": "central-cordoba", "name": "Central Córdoba", "short": "CCO", "league": "arg", "color": "#111111"}, {"id": "barracas-central", "name": "Barracas Central", "short": "BAR", "league": "arg", "color": "#D5001C"}, {"id": "deportivo-riestra", "name": "Deportivo Riestra", "short": "RIE", "league": "arg", "color": "#1A1A1A"}, {"id": "independiente-rivadavia", "name": "Independiente Rivadavia", "short": "IRV", "league": "arg", "color": "#004B93"}, {"id": "san-martin-sj", "name": "San Martín SJ", "short": "SMS", "league": "arg", "color": "#009444"}, {"id": "aldosivi", "name": "Aldosivi", "short": "ALD", "league": "arg", "color": "#FFD200"}, {"id": "flamengo", "name": "Flamengo", "short": "FLA", "league": "bra", "color": "#E30613"}, {"id": "palmeiras", "name": "Palmeiras", "short": "PAL", "league": "bra", "color": "#006437"}, {"id": "sao-paulo", "name": "São Paulo", "short": "SAO", "league": "bra", "color": "#E30613"}, {"id": "corinthians", "name": "Corinthians", "short": "COR", "league": "bra", "color": "#111111"}, {"id": "gremio", "name": "Grêmio", "short": "GRE", "league": "bra", "color": "#0091DA"}, {"id": "internacional", "name": "Internacional", "short": "INT", "league": "bra", "color": "#E30613"}, {"id": "atletico-mineiro", "name": "Atlético Mineiro", "short": "CAM", "league": "bra", "color": "#000000"}, {"id": "fluminense", "name": "Fluminense", "short": "FLU", "league": "bra", "color": "#722F37"}, {"id": "botafogo", "name": "Botafogo", "short": "BOT", "league": "bra", "color": "#000000"}, {"id": "santos", "name": "Santos", "short": "SAN", "league": "bra", "color": "#111111"}, {"id": "cruzeiro", "name": "Cruzeiro", "short": "CRU", "league": "bra", "color": "#003DA5"}, {"id": "vasco-da-gama", "name": "Vasco da Gama", "short": "VAS", "league": "bra", "color": "#000000"}, {"id": "bahia", "name": "Bahia", "short": "BAH", "league": "bra", "color": "#0057A8"}, {"id": "fortaleza", "name": "Fortaleza", "short": "FOR", "league": "bra", "color": "#0057A8"}, {"id": "ceara", "name": "Ceará", "short": "CEA", "league": "bra", "color": "#000000"}, {"id": "vitoria", "name": "Vitória", "short": "VIT", "league": "bra", "color": "#E30613"}, {"id": "sport-recife", "name": "Sport Recife", "short": "SPO", "league": "bra", "color": "#E30613"}, {"id": "juventude", "name": "Juventude", "short": "JUV", "league": "bra", "color": "#009444"}, {"id": "red-bull-bragantino", "name": "Red Bull Bragantino", "short": "RBB", "league": "bra", "color": "#D5001C"}, {"id": "mirassol", "name": "Mirassol", "short": "MIR", "league": "bra", "color": "#F7D117"}, {"id": "club-america", "name": "Club América", "short": "AME", "league": "mex", "color": "#FDB913"}, {"id": "chivas", "name": "Chivas", "short": "GDL", "league": "mex", "color": "#D5001C"}, {"id": "cruz-azul", "name": "Cruz Azul", "short": "CAZ", "league": "mex", "color": "#003DA5"}, {"id": "pumas", "name": "Pumas", "short": "PUM", "league": "mex", "color": "#1B365D"}, {"id": "monterrey", "name": "Monterrey", "short": "MTY", "league": "mex", "color": "#00285E"}, {"id": "tigres", "name": "Tigres", "short": "TIG", "league": "mex", "color": "#FFB81C"}, {"id": "toluca", "name": "Toluca", "short": "TOL", "league": "mex", "color": "#E30613"}, {"id": "atlas", "name": "Atlas", "short": "ATS", "league": "mex", "color": "#E30613"}, {"id": "leon", "name": "León", "short": "LEO", "league": "mex", "color": "#007A33"}, {"id": "pachuca", "name": "Pachuca", "short": "PAC", "league": "mex", "color": "#0057A8"}, {"id": "santos-laguna", "name": "Santos Laguna", "short": "SAN", "league": "mex", "color": "#009444"}, {"id": "tijuana", "name": "Tijuana", "short": "TIJ", "league": "mex", "color": "#E30613"}, {"id": "necaxa", "name": "Necaxa", "short": "NEC", "league": "mex", "color": "#E30613"}, {"id": "puebla", "name": "Puebla", "short": "PUE", "league": "mex", "color": "#003DA5"}, {"id": "queretaro", "name": "Querétaro", "short": "QUE", "league": "mex", "color": "#0057A8"}, {"id": "atletico-san-luis", "name": "Atlético San Luis", "short": "ASL", "league": "mex", "color": "#002D62"}, {"id": "fc-juarez", "name": "FC Juárez", "short": "JUA", "league": "mex", "color": "#009444"}, {"id": "mazatlan", "name": "Mazatlán", "short": "MAZ", "league": "mex", "color": "#5B2D8E"}, {"id": "colo-colo", "name": "Colo-Colo", "short": "COL", "league": "chi", "color": "#111111"}, {"id": "universidad-de-chile", "name": "Universidad de Chile", "short": "UCH", "league": "chi", "color": "#002D62"}, {"id": "universidad-catolica", "name": "Universidad Católica", "short": "UCA", "league": "chi", "color": "#003DA5"}, {"id": "union-espanola", "name": "Unión Española", "short": "UES", "league": "chi", "color": "#E30613"}, {"id": "palestino", "name": "Palestino", "short": "PAL", "league": "chi", "color": "#009444"}, {"id": "ohiggins", "name": "O'Higgins", "short": "OHI", "league": "chi", "color": "#5BACE6"}, {"id": "everton-chile", "name": "Everton", "short": "EVE", "league": "chi", "color": "#003DA5"}, {"id": "huachipato", "name": "Huachipato", "short": "HUA", "league": "chi", "color": "#002D62"}, {"id": "audax-italiano", "name": "Audax Italiano", "short": "AUD", "league": "chi", "color": "#009444"}, {"id": "cobresal", "name": "Cobresal", "short": "COB", "league": "chi", "color": "#F26522"}, {"id": "coquimbo-unido", "name": "Coquimbo Unido", "short": "COQ", "league": "chi", "color": "#FFD100"}, {"id": "deportes-iquique", "name": "Deportes Iquique", "short": "IQU", "league": "chi", "color": "#0091DA"}, {"id": "union-la-calera", "name": "Unión La Calera", "short": "ULC", "league": "chi", "color": "#E30613"}, {"id": "nublense", "name": "Ñublense", "short": "NUB", "league": "chi", "color": "#E30613"}, {"id": "la-serena", "name": "La Serena", "short": "SER", "league": "chi", "color": "#722F37"}, {"id": "deportes-limache", "name": "Deportes Limache", "short": "LIM", "league": "chi", "color": "#E30613"}, {"id": "atletico-nacional", "name": "Atlético Nacional", "short": "NAC", "league": "col", "color": "#009444"}, {"id": "millonarios", "name": "Millonarios", "short": "MIL", "league": "col", "color": "#003DA5"}, {"id": "america-de-cali", "name": "América de Cali", "short": "AME", "league": "col", "color": "#E30613"}, {"id": "junior", "name": "Junior", "short": "JUN", "league": "col", "color": "#E30613"}, {"id": "independiente-medellin", "name": "Independiente Medellín", "short": "DIM", "league": "col", "color": "#C8102E"}, {"id": "santa-fe", "name": "Santa Fe", "short": "SFE", "league": "col", "color": "#E30613"}, {"id": "deportivo-cali", "name": "Deportivo Cali", "short": "CAL", "league": "col", "color": "#009444"}, {"id": "once-caldas", "name": "Once Caldas", "short": "ONC", "league": "col", "color": "#FFFFFF"}, {"id": "deportes-tolima", "name": "Deportes Tolima", "short": "TOL", "league": "col", "color": "#722F37"}, {"id": "atletico-bucaramanga", "name": "Atlético Bucaramanga", "short": "BUC", "league": "col", "color": "#FFD100"}, {"id": "deportivo-pereira", "name": "Deportivo Pereira", "short": "PER", "league": "col", "color": "#E30613"}, {"id": "deportivo-pasto", "name": "Deportivo Pasto", "short": "PAS", "league": "col", "color": "#D5001C"}, {"id": "la-equidad", "name": "La Equidad", "short": "EQU", "league": "col", "color": "#009444"}, {"id": "aguilas-doradas", "name": "Águilas Doradas", "short": "AGU", "league": "col", "color": "#FFB81C"}, {"id": "envigado", "name": "Envigado", "short": "ENV", "league": "col", "color": "#F26522"}, {"id": "boyaca-chico", "name": "Boyacá Chicó", "short": "BOY", "league": "col", "color": "#F26522"}, {"id": "alianza-fc", "name": "Alianza FC", "short": "ALI", "league": "col", "color": "#0057A8"}, {"id": "union-magdalena", "name": "Unión Magdalena", "short": "MAG", "league": "col", "color": "#0057A8"}, {"id": "fortaleza-ceif", "name": "Fortaleza CEIF", "short": "FOR", "league": "col", "color": "#E30613"}, {"id": "llaneros", "name": "Llaneros", "short": "LLA", "league": "col", "color": "#111111"}, {"id": "penarol", "name": "Peñarol", "short": "PEN", "league": "uru", "color": "#FFB81C"}, {"id": "nacional", "name": "Nacional", "short": "NAC", "league": "uru", "color": "#003DA5"}, {"id": "defensor-sporting", "name": "Defensor Sporting", "short": "DEF", "league": "uru", "color": "#5B2D8E"}, {"id": "danubio", "name": "Danubio", "short": "DAN", "league": "uru", "color": "#111111"}, {"id": "liverpool-uruguay", "name": "Liverpool", "short": "LIV", "league": "uru", "color": "#1A1A1A"}, {"id": "montevideo-city-torque", "name": "Montevideo City Torque", "short": "MCT", "league": "uru", "color": "#0091DA"}, {"id": "wanderers", "name": "Wanderers", "short": "WAN", "league": "uru", "color": "#111111"}, {"id": "racing-montevideo", "name": "Racing Montevideo", "short": "RAC", "league": "uru", "color": "#009444"}, {"id": "cerro", "name": "Cerro", "short": "CER", "league": "uru", "color": "#0091DA"}, {"id": "plaza-colonia", "name": "Plaza Colonia", "short": "PLA", "league": "uru", "color": "#009444"}, {"id": "boston-river", "name": "Boston River", "short": "BOS", "league": "uru", "color": "#E30613"}, {"id": "cerro-largo", "name": "Cerro Largo", "short": "CLA", "league": "uru", "color": "#003DA5"}, {"id": "progreso", "name": "Progreso", "short": "PRO", "league": "uru", "color": "#E30613"}, {"id": "juventud", "name": "Juventud", "short": "JUV", "league": "uru", "color": "#003DA5"}, {"id": "deportivo-maldonado", "name": "Deportivo Maldonado", "short": "MAL", "league": "uru", "color": "#E30613"}, {"id": "miramar-misiones", "name": "Miramar Misiones", "short": "MIR", "league": "uru", "color": "#111111"}, {"id": "olimpia", "name": "Olimpia", "short": "OLI", "league": "par", "color": "#000000"}, {"id": "cerro-porteno", "name": "Cerro Porteño", "short": "CCP", "league": "par", "color": "#E30613"}, {"id": "libertad", "name": "Libertad", "short": "LIB", "league": "par", "color": "#1A1A1A"}, {"id": "guarani", "name": "Guaraní", "short": "GUA", "league": "par", "color": "#FFD100"}, {"id": "nacional-paraguay", "name": "Nacional", "short": "NAC", "league": "par", "color": "#D5001C"}, {"id": "sportivo-luqueno", "name": "Sportivo Luqueño", "short": "LUQ", "league": "par", "color": "#003DA5"}, {"id": "sportivo-trinidense", "name": "Sportivo Trinidense", "short": "TRI", "league": "par", "color": "#FFD100"}, {"id": "sportivo-ameliano", "name": "Sportivo Ameliano", "short": "AML", "league": "par", "color": "#003DA5"}, {"id": "2-de-mayo", "name": "2 de Mayo", "short": "2DM", "league": "par", "color": "#0057A8"}, {"id": "general-caballero", "name": "General Caballero", "short": "GCA", "league": "par", "color": "#E30613"}, {"id": "atletico-tembetary", "name": "Atlético Tembetary", "short": "TEM", "league": "par", "color": "#C8102E"}, {"id": "deportivo-recoleta", "name": "Deportivo Recoleta", "short": "REC", "league": "par", "color": "#FFD100"}, {"id": "bolivar", "name": "Bolívar", "short": "BOL", "league": "bol", "color": "#5BACE6"}, {"id": "the-strongest", "name": "The Strongest", "short": "STR", "league": "bol", "color": "#FFD100"}, {"id": "always-ready", "name": "Always Ready", "short": "ALW", "league": "bol", "color": "#E30613"}, {"id": "blooming", "name": "Blooming", "short": "BLO", "league": "bol", "color": "#0091DA"}, {"id": "oriente-petrolero", "name": "Oriente Petrolero", "short": "ORI", "league": "bol", "color": "#009444"}, {"id": "wilstermann", "name": "Wilstermann", "short": "WIL", "league": "bol", "color": "#E30613"}, {"id": "nacional-potosi", "name": "Nacional Potosí", "short": "NAP", "league": "bol", "color": "#E30613"}, {"id": "aurora", "name": "Aurora", "short": "AUR", "league": "bol", "color": "#0091DA"}, {"id": "guabira", "name": "Guabirá", "short": "GUA", "league": "bol", "color": "#E30613"}, {"id": "independiente-petrolero", "name": "Independiente Petrolero", "short": "INP", "league": "bol", "color": "#E30613"}, {"id": "san-antonio", "name": "San Antonio", "short": "SAB", "league": "bol", "color": "#003DA5"}, {"id": "universitario-de-vinto", "name": "Universitario de Vinto", "short": "UVI", "league": "bol", "color": "#0057A8"}, {"id": "real-tomayapo", "name": "Real Tomayapo", "short": "TOM", "league": "bol", "color": "#009444"}, {"id": "gv-san-jose", "name": "GV San José", "short": "GVS", "league": "bol", "color": "#003DA5"}, {"id": "abb", "name": "ABB", "short": "ABB", "league": "bol", "color": "#FFD100"}, {"id": "real-oruro", "name": "Real Oruro", "short": "ROR", "league": "bol", "color": "#722F37"}, {"id": "barcelona-sc", "name": "Barcelona SC", "short": "BSC", "league": "ecu", "color": "#FFD100"}, {"id": "emelec", "name": "Emelec", "short": "EME", "league": "ecu", "color": "#003DA5"}, {"id": "liga-de-quito", "name": "Liga de Quito", "short": "LDU", "league": "ecu", "color": "#F5F5F5"}, {"id": "independiente-del-valle", "name": "Independiente del Valle", "short": "IDV", "league": "ecu", "color": "#1A1A1A"}, {"id": "el-nacional", "name": "El Nacional", "short": "NAC", "league": "ecu", "color": "#E30613"}, {"id": "aucas", "name": "Aucas", "short": "AUC", "league": "ecu", "color": "#FFD100"}, {"id": "deportivo-cuenca", "name": "Deportivo Cuenca", "short": "CUE", "league": "ecu", "color": "#E30613"}, {"id": "universidad-catolica-ecuador", "name": "Universidad Católica", "short": "UCA", "league": "ecu", "color": "#0091DA"}, {"id": "macara", "name": "Macará", "short": "MAC", "league": "ecu", "color": "#0091DA"}, {"id": "delfin", "name": "Delfín", "short": "DEL", "league": "ecu", "color": "#FFD100"}, {"id": "tecnico-universitario", "name": "Técnico Universitario", "short": "TEC", "league": "ecu", "color": "#E30613"}, {"id": "mushuc-runa", "name": "Mushuc Runa", "short": "MUS", "league": "ecu", "color": "#E30613"}, {"id": "orense", "name": "Orense", "short": "ORE", "league": "ecu", "color": "#009444"}, {"id": "libertad-fc", "name": "Libertad FC", "short": "LIB", "league": "ecu", "color": "#F26522"}, {"id": "vinotinto", "name": "Vinotinto", "short": "VIN", "league": "ecu", "color": "#722F37"}, {"id": "manta", "name": "Manta", "short": "MAN", "league": "ecu", "color": "#0091DA"}, {"id": "caracas", "name": "Caracas", "short": "CAR", "league": "ven", "color": "#E30613"}, {"id": "deportivo-tachira", "name": "Deportivo Táchira", "short": "TAC", "league": "ven", "color": "#FFD100"}, {"id": "carabobo", "name": "Carabobo", "short": "CBO", "league": "ven", "color": "#722F37"}, {"id": "deportivo-la-guaira", "name": "Deportivo La Guaira", "short": "DLG", "league": "ven", "color": "#F26522"}, {"id": "metropolitanos", "name": "Metropolitanos", "short": "MET", "league": "ven", "color": "#5B2D8E"}, {"id": "academia-puerto-cabello", "name": "Academia Puerto Cabello", "short": "APC", "league": "ven", "color": "#F26522"}, {"id": "monagas", "name": "Monagas", "short": "MON", "league": "ven", "color": "#003DA5"}, {"id": "estudiantes-de-merida", "name": "Estudiantes de Mérida", "short": "EST", "league": "ven", "color": "#E30613"}, {"id": "portuguesa", "name": "Portuguesa", "short": "POR", "league": "ven", "color": "#C8102E"}, {"id": "zamora", "name": "Zamora", "short": "ZAM", "league": "ven", "color": "#111111"}, {"id": "ucv", "name": "UCV", "short": "UCV", "league": "ven", "color": "#0057A8"}, {"id": "rayo-zuliano", "name": "Rayo Zuliano", "short": "RAY", "league": "ven", "color": "#FFD100"}, {"id": "anzoategui", "name": "Anzoátegui", "short": "ANZ", "league": "ven", "color": "#722F37"}, {"id": "yaracuyanos", "name": "Yaracuyanos", "short": "YAR", "league": "ven", "color": "#E30613"}, {"id": "universitario", "name": "Universitario", "short": "UNI", "league": "per", "color": "#F3EAD3"}, {"id": "alianza-lima", "name": "Alianza Lima", "short": "ALI", "league": "per", "color": "#003DA5"}, {"id": "sporting-cristal", "name": "Sporting Cristal", "short": "SCR", "league": "per", "color": "#0091DA"}, {"id": "melgar", "name": "Melgar", "short": "MEL", "league": "per", "color": "#E30613"}, {"id": "cienciano", "name": "Cienciano", "short": "CIE", "league": "per", "color": "#E30613"}, {"id": "cusco-fc", "name": "Cusco FC", "short": "CUS", "league": "per", "color": "#FFD100"}, {"id": "deportivo-garcilaso", "name": "Deportivo Garcilaso", "short": "GAR", "league": "per", "color": "#0091DA"}, {"id": "sport-huancayo", "name": "Sport Huancayo", "short": "SHU", "league": "per", "color": "#E30613"}, {"id": "adt", "name": "ADT", "short": "ADT", "league": "per", "color": "#0091DA"}, {"id": "alianza-atletico", "name": "Alianza Atlético", "short": "AAT", "league": "per", "color": "#5BACE6"}, {"id": "atletico-grau", "name": "Atlético Grau", "short": "GRA", "league": "per", "color": "#F5F5F5"}, {"id": "sport-boys", "name": "Sport Boys", "short": "SBO", "league": "per", "color": "#F472B6"}, {"id": "utc", "name": "UTC", "short": "UTC", "league": "per", "color": "#FFD100"}, {"id": "los-chankas", "name": "Los Chankas", "short": "CHA", "league": "per", "color": "#722F37"}, {"id": "ayacucho-fc", "name": "Ayacucho FC", "short": "AYA", "league": "per", "color": "#F26522"}, {"id": "binacional", "name": "Binacional", "short": "BIN", "league": "per", "color": "#0091DA"}, {"id": "comerciantes-unidos", "name": "Comerciantes Unidos", "short": "COM", "league": "per", "color": "#009444"}, {"id": "juan-pablo-ii", "name": "Juan Pablo II", "short": "JPI", "league": "per", "color": "#FFD100"}, {"id": "inter-miami", "name": "Inter Miami", "short": "MIA", "league": "usa", "color": "#F7A8B8"}, {"id": "la-galaxy", "name": "LA Galaxy", "short": "LAG", "league": "usa", "color": "#002D62"}, {"id": "lafc", "name": "LAFC", "short": "LAFC", "league": "usa", "color": "#000000"}, {"id": "new-york-city-fc", "name": "New York City FC", "short": "NYC", "league": "usa", "color": "#0091DA"}, {"id": "ny-red-bulls", "name": "NY Red Bulls", "short": "RBNY", "league": "usa", "color": "#E30613"}, {"id": "columbus-crew", "name": "Columbus Crew", "short": "CLB", "league": "usa", "color": "#FFD100"}, {"id": "fc-cincinnati", "name": "FC Cincinnati", "short": "CIN", "league": "usa", "color": "#F26522"}, {"id": "seattle-sounders", "name": "Seattle Sounders", "short": "SEA", "league": "usa", "color": "#658D1B"}, {"id": "portland-timbers", "name": "Portland Timbers", "short": "POR", "league": "usa", "color": "#009444"}, {"id": "atlanta-united", "name": "Atlanta United", "short": "ATL", "league": "usa", "color": "#910F28"}, {"id": "toronto-fc", "name": "Toronto FC", "short": "TOR", "league": "usa", "color": "#E30613"}, {"id": "chicago-fire", "name": "Chicago Fire", "short": "CHI", "league": "usa", "color": "#E30613"}, {"id": "dc-united", "name": "DC United", "short": "DCU", "league": "usa", "color": "#000000"}, {"id": "orlando-city", "name": "Orlando City", "short": "ORL", "league": "usa", "color": "#5B2D8E"}, {"id": "philadelphia-union", "name": "Philadelphia Union", "short": "PHI", "league": "usa", "color": "#002D62"}, {"id": "nashville-sc", "name": "Nashville SC", "short": "NSH", "league": "usa", "color": "#FFD100"}, {"id": "austin-fc", "name": "Austin FC", "short": "ATX", "league": "usa", "color": "#009444"}, {"id": "houston-dynamo", "name": "Houston Dynamo", "short": "HOU", "league": "usa", "color": "#F26522"}, {"id": "fc-dallas", "name": "FC Dallas", "short": "DAL", "league": "usa", "color": "#E30613"}, {"id": "sporting-kc", "name": "Sporting KC", "short": "SKC", "league": "usa", "color": "#93B1D7"}, {"id": "real-salt-lake", "name": "Real Salt Lake", "short": "RSL", "league": "usa", "color": "#B30838"}, {"id": "san-jose-earthquakes", "name": "San Jose Earthquakes", "short": "SJE", "league": "usa", "color": "#003DA5"}, {"id": "vancouver-whitecaps", "name": "Vancouver Whitecaps", "short": "VAN", "league": "usa", "color": "#003DA5"}, {"id": "minnesota-united", "name": "Minnesota United", "short": "MIN", "league": "usa", "color": "#0091DA"}, {"id": "charlotte-fc", "name": "Charlotte FC", "short": "CHA", "league": "usa", "color": "#003DA5"}, {"id": "st-louis-city", "name": "St. Louis City", "short": "STL", "league": "usa", "color": "#E31837"}, {"id": "cf-montreal", "name": "CF Montréal", "short": "MTL", "league": "usa", "color": "#003DA5"}, {"id": "new-england-revolution", "name": "New England Revolution", "short": "NER", "league": "usa", "color": "#002D62"}, {"id": "colorado-rapids", "name": "Colorado Rapids", "short": "COL", "league": "usa", "color": "#862633"}, {"id": "san-diego-fc", "name": "San Diego FC", "short": "SDF", "league": "usa", "color": "#0057A8"}, {"id": "arsenal", "name": "Arsenal", "short": "ARS", "league": "eng", "color": "#EF0107"}, {"id": "liverpool", "name": "Liverpool", "short": "LIV", "league": "eng", "color": "#C8102E"}, {"id": "manchester-city", "name": "Manchester City", "short": "MCI", "league": "eng", "color": "#6CABDD"}, {"id": "manchester-united", "name": "Manchester United", "short": "MUN", "league": "eng", "color": "#DA291C"}, {"id": "chelsea", "name": "Chelsea", "short": "CHE", "league": "eng", "color": "#034694"}, {"id": "tottenham-hotspur", "name": "Tottenham Hotspur", "short": "TOT", "league": "eng", "color": "#132257"}, {"id": "newcastle-united", "name": "Newcastle United", "short": "NEW", "league": "eng", "color": "#000000"}, {"id": "aston-villa", "name": "Aston Villa", "short": "AVL", "league": "eng", "color": "#670E36"}, {"id": "west-ham", "name": "West Ham", "short": "WHU", "league": "eng", "color": "#7A263A"}, {"id": "brighton", "name": "Brighton", "short": "BHA", "league": "eng", "color": "#0057B8"}, {"id": "everton", "name": "Everton", "short": "EVE", "league": "eng", "color": "#003399"}, {"id": "fulham", "name": "Fulham", "short": "FUL", "league": "eng", "color": "#000000"}, {"id": "crystal-palace", "name": "Crystal Palace", "short": "CRY", "league": "eng", "color": "#1B458F"}, {"id": "brentford", "name": "Brentford", "short": "BRE", "league": "eng", "color": "#E30613"}, {"id": "nottingham-forest", "name": "Nottingham Forest", "short": "NFO", "league": "eng", "color": "#DD0000"}, {"id": "bournemouth", "name": "Bournemouth", "short": "BOU", "league": "eng", "color": "#DA291C"}, {"id": "wolves", "name": "Wolves", "short": "WOL", "league": "eng", "color": "#FDB913"}, {"id": "leeds-united", "name": "Leeds United", "short": "LEE", "league": "eng", "color": "#FFCD00"}, {"id": "burnley", "name": "Burnley", "short": "BUR", "league": "eng", "color": "#6C1D45"}, {"id": "sunderland", "name": "Sunderland", "short": "SUN", "league": "eng", "color": "#EB172B"}, {"id": "real-madrid", "name": "Real Madrid", "short": "RMA", "league": "esp", "color": "#FFFFFF"}, {"id": "barcelona", "name": "Barcelona", "short": "BAR", "league": "esp", "color": "#A50044"}, {"id": "atletico-madrid", "name": "Atlético Madrid", "short": "ATM", "league": "esp", "color": "#CB3524"}, {"id": "athletic-club", "name": "Athletic Club", "short": "ATH", "league": "esp", "color": "#EE2523"}, {"id": "villarreal", "name": "Villarreal", "short": "VIL", "league": "esp", "color": "#FFDF00"}, {"id": "real-betis", "name": "Real Betis", "short": "BET", "league": "esp", "color": "#00954C"}, {"id": "real-sociedad", "name": "Real Sociedad", "short": "RSO", "league": "esp", "color": "#0067B1"}, {"id": "valencia", "name": "Valencia", "short": "VAL", "league": "esp", "color": "#F5A300"}, {"id": "sevilla", "name": "Sevilla", "short": "SEV", "league": "esp", "color": "#ED1C24"}, {"id": "celta-vigo", "name": "Celta Vigo", "short": "CEL", "league": "esp", "color": "#8AC3EE"}, {"id": "osasuna", "name": "Osasuna", "short": "OSA", "league": "esp", "color": "#D00027"}, {"id": "getafe", "name": "Getafe", "short": "GET", "league": "esp", "color": "#003DA5"}, {"id": "espanyol", "name": "Espanyol", "short": "ESP", "league": "esp", "color": "#007FC8"}, {"id": "rayo-vallecano", "name": "Rayo Vallecano", "short": "RAY", "league": "esp", "color": "#D5001C"}, {"id": "girona", "name": "Girona", "short": "GIR", "league": "esp", "color": "#CD2534"}, {"id": "alaves", "name": "Alavés", "short": "ALA", "league": "esp", "color": "#003DA5"}, {"id": "mallorca", "name": "Mallorca", "short": "MLL", "league": "esp", "color": "#E20613"}, {"id": "levante", "name": "Levante", "short": "LEV", "league": "esp", "color": "#004B93"}, {"id": "elche", "name": "Elche", "short": "ELC", "league": "esp", "color": "#009444"}, {"id": "real-oviedo", "name": "Real Oviedo", "short": "OVI", "league": "esp", "color": "#0057A8"}, {"id": "inter", "name": "Inter", "short": "INT", "league": "ita", "color": "#0068A8"}, {"id": "milan", "name": "Milan", "short": "MIL", "league": "ita", "color": "#FB090B"}, {"id": "juventus", "name": "Juventus", "short": "JUV", "league": "ita", "color": "#000000"}, {"id": "napoli", "name": "Napoli", "short": "NAP", "league": "ita", "color": "#12A0D7"}, {"id": "roma", "name": "Roma", "short": "ROM", "league": "ita", "color": "#A6192E"}, {"id": "atalanta", "name": "Atalanta", "short": "ATA", "league": "ita", "color": "#1E71B8"}, {"id": "lazio", "name": "Lazio", "short": "LAZ", "league": "ita", "color": "#87D8F7"}, {"id": "fiorentina", "name": "Fiorentina", "short": "FIO", "league": "ita", "color": "#582C83"}, {"id": "bologna", "name": "Bologna", "short": "BOL", "league": "ita", "color": "#A21C26"}, {"id": "torino", "name": "Torino", "short": "TOR", "league": "ita", "color": "#881B1B"}, {"id": "udinese", "name": "Udinese", "short": "UDI", "league": "ita", "color": "#000000"}, {"id": "genoa", "name": "Genoa", "short": "GEN", "league": "ita", "color": "#C8102E"}, {"id": "cagliari", "name": "Cagliari", "short": "CAG", "league": "ita", "color": "#AD002A"}, {"id": "parma", "name": "Parma", "short": "PAR", "league": "ita", "color": "#FFD100"}, {"id": "hellas-verona", "name": "Hellas Verona", "short": "VER", "league": "ita", "color": "#FCE405"}, {"id": "como", "name": "Como", "short": "COM", "league": "ita", "color": "#0064AA"}, {"id": "sassuolo", "name": "Sassuolo", "short": "SAS", "league": "ita", "color": "#00A651"}, {"id": "lecce", "name": "Lecce", "short": "LEC", "league": "ita", "color": "#FFED00"}, {"id": "pisa", "name": "Pisa", "short": "PIS", "league": "ita", "color": "#1A1A1A"}, {"id": "cremonese", "name": "Cremonese", "short": "CRE", "league": "ita", "color": "#A6192E"}, {"id": "bayern-munchen", "name": "Bayern München", "short": "FCB", "league": "ger", "color": "#DC052D"}, {"id": "borussia-dortmund", "name": "Borussia Dortmund", "short": "BVB", "league": "ger", "color": "#FDE100"}, {"id": "bayer-leverkusen", "name": "Bayer Leverkusen", "short": "B04", "league": "ger", "color": "#E32219"}, {"id": "rb-leipzig", "name": "RB Leipzig", "short": "RBL", "league": "ger", "color": "#DD001F"}, {"id": "vfb-stuttgart", "name": "VfB Stuttgart", "short": "VFB", "league": "ger", "color": "#E32219"}, {"id": "eintracht-frankfurt", "name": "Eintracht Frankfurt", "short": "SGE", "league": "ger", "color": "#E1000F"}, {"id": "wolfsburg", "name": "Wolfsburg", "short": "WOB", "league": "ger", "color": "#65B32E"}, {"id": "borussia-monchengladbach", "name": "Borussia Mönchengladbach", "short": "BMG", "league": "ger", "color": "#000000"}, {"id": "freiburg", "name": "Freiburg", "short": "SCF", "league": "ger", "color": "#E2001A"}, {"id": "hoffenheim", "name": "Hoffenheim", "short": "TSG", "league": "ger", "color": "#1961B5"}, {"id": "werder-bremen", "name": "Werder Bremen", "short": "SVW", "league": "ger", "color": "#1D9053"}, {"id": "augsburg", "name": "Augsburg", "short": "FCA", "league": "ger", "color": "#BA3733"}, {"id": "union-berlin", "name": "Union Berlin", "short": "FCU", "league": "ger", "color": "#E30613"}, {"id": "mainz-05", "name": "Mainz 05", "short": "M05", "league": "ger", "color": "#C8102E"}, {"id": "st-pauli", "name": "St. Pauli", "short": "STP", "league": "ger", "color": "#6F4E37"}, {"id": "heidenheim", "name": "Heidenheim", "short": "FCH", "league": "ger", "color": "#E2001A"}, {"id": "fc-koln", "name": "FC Köln", "short": "KOE", "league": "ger", "color": "#ED1C24"}, {"id": "hamburger-sv", "name": "Hamburger SV", "short": "HSV", "league": "ger", "color": "#0057A8"}, {"id": "paris-saint-germain", "name": "Paris Saint-Germain", "short": "PSG", "league": "fra", "color": "#004170"}, {"id": "marseille", "name": "Marseille", "short": "OM", "league": "fra", "color": "#2FAEE0"}, {"id": "monaco", "name": "Monaco", "short": "ASM", "league": "fra", "color": "#E63312"}, {"id": "lille", "name": "Lille", "short": "LIL", "league": "fra", "color": "#E01E13"}, {"id": "lyon", "name": "Lyon", "short": "LYO", "league": "fra", "color": "#003DA5"}, {"id": "nice", "name": "Nice", "short": "NIC", "league": "fra", "color": "#E30613"}, {"id": "lens", "name": "Lens", "short": "RCL", "league": "fra", "color": "#E30613"}, {"id": "rennes", "name": "Rennes", "short": "REN", "league": "fra", "color": "#E30613"}, {"id": "strasbourg", "name": "Strasbourg", "short": "STR", "league": "fra", "color": "#0091DA"}, {"id": "toulouse", "name": "Toulouse", "short": "TFC", "league": "fra", "color": "#5B2D8E"}, {"id": "brest", "name": "Brest", "short": "BRE", "league": "fra", "color": "#E30613"}, {"id": "nantes", "name": "Nantes", "short": "NAN", "league": "fra", "color": "#00874C"}, {"id": "auxerre", "name": "Auxerre", "short": "AJA", "league": "fra", "color": "#0057A8"}, {"id": "angers", "name": "Angers", "short": "SCO", "league": "fra", "color": "#000000"}, {"id": "le-havre", "name": "Le Havre", "short": "HAC", "league": "fra", "color": "#0091DA"}, {"id": "lorient", "name": "Lorient", "short": "LOR", "league": "fra", "color": "#F26522"}, {"id": "metz", "name": "Metz", "short": "MET", "league": "fra", "color": "#722F37"}, {"id": "paris-fc", "name": "Paris FC", "short": "PFC", "league": "fra", "color": "#003DA5"}, {"id": "ajax", "name": "Ajax", "short": "AJA", "league": "ned", "color": "#D2122E"}, {"id": "psv", "name": "PSV", "short": "PSV", "league": "ned", "color": "#ED1C24"}, {"id": "feyenoord", "name": "Feyenoord", "short": "FEY", "league": "ned", "color": "#FF0000"}, {"id": "utrecht", "name": "Utrecht", "short": "UTR", "league": "ned", "color": "#E30613"}, {"id": "az", "name": "AZ", "short": "AZ", "league": "ned", "color": "#ED1C24"}, {"id": "twente", "name": "Twente", "short": "TWE", "league": "ned", "color": "#E30613"}, {"id": "heerenveen", "name": "Heerenveen", "short": "HEE", "league": "ned", "color": "#003DA5"}, {"id": "nec", "name": "NEC", "short": "NEC", "league": "ned", "color": "#E30613"}, {"id": "sparta-rotterdam", "name": "Sparta Rotterdam", "short": "SPA", "league": "ned", "color": "#E30613"}, {"id": "go-ahead-eagles", "name": "Go Ahead Eagles", "short": "GAE", "league": "ned", "color": "#E30613"}, {"id": "fortuna-sittard", "name": "Fortuna Sittard", "short": "FOR", "league": "ned", "color": "#FFD100"}, {"id": "groningen", "name": "Groningen", "short": "GRO", "league": "ned", "color": "#009444"}, {"id": "pec-zwolle", "name": "PEC Zwolle", "short": "PEC", "league": "ned", "color": "#003DA5"}, {"id": "heracles", "name": "Heracles", "short": "HER", "league": "ned", "color": "#000000"}, {"id": "nac-breda", "name": "NAC Breda", "short": "NAC", "league": "ned", "color": "#FFD100"}, {"id": "excelsior", "name": "Excelsior", "short": "EXC", "league": "ned", "color": "#E30613"}, {"id": "volendam", "name": "Volendam", "short": "VOL", "league": "ned", "color": "#F26522"}, {"id": "telstar", "name": "Telstar", "short": "TEL", "league": "ned", "color": "#F5F5F5"}, {"id": "sporting-cp", "name": "Sporting CP", "short": "SCP", "league": "por", "color": "#008057"}, {"id": "benfica", "name": "Benfica", "short": "SLB", "league": "por", "color": "#E30613"}, {"id": "porto", "name": "Porto", "short": "FCP", "league": "por", "color": "#003DA5"}, {"id": "braga", "name": "Braga", "short": "SCB", "league": "por", "color": "#E30613"}, {"id": "vitoria-guimaraes", "name": "Vitória Guimarães", "short": "VSC", "league": "por", "color": "#000000"}, {"id": "santa-clara", "name": "Santa Clara", "short": "SCL", "league": "por", "color": "#E30613"}, {"id": "famalicao", "name": "Famalicão", "short": "FAM", "league": "por", "color": "#003DA5"}, {"id": "moreirense", "name": "Moreirense", "short": "MOR", "league": "por", "color": "#009444"}, {"id": "rio-ave", "name": "Rio Ave", "short": "RAV", "league": "por", "color": "#009444"}, {"id": "gil-vicente", "name": "Gil Vicente", "short": "GIL", "league": "por", "color": "#E30613"}, {"id": "casa-pia", "name": "Casa Pia", "short": "CAS", "league": "por", "color": "#000000"}, {"id": "estoril", "name": "Estoril", "short": "EST", "league": "por", "color": "#FFD100"}, {"id": "arouca", "name": "Arouca", "short": "ARO", "league": "por", "color": "#FFD100"}, {"id": "estrela-amadora", "name": "Estrela Amadora", "short": "ETA", "league": "por", "color": "#E30613"}, {"id": "cd-nacional", "name": "CD Nacional", "short": "NAC", "league": "por", "color": "#000000"}, {"id": "avs", "name": "AVS", "short": "AVS", "league": "por", "color": "#E30613"}, {"id": "tondela", "name": "Tondela", "short": "TON", "league": "por", "color": "#FFD100"}, {"id": "alverca", "name": "Alverca", "short": "ALV", "league": "por", "color": "#E30613"}, {"id": "celtic", "name": "Celtic", "short": "CEL", "league": "sco", "color": "#009444"}, {"id": "rangers", "name": "Rangers", "short": "RAN", "league": "sco", "color": "#1B458F"}, {"id": "hearts", "name": "Hearts", "short": "HEA", "league": "sco", "color": "#722F37"}, {"id": "hibernian", "name": "Hibernian", "short": "HIB", "league": "sco", "color": "#009444"}, {"id": "aberdeen", "name": "Aberdeen", "short": "ABE", "league": "sco", "color": "#E30613"}, {"id": "dundee-united", "name": "Dundee United", "short": "DNU", "league": "sco", "color": "#F26522"}, {"id": "motherwell", "name": "Motherwell", "short": "MOT", "league": "sco", "color": "#FFB81C"}, {"id": "kilmarnock", "name": "Kilmarnock", "short": "KIL", "league": "sco", "color": "#003DA5"}, {"id": "st-mirren", "name": "St Mirren", "short": "STM", "league": "sco", "color": "#000000"}, {"id": "dundee", "name": "Dundee", "short": "DUN", "league": "sco", "color": "#003DA5"}, {"id": "livingston", "name": "Livingston", "short": "LIV", "league": "sco", "color": "#FFB81C"}, {"id": "falkirk", "name": "Falkirk", "short": "FAL", "league": "sco", "color": "#003DA5"}, {"id": "galatasaray", "name": "Galatasaray", "short": "GS", "league": "tur", "color": "#E30613"}, {"id": "fenerbahce", "name": "Fenerbahçe", "short": "FB", "league": "tur", "color": "#FFED00"}, {"id": "besiktas", "name": "Beşiktaş", "short": "BJK", "league": "tur", "color": "#000000"}, {"id": "trabzonspor", "name": "Trabzonspor", "short": "TS", "league": "tur", "color": "#7A1F3D"}, {"id": "basaksehir", "name": "Başakşehir", "short": "BAS", "league": "tur", "color": "#F26522"}, {"id": "samsunspor", "name": "Samsunspor", "short": "SAM", "league": "tur", "color": "#E30613"}, {"id": "eyupspor", "name": "Eyüpspor", "short": "EYU", "league": "tur", "color": "#5B2D8E"}, {"id": "goztepe", "name": "Göztepe", "short": "GOZ", "league": "tur", "color": "#FFD100"}, {"id": "konyaspor", "name": "Konyaspor", "short": "KON", "league": "tur", "color": "#009444"}, {"id": "alanyaspor", "name": "Alanyaspor", "short": "ALN", "league": "tur", "color": "#F26522"}, {"id": "kasimpasa", "name": "Kasımpaşa", "short": "KAS", "league": "tur", "color": "#0091DA"}, {"id": "antalyaspor", "name": "Antalyaspor", "short": "ANT", "league": "tur", "color": "#E30613"}, {"id": "caykur-rizespor", "name": "Çaykur Rizespor", "short": "RIZ", "league": "tur", "color": "#009444"}, {"id": "gaziantep-fk", "name": "Gaziantep FK", "short": "GAZ", "league": "tur", "color": "#E30613"}, {"id": "kayserispor", "name": "Kayserispor", "short": "KAY", "league": "tur", "color": "#E30613"}, {"id": "sivasspor", "name": "Sivasspor", "short": "SIV", "league": "tur", "color": "#E30613"}, {"id": "hatayspor", "name": "Hatayspor", "short": "HAT", "league": "tur", "color": "#722F37"}, {"id": "bodrum-fk", "name": "Bodrum FK", "short": "BOD", "league": "tur", "color": "#009444"}, {"id": "adana-demirspor", "name": "Adana Demirspor", "short": "ADS", "league": "tur", "color": "#003DA5"}, {"id": "club-brugge", "name": "Club Brugge", "short": "BRU", "league": "bel", "color": "#003DA5"}, {"id": "union-sg", "name": "Union SG", "short": "USG", "league": "bel", "color": "#FFD100"}, {"id": "anderlecht", "name": "Anderlecht", "short": "AND", "league": "bel", "color": "#5B2D8E"}, {"id": "genk", "name": "Genk", "short": "GNK", "league": "bel", "color": "#003DA5"}, {"id": "gent", "name": "Gent", "short": "GNT", "league": "bel", "color": "#0057A8"}, {"id": "antwerp", "name": "Antwerp", "short": "ANT", "league": "bel", "color": "#E30613"}, {"id": "standard-liege", "name": "Standard Liège", "short": "STA", "league": "bel", "color": "#E30613"}, {"id": "westerlo", "name": "Westerlo", "short": "WES", "league": "bel", "color": "#FFD100"}, {"id": "mechelen", "name": "Mechelen", "short": "MEC", "league": "bel", "color": "#FFD100"}, {"id": "charleroi", "name": "Charleroi", "short": "CHA", "league": "bel", "color": "#000000"}, {"id": "sint-truiden", "name": "Sint-Truiden", "short": "STV", "league": "bel", "color": "#FFD100"}, {"id": "cercle-brugge", "name": "Cercle Brugge", "short": "CER", "league": "bel", "color": "#009444"}, {"id": "oh-leuven", "name": "OH Leuven", "short": "OHL", "league": "bel", "color": "#E30613"}, {"id": "dender", "name": "Dender", "short": "DEN", "league": "bel", "color": "#0057A8"}, {"id": "zulte-waregem", "name": "Zulte Waregem", "short": "ZWA", "league": "bel", "color": "#E30613"}, {"id": "raal-la-louviere", "name": "RAAL La Louvière", "short": "RAL", "league": "bel", "color": "#009444"}]}, "boards": {"global": [{"club": "real-madrid", "league": "esp", "total": 214, "pushes": 132, "firstAt": 1792421650852, "lastAt": 1792519330852, "shout": {"text": "Hala Madrid — the world is ours", "fan": "VikingoRM", "at": 1792519330852}, "position": 1}, {"club": "barcelona", "league": "esp", "total": 201, "pushes": 121, "firstAt": 1792423870852, "lastAt": 1792519150852, "shout": {"text": "Més que un club", "fan": "Culé1899", "at": 1792519150852}, "position": 2}, {"club": "river-plate", "league": "arg", "total": 168, "pushes": 118, "firstAt": 1792428310852, "lastAt": 1792518790852, "shout": {"text": "¡Este año la tabla es nuestra!", "fan": "El Diez", "at": 1792518790852}, "position": 3}, {"club": "boca-juniors", "league": "arg", "total": 157, "pushes": 109, "firstAt": 1792430530852, "lastAt": 1792518610852, "shout": {"text": "La 12 no abandona: ¡arriba Boca!", "fan": "Xeneize12", "at": 1792518610852}, "position": 4}, {"club": "manchester-city", "league": "eng", "total": 131, "pushes": 74, "firstAt": 1792437190852, "lastAt": 1792518070852, "position": 5}, {"club": "liverpool", "league": "eng", "total": 124, "pushes": 71, "firstAt": 1792439410852, "lastAt": 1792517890852, "shout": {"text": "You'll never walk alone", "fan": "KopiteYNWA", "at": 1792517890852}, "position": 6}, {"club": "flamengo", "league": "bra", "total": 118, "pushes": 88, "firstAt": 1792443850852, "lastAt": 1792517530852, "shout": {"text": "Maior do mundo", "fan": "TorcedorBR", "at": 1792517530852}, "position": 7}, {"club": "paris-saint-germain", "league": "fra", "total": 104, "pushes": 63, "firstAt": 1792450510852, "lastAt": 1792516990852, "position": 8}, {"club": "bayern-munchen", "league": "ger", "total": 97, "pushes": 58, "firstAt": 1792454950852, "lastAt": 1792516630852, "position": 9}, {"club": "atletico-madrid", "league": "esp", "total": 96, "pushes": 61, "firstAt": 1792426090852, "lastAt": 1792518970852, "position": 10}, {"club": "inter-miami", "league": "usa", "total": 92, "pushes": 66, "firstAt": 1792463830852, "lastAt": 1792515910852, "shout": {"text": "Miami to the top", "fan": "MikeMLS", "at": 1792515910852}, "position": 11}, {"club": "palmeiras", "league": "bra", "total": 89, "pushes": 61, "firstAt": 1792446070852, "lastAt": 1792517350852, "position": 12}, {"club": "arsenal", "league": "eng", "total": 88, "pushes": 57, "firstAt": 1792441630852, "lastAt": 1792517710852, "shout": {"text": "North London is ours", "fan": "Gunner4Life", "at": 1792517710852}, "position": 13}, {"club": "inter", "league": "ita", "total": 81, "pushes": 49, "firstAt": 1792459390852, "lastAt": 1792516270852, "position": 14}, {"club": "club-america", "league": "mex", "total": 76, "pushes": 52, "firstAt": 1792470490852, "lastAt": 1792515370852, "shout": {"text": "¡Ódiame más!", "fan": "ÁguilaMayor", "at": 1792515370852}, "position": 15}, {"club": "juventus", "league": "ita", "total": 64, "pushes": 41, "firstAt": 1792461610852, "lastAt": 1792516090852, "position": 16}, {"club": "la-galaxy", "league": "usa", "total": 63, "pushes": 40, "firstAt": 1792466050852, "lastAt": 1792515730852, "position": 17}, {"club": "benfica", "league": "por", "total": 61, "pushes": 39, "firstAt": 1792514890852, "lastAt": 1792511770852, "position": 18}, {"club": "ajax", "league": "ned", "total": 58, "pushes": 37, "firstAt": 1792512670852, "lastAt": 1792511950852, "position": 19}, {"club": "independiente", "league": "arg", "total": 55, "pushes": 34, "firstAt": 1792432750852, "lastAt": 1792518430852, "position": 20}, {"club": "sporting-cp", "league": "por", "total": 54, "pushes": 35, "firstAt": 1792517110852, "lastAt": 1792511590852, "position": 21}, {"club": "galatasaray", "league": "tur", "total": 52, "pushes": 33, "firstAt": 1792501570852, "lastAt": 1792512850852, "position": 22}, {"club": "chivas", "league": "mex", "total": 48, "pushes": 31, "firstAt": 1792472710852, "lastAt": 1792515190852, "position": 23}, {"club": "nacional", "league": "uru", "total": 47, "pushes": 29, "firstAt": 1792479370852, "lastAt": 1792514650852, "position": 24}, {"club": "fenerbahce", "league": "tur", "total": 46, "pushes": 30, "firstAt": 1792503790852, "lastAt": 1792512670852, "position": 25}, {"club": "borussia-dortmund", "league": "ger", "total": 44, "pushes": 29, "firstAt": 1792457170852, "lastAt": 1792516450852, "position": 26}, {"club": "colo-colo", "league": "chi", "total": 43, "pushes": 27, "firstAt": 1792483810852, "lastAt": 1792514290852, "shout": {"text": "El Cacique manda en Chile", "fan": "AlboEterno", "at": 1792514290852}, "position": 27}, {"club": "racing", "league": "arg", "total": 41, "pushes": 26, "firstAt": 1792434970852, "lastAt": 1792518250852, "position": 28}, {"club": "penarol", "league": "uru", "total": 39, "pushes": 24, "firstAt": 1792481590852, "lastAt": 1792514470852, "position": 29}, {"club": "marseille", "league": "fra", "total": 38, "pushes": 24, "firstAt": 1792452730852, "lastAt": 1792516810852, "position": 30}, {"club": "sao-paulo", "league": "bra", "total": 36, "pushes": 22, "firstAt": 1792448290852, "lastAt": 1792517170852, "position": 31}, {"club": "celtic", "league": "sco", "total": 35, "pushes": 23, "firstAt": 1792508230852, "lastAt": 1792512310852, "position": 32}, {"club": "atletico-nacional", "league": "col", "total": 34, "pushes": 21, "firstAt": 1792474930852, "lastAt": 1792515010852, "position": 33}, {"club": "rangers", "league": "sco", "total": 33, "pushes": 22, "firstAt": 1792510450852, "lastAt": 1792512130852, "position": 34}, {"club": "universidad-de-chile", "league": "chi", "total": 31, "pushes": 20, "firstAt": 1792486030852, "lastAt": 1792514110852, "position": 35}, {"club": "club-brugge", "league": "bel", "total": 29, "pushes": 19, "firstAt": 1792506010852, "lastAt": 1792512490852, "position": 36}, {"club": "olimpia", "league": "par", "total": 28, "pushes": 17, "firstAt": 1792488250852, "lastAt": 1792513930852, "position": 37}, {"club": "millonarios", "league": "col", "total": 27, "pushes": 18, "firstAt": 1792477150852, "lastAt": 1792514830852, "position": 38}, {"club": "universitario", "league": "per", "total": 24, "pushes": 15, "firstAt": 1792490470852, "lastAt": 1792513750852, "position": 39}, {"club": "barcelona-sc", "league": "ecu", "total": 23, "pushes": 16, "firstAt": 1792497130852, "lastAt": 1792513210852, "position": 40}, {"club": "seattle-sounders", "league": "usa", "total": 22, "pushes": 14, "firstAt": 1792468270852, "lastAt": 1792515550852, "position": 41}, {"club": "alianza-lima", "league": "per", "total": 21, "pushes": 13, "firstAt": 1792492690852, "lastAt": 1792513570852, "position": 42}, {"club": "bolivar", "league": "bol", "total": 19, "pushes": 12, "firstAt": 1792494910852, "lastAt": 1792513390852, "position": 43}, {"club": "caracas", "league": "ven", "total": 17, "pushes": 11, "firstAt": 1792499350852, "lastAt": 1792513030852, "position": 44}], "arg": [{"club": "river-plate", "league": "arg", "total": 168, "pushes": 118, "firstAt": 1792510450852, "lastAt": 1792519330852, "shout": {"text": "¡Este año la tabla es nuestra!", "fan": "El Diez", "at": 1792519330852}, "position": 1}, {"club": "boca-juniors", "league": "arg", "total": 157, "pushes": 109, "firstAt": 1792512670852, "lastAt": 1792519150852, "shout": {"text": "La 12 no abandona: ¡arriba Boca!", "fan": "Xeneize12", "at": 1792519150852}, "position": 2}, {"club": "independiente", "league": "arg", "total": 55, "pushes": 34, "firstAt": 1792514890852, "lastAt": 1792518970852, "position": 3}, {"club": "racing", "league": "arg", "total": 41, "pushes": 26, "firstAt": 1792517110852, "lastAt": 1792518790852, "position": 4}], "bel": [{"club": "club-brugge", "league": "bel", "total": 29, "pushes": 19, "firstAt": 1792517110852, "lastAt": 1792519330852, "position": 1}], "bol": [{"club": "bolivar", "league": "bol", "total": 19, "pushes": 12, "firstAt": 1792517110852, "lastAt": 1792519330852, "position": 1}], "bra": [{"club": "flamengo", "league": "bra", "total": 118, "pushes": 88, "firstAt": 1792512670852, "lastAt": 1792519330852, "shout": {"text": "Maior do mundo", "fan": "TorcedorBR", "at": 1792519330852}, "position": 1}, {"club": "palmeiras", "league": "bra", "total": 89, "pushes": 61, "firstAt": 1792514890852, "lastAt": 1792519150852, "position": 2}, {"club": "sao-paulo", "league": "bra", "total": 36, "pushes": 22, "firstAt": 1792517110852, "lastAt": 1792518970852, "position": 3}], "chi": [{"club": "colo-colo", "league": "chi", "total": 43, "pushes": 27, "firstAt": 1792514890852, "lastAt": 1792519330852, "shout": {"text": "El Cacique manda en Chile", "fan": "AlboEterno", "at": 1792519330852}, "position": 1}, {"club": "universidad-de-chile", "league": "chi", "total": 31, "pushes": 20, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "col": [{"club": "atletico-nacional", "league": "col", "total": 34, "pushes": 21, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "millonarios", "league": "col", "total": 27, "pushes": 18, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "ecu": [{"club": "barcelona-sc", "league": "ecu", "total": 23, "pushes": 16, "firstAt": 1792517110852, "lastAt": 1792519330852, "position": 1}], "eng": [{"club": "manchester-city", "league": "eng", "total": 131, "pushes": 74, "firstAt": 1792512670852, "lastAt": 1792519330852, "position": 1}, {"club": "liverpool", "league": "eng", "total": 124, "pushes": 71, "firstAt": 1792514890852, "lastAt": 1792519150852, "shout": {"text": "You'll never walk alone", "fan": "KopiteYNWA", "at": 1792519150852}, "position": 2}, {"club": "arsenal", "league": "eng", "total": 88, "pushes": 57, "firstAt": 1792517110852, "lastAt": 1792518970852, "shout": {"text": "North London is ours", "fan": "Gunner4Life", "at": 1792518970852}, "position": 3}], "esp": [{"club": "real-madrid", "league": "esp", "total": 214, "pushes": 132, "firstAt": 1792512670852, "lastAt": 1792519330852, "shout": {"text": "Hala Madrid — the world is ours", "fan": "VikingoRM", "at": 1792519330852}, "position": 1}, {"club": "barcelona", "league": "esp", "total": 201, "pushes": 121, "firstAt": 1792514890852, "lastAt": 1792519150852, "shout": {"text": "Més que un club", "fan": "Culé1899", "at": 1792519150852}, "position": 2}, {"club": "atletico-madrid", "league": "esp", "total": 96, "pushes": 61, "firstAt": 1792517110852, "lastAt": 1792518970852, "position": 3}], "fra": [{"club": "paris-saint-germain", "league": "fra", "total": 104, "pushes": 63, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "marseille", "league": "fra", "total": 38, "pushes": 24, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "ger": [{"club": "bayern-munchen", "league": "ger", "total": 97, "pushes": 58, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "borussia-dortmund", "league": "ger", "total": 44, "pushes": 29, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "ita": [{"club": "inter", "league": "ita", "total": 81, "pushes": 49, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "juventus", "league": "ita", "total": 64, "pushes": 41, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "mex": [{"club": "club-america", "league": "mex", "total": 76, "pushes": 52, "firstAt": 1792514890852, "lastAt": 1792519330852, "shout": {"text": "¡Ódiame más!", "fan": "ÁguilaMayor", "at": 1792519330852}, "position": 1}, {"club": "chivas", "league": "mex", "total": 48, "pushes": 31, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "ned": [{"club": "ajax", "league": "ned", "total": 58, "pushes": 37, "firstAt": 1792517110852, "lastAt": 1792519330852, "position": 1}], "par": [{"club": "olimpia", "league": "par", "total": 28, "pushes": 17, "firstAt": 1792517110852, "lastAt": 1792519330852, "position": 1}], "per": [{"club": "universitario", "league": "per", "total": 24, "pushes": 15, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "alianza-lima", "league": "per", "total": 21, "pushes": 13, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "por": [{"club": "benfica", "league": "por", "total": 61, "pushes": 39, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "sporting-cp", "league": "por", "total": 54, "pushes": 35, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "sco": [{"club": "celtic", "league": "sco", "total": 35, "pushes": 23, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "rangers", "league": "sco", "total": 33, "pushes": 22, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "tur": [{"club": "galatasaray", "league": "tur", "total": 52, "pushes": 33, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "fenerbahce", "league": "tur", "total": 46, "pushes": 30, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "uru": [{"club": "nacional", "league": "uru", "total": 47, "pushes": 29, "firstAt": 1792514890852, "lastAt": 1792519330852, "position": 1}, {"club": "penarol", "league": "uru", "total": 39, "pushes": 24, "firstAt": 1792517110852, "lastAt": 1792519150852, "position": 2}], "usa": [{"club": "inter-miami", "league": "usa", "total": 92, "pushes": 66, "firstAt": 1792512670852, "lastAt": 1792519330852, "shout": {"text": "Miami to the top", "fan": "MikeMLS", "at": 1792519330852}, "position": 1}, {"club": "la-galaxy", "league": "usa", "total": 63, "pushes": 40, "firstAt": 1792514890852, "lastAt": 1792519150852, "position": 2}, {"club": "seattle-sounders", "league": "usa", "total": 22, "pushes": 14, "firstAt": 1792517110852, "lastAt": 1792518970852, "position": 3}], "ven": [{"club": "caracas", "league": "ven", "total": 17, "pushes": 11, "firstAt": 1792517110852, "lastAt": 1792519330852, "position": 1}]}, "statsByScope": {"global": {"totalPushed": 2968, "totalPushes": 1902, "clubsRanked": 44}, "arg": {"totalPushed": 421, "totalPushes": 287, "clubsRanked": 4}, "bel": {"totalPushed": 29, "totalPushes": 19, "clubsRanked": 1}, "bol": {"totalPushed": 19, "totalPushes": 12, "clubsRanked": 1}, "bra": {"totalPushed": 243, "totalPushes": 171, "clubsRanked": 3}, "chi": {"totalPushed": 74, "totalPushes": 47, "clubsRanked": 2}, "col": {"totalPushed": 61, "totalPushes": 39, "clubsRanked": 2}, "ecu": {"totalPushed": 23, "totalPushes": 16, "clubsRanked": 1}, "eng": {"totalPushed": 343, "totalPushes": 202, "clubsRanked": 3}, "esp": {"totalPushed": 511, "totalPushes": 314, "clubsRanked": 3}, "fra": {"totalPushed": 142, "totalPushes": 87, "clubsRanked": 2}, "ger": {"totalPushed": 141, "totalPushes": 87, "clubsRanked": 2}, "ita": {"totalPushed": 145, "totalPushes": 90, "clubsRanked": 2}, "mex": {"totalPushed": 124, "totalPushes": 83, "clubsRanked": 2}, "ned": {"totalPushed": 58, "totalPushes": 37, "clubsRanked": 1}, "par": {"totalPushed": 28, "totalPushes": 17, "clubsRanked": 1}, "per": {"totalPushed": 45, "totalPushes": 28, "clubsRanked": 2}, "por": {"totalPushed": 115, "totalPushes": 74, "clubsRanked": 2}, "sco": {"totalPushed": 68, "totalPushes": 45, "clubsRanked": 2}, "tur": {"totalPushed": 98, "totalPushes": 63, "clubsRanked": 2}, "uru": {"totalPushed": 86, "totalPushes": 53, "clubsRanked": 2}, "usa": {"totalPushed": 177, "totalPushes": 120, "clubsRanked": 3}, "ven": {"totalPushed": 17, "totalPushes": 11, "clubsRanked": 1}}, "activity": [{"club": "river-plate", "league": "arg", "scope": "arg", "amount": 12, "fan": "El Diez", "message": "¡Este año la tabla es nuestra!", "at": 1792519210852}, {"club": "real-madrid", "league": "esp", "scope": "global", "amount": 20, "fan": "VikingoRM", "message": "Hala Madrid — the world is ours", "at": 1792519030852}, {"club": "boca-juniors", "league": "arg", "scope": "arg", "amount": 10, "fan": "Xeneize12", "message": "", "at": 1792518910852}, {"club": "inter-miami", "league": "usa", "scope": "global", "amount": 8, "fan": "MikeMLS", "message": "", "at": 1792518670852}, {"club": "flamengo", "league": "bra", "scope": "bra", "amount": 15, "fan": "TorcedorBR", "message": "Maior do mundo", "at": 1792518490852}, {"club": "barcelona", "league": "esp", "scope": "esp", "amount": 11, "fan": "Culé1899", "message": "", "at": 1792518250852}, {"club": "colo-colo", "league": "chi", "scope": "global", "amount": 5, "fan": "AlboEterno", "message": "El Cacique manda en Chile", "at": 1792517950852}, {"club": "liverpool", "league": "eng", "scope": "eng", "amount": 9, "fan": "KopiteYNWA", "message": "", "at": 1792517590852}, {"club": "galatasaray", "league": "tur", "scope": "global", "amount": 7, "fan": "Cimbom1905", "message": "", "at": 1792517290852}], "chat": [{"fan": "Xeneize12", "club": "boca-juniors", "text": "River, miren la tabla desde abajo 😄", "at": 1792519270852}, {"fan": "El Diez", "club": "river-plate", "text": "Tranquilo, la temporada es larga y la cima es nuestra", "at": 1792519090852}, {"fan": "Culé1899", "club": "barcelona", "text": "Madrid, enjoy it while it lasts", "at": 1792518850852}, {"fan": "VikingoRM", "club": "real-madrid", "text": "The world champion will be white. Watch us.", "at": 1792518610852}, {"fan": "MikeMLS", "club": "inter-miami", "text": "Miami is coming for that global top 5", "at": 1792518190852}, {"fan": "TorcedorBR", "club": "flamengo", "text": "Flamengo maior do mundo, simples assim", "at": 1792517770852}, {"fan": "AnaBanana", "club": "palmeiras", "text": "Verdão no topo do Brasil, anotem aí", "at": 1792517350852}]};</script>
+<script>
+/**
+ * app.js — Hinchaboard index page: live ticker, podium, TWO independent
+ * ranked tables (country ranking + world ranking), push form with scope and
+ * message, activity feed, fan chat ("La Tribuna"), club showcase carousels
+ * and Hall of Fame. Pure frontend; no build step.
+ * Preview mode: if window.__HINCHABOARD__ is set, it is used instead of the
+ * API and live activity is simulated.
+ */
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const PREVIEW = window.__HINCHABOARD__ || null;
+
+const STRINGS = {
+  en: {
+    tickerLabel: "LIVE", brandSub: "THE FANS' RANKING",
+    season: "SEASON", endsIn: "ends in",
+    headline: "The ranking the fans decide.",
+    sub: "Every dollar is a push. Push from $1, lift your club, and the club on top when the year ends stays in the Hall of Fame forever.",
+    statPool: "TOTAL PUSHED", statPushes: "FAN PUSHES", statClubs: "CLUBS RANKED", statListed: "CLUBS LISTED",
+    rules: "Minimum push <strong>$1</strong> · Pushes pool into your club's total · Pass the club above by <strong>$1 or more</strong> · <strong>Two separate competitions</strong>: country and world",
+    podiumGlobal: "Top of the world", podiumCountry: "Top of {country}", boardTitle: "The table",
+    scopeGlobal: "World ranking", scopeCountry: "By country",
+    scopeNote: "Two separate competitions — pushes in one never move the other.",
+    boardEmpty: "No pushes yet here — the first fan puts their club on top for $1.",
+    pushTitle: "Push your club", fLeague: "League", fClub: "Club",
+    fFan: "Your fan name (optional)", fMessage: "Message next to your club (optional)",
+    fMessagePh: "Say it loud — rivals will read it", fAmount: "Your push (USD)", pushBtn: "Push now",
+    formScope: "Where does your push count?", formScopeCountry: "Club's country", formScopeGlobal: "The world",
+    formCountsGlobal: "Counts only for the world ranking.",
+    formCountsCountry: "Counts only for the {country} ranking.",
+    firstPushHint: "The first push puts your club on top of this ranking for $1.",
+    feedTitle: "Live from the stands",
+    chatTitle: "La Tribuna — fan chat", cFanPh: "Your fan name", cTextPh: "Talk to the stands…", chatSend: "Send",
+    chatBalance: "Messages: {n}", chatNoCredit: "You're out of messages. Add credit to keep chatting.",
+    creditBtn: "Add messages", creditNote: "USD 1 = 3 messages. Chat credit is separate from the rankings.",
+    creditPreview: "Preview: {n} messages added locally.", creditErr: "Could not start the credit purchase.",
+    creditStart: "Opening checkout…",
+    showTitle: "Every club. Every league.",
+    showSub: "405 clubs across Latin America, the MLS and Europe — listed free, forever. The ranked tables above are where the fans fight.",
+    hofTitle: "Hall of Fame",
+    hofText: "When the season ends, the world champion and the champion of every country enter here and stay forever. The first class is crowned on December 31.",
+    hofWorld: "World Champion", hofCountries: "Country champions", hofTbd: "Crowned Dec 31",
+    footer: "Transparent fan ranking — every push is public. Seasons run January 1 to December 31; champions are forever.",
+    scopeTagGlobal: "🌍 World",
+    pushesWord: "pushes", needWord: "needs", toPass: "to pass",
+    moreBtn: "Show more", lessBtn: "Show less",
+    projected: "With this push:",
+    projectLead: "your club takes the lead here",
+    projectPos: "your club reaches #{pos}",
+    projectNeed: "{amount} more to pass {club}",
+    errAmount: "Minimum push is $1.00.", errClub: "Pick your club first.",
+    errScope: "That club belongs to another country ranking. Use the world ranking to push it.",
+    previewOk: "Preview mode: your push would be sent to checkout. Payments are not live yet.",
+    chatErr: "Could not send. Try again in a bit.", anonymous: "A fan",
+    regions: { latam: "Latin America", usa: "United States · MLS", europe: "Europe" },
+    yourClubTop: "Your club is on top here — defend it!",
+  },
+  es: {
+    tickerLabel: "EN VIVO", brandSub: "EL RANKING DE LOS HINCHAS",
+    season: "TEMPORADA", endsIn: "cierra en",
+    headline: "El ranking que deciden los hinchas.",
+    sub: "Cada dólar es un empuje. Empujá desde USD 1, hacé subir a tu club, y el club que cierra el año arriba queda en el Salón de la Fama para siempre.",
+    statPool: "TOTAL EMPUJADO", statPushes: "EMPUJES", statClubs: "CLUBES EN TABLAS", statListed: "CLUBES LISTADOS",
+    rules: "Empuje mínimo <strong>$1</strong> · Los empujes se suman al total de tu club · Superá al de arriba por <strong>$1 o más</strong> · <strong>Dos competencias separadas</strong>: país y mundo",
+    podiumGlobal: "La cima del mundo", podiumCountry: "La cima de {country}", boardTitle: "La tabla",
+    scopeGlobal: "Ranking mundial", scopeCountry: "Por país",
+    scopeNote: "Dos competencias separadas: los empujes de una no mueven la otra.",
+    boardEmpty: "Todavía no hay empujes acá: el primer hincha pone a su club arriba por USD 1.",
+    pushTitle: "Empujá a tu club", fLeague: "Liga", fClub: "Club",
+    fFan: "Tu nombre de hincha (opcional)", fMessage: "Mensaje junto a tu club (opcional)",
+    fMessagePh: "Decilo fuerte: lo leen los rivales", fAmount: "Tu empuje (USD)", pushBtn: "Empujar ahora",
+    formScope: "¿Dónde cuenta tu empuje?", formScopeCountry: "País del club", formScopeGlobal: "El mundo",
+    formCountsGlobal: "Cuenta solo para el ranking mundial.",
+    formCountsCountry: "Cuenta solo para el ranking de {country}.",
+    firstPushHint: "El primer empuje pone a tu club arriba de este ranking por USD 1.",
+    feedTitle: "En vivo desde la tribuna",
+    chatTitle: "La Tribuna — chat de hinchas", cFanPh: "Tu nombre de hincha", cTextPh: "Hablale a la tribuna…", chatSend: "Enviar",
+    chatBalance: "Mensajes: {n}", chatNoCredit: "Te quedaste sin mensajes. Cargá crédito para seguir hablando.",
+    creditBtn: "Cargar mensajes", creditNote: "USD 1 = 3 mensajes. El crédito del chat va aparte de los rankings.",
+    creditPreview: "Vista previa: {n} mensajes cargados localmente.", creditErr: "No se pudo iniciar la compra de mensajes.",
+    creditStart: "Abriendo el pago…",
+    showTitle: "Todos los clubes. Todas las ligas.",
+    showSub: "405 clubes de América Latina, la MLS y Europa: listados gratis, para siempre. Las tablas de arriba son donde pelean los hinchas.",
+    hofTitle: "Salón de la Fama",
+    hofText: "Cuando cierra la temporada, el campeón mundial y el campeón de cada país entran acá y se quedan para siempre. La primera camada se corona el 31 de diciembre.",
+    hofWorld: "Campeón mundial", hofCountries: "Campeones de cada país", hofTbd: "Se corona el 31/12",
+    footer: "Ranking de hinchas transparente: cada empuje es público. Las temporadas van del 1 de enero al 31 de diciembre; los campeones son para siempre.",
+    scopeTagGlobal: "🌍 Mundial",
+    pushesWord: "empujes", needWord: "necesita", toPass: "para pasar a",
+    moreBtn: "Ver más", lessBtn: "Ver menos",
+    projected: "Con este empuje:",
+    projectLead: "tu club queda puntero acá",
+    projectPos: "tu club llega al puesto #{pos}",
+    projectNeed: "faltan {amount} para pasar a {club}",
+    errAmount: "El empuje mínimo es $1.00.", errClub: "Elegí tu club primero.",
+    errScope: "Ese club pertenece al ranking de otro país. Para empujarlo usá el ranking mundial.",
+    previewOk: "Vista previa: tu empuje iría al pago. Los pagos todavía no están activos.",
+    chatErr: "No se pudo enviar. Probá en un rato.", anonymous: "Un hincha",
+    regions: { latam: "América Latina", usa: "Estados Unidos · MLS", europe: "Europa" },
+    yourClubTop: "Tu club está arriba acá: ¡a defenderlo!",
+  },
+};
+
+const defaultLang = () => {
+  const stored = localStorage.getItem("hinchaboard-lang");
+  if (stored === "en" || stored === "es") return stored;
+  return String(navigator.language || "en").toLowerCase().startsWith("es") ? "es" : "en";
+};
+
+const state = {
+  lang: defaultLang(),
+  viewScope: "global",   // board view: "global" | "country"
+  country: "arg",        // selected country tab (league id = country key)
+  formScope: "country",  // where the form's push counts
+  clubs: [], leagues: [], clubById: new Map(), leagueById: new Map(),
+  boards: new Map(), statsByScope: new Map(),
+  activity: [], chat: [], flashClub: null,
+  boardExpanded: false,
+  wallet: "", balance: 0,
+};
+const S = () => STRINGS[state.lang];
+const money = (v) => "$" + Number(v).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (tpl, vars) => Object.entries(vars).reduce((out, [k, v]) => out.replaceAll(`{${k}}`, v), tpl);
+
+const WALLET_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function ensureWallet() {
+  let id = localStorage.getItem("hinchaboard-wallet");
+  if (id && WALLET_RE.test(id)) return id;
+  id = globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID()
+    : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+      });
+  localStorage.setItem("hinchaboard-wallet", id);
+  return id;
+}
+
+/* ---------- shields ---------- */
+function textOn(hex) {
+  const h = String(hex || "#444").replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? "#10160f" : "#ffffff";
+}
+function shield(club, size = 46) {
+  if (!club) return "";
+  const h = Math.round(size * 1.12);
+  return `<svg class="shield" width="${size}" height="${h}" viewBox="0 0 48 54" aria-hidden="true">
+    <path d="M24 2 L44 8 V27 C44 41 36 48.5 24 52 C12 48.5 4 41 4 27 V8 Z" fill="${esc(club.color)}" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/>
+    <text x="24" y="33" text-anchor="middle" font-family="Oswald, sans-serif" font-weight="700" font-size="12.5" fill="${textOn(club.color)}">${esc(club.short)}</text>
+  </svg>`;
+}
+const clubOf = (id) => state.clubById.get(id);
+const leagueOf = (id) => state.leagueById.get(id);
+const countryName = (leagueId) => {
+  const l = leagueOf(leagueId);
+  if (!l) return leagueId;
+  return state.lang === "es" ? l.country_es : l.country_en;
+};
+const leagueName = (l) => (state.lang === "es" ? l.name_es : l.name_en);
+const leagueLabel = (id) => {
+  const l = leagueOf(id);
+  return l ? `${leagueName(l)} · ${countryName(id)}` : id;
+};
+const scopeTag = (scope) => scope === "global" ? S().scopeTagGlobal : countryName(scope);
+const countriesSorted = () => [...state.leagues].sort((a, b) => countryName(a.id).localeCompare(countryName(b.id), state.lang));
+const currentScope = () => state.viewScope === "global" ? "global" : state.country;
+const formCountry = () => $("fLeague").value || state.country;
+const formScope = () => state.formScope === "global" ? "global" : formCountry();
+const statsFor = (scope) => state.statsByScope.get(scope) || { totalPushed: 0, totalPushes: 0, clubsRanked: 0 };
+const boardFor = (scope) => state.boards.get(scope) || [];
+
+/* ---------- countdown ---------- */
+function startCountdown() {
+  const now = new Date();
+  $("seasonYear").textContent = now.getFullYear();
+  const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+  const tick = () => {
+    let diff = Math.max(0, end - new Date());
+    const d = Math.floor(diff / 864e5); diff -= d * 864e5;
+    const h = Math.floor(diff / 36e5); diff -= h * 36e5;
+    const m = Math.floor(diff / 6e4); const s = Math.floor((diff - m * 6e4) / 1e3);
+    $("countdown").textContent = `${d}d ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  };
+  tick(); setInterval(tick, 1000);
+}
+
+/* ---------- count-up ---------- */
+function countUp(el, to, prefix = "") {
+  const from = 0, t0 = performance.now(), dur = 1100;
+  const step = (t) => {
+    const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = prefix + Math.round(from + (to - from) * e).toLocaleString("en-US");
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ---------- renders ---------- */
+function renderScopeButtons() {
+  $("boardScopeGlobal").classList.toggle("active", state.viewScope === "global");
+  $("boardScopeCountry").classList.toggle("active", state.viewScope === "country");
+  $("fScopeCountry").classList.toggle("active", state.formScope === "country");
+  $("fScopeGlobal").classList.toggle("active", state.formScope === "global");
+}
+
+function renderTicker() {
+  const items = state.activity.length
+    ? state.activity.map((a) => {
+      const c = clubOf(a.club);
+      return c ? `<span class="tick">⚽ <b>${esc(c.name)}</b> <span class="up">+${money(a.amount)}</span> · ${esc(scopeTag(a.scope))}${a.fan ? ` · ${esc(a.fan)}` : ""}</span>` : "";
+    }).join("")
+    : boardFor(currentScope()).map((r) => {
+      const c = clubOf(r.club);
+      return c ? `<span class="tick">🏆 <b>${esc(c.name)}</b> ${money(r.total)}</span>` : "";
+    }).join("");
+  $("tickerTrack").innerHTML = items + items; // duplicate for a seamless loop
+}
+
+function renderStats(animate = true) {
+  const st = statsFor(currentScope());
+  if (animate) {
+    countUp($("statPool"), st.totalPushed, "$");
+    countUp($("statPushes"), st.totalPushes);
+    countUp($("statClubs"), st.clubsRanked);
+    countUp($("statListed"), state.clubs.length);
+  } else {
+    $("statPool").textContent = money(st.totalPushed);
+    $("statPushes").textContent = st.totalPushes.toLocaleString("en-US");
+    $("statClubs").textContent = st.clubsRanked;
+    $("statListed").textContent = state.clubs.length;
+  }
+}
+
+function renderTitles() {
+  const isGlobal = state.viewScope === "global";
+  $("podiumTitle").textContent = isGlobal
+    ? S().podiumGlobal
+    : fmt(S().podiumCountry, { country: countryName(state.country) });
+  $("boardTitle").textContent = S().boardTitle;
+}
+
+function renderPodium() {
+  const board = boardFor(currentScope());
+  const top = board.slice(0, 3);
+  const order = [top[1], top[0], top[2]].filter(Boolean); // 2nd, 1st, 3rd
+  $("podium").innerHTML = order.map((r) => {
+    const c = clubOf(r.club); if (!c) return "";
+    const cls = r.position === 1 ? "pod-1" : r.position === 2 ? "pod-2" : "pod-3";
+    return `<div class="pod ${cls}">
+      ${r.position === 1 ? '<span class="crown">👑</span>' : ""}
+      ${shield(c, 56)}
+      <div class="pod-name">${esc(c.name)}</div>
+      <div class="pod-league">${esc(leagueLabel(r.league))}</div>
+      <div class="pod-total">${money(r.total)}</div>
+      <div class="pod-bar"><div class="pod-pos">#${r.position}</div></div>
+    </div>`;
+  }).join("");
+}
+
+function renderTabs() {
+  $("leagueTabs").hidden = state.viewScope !== "country";
+  $("leagueTabs").innerHTML = countriesSorted().map((l) =>
+    `<button type="button" class="tab${state.country === l.id ? " active" : ""}" data-country="${l.id}">${esc(countryName(l.id))}</button>`).join("");
+  $("leagueTabs").querySelectorAll(".tab").forEach((b) =>
+    b.addEventListener("click", () => selectCountry(b.dataset.country)));
+}
+
+function renderBoard() {
+  const rows = boardFor(currentScope());
+  const leaderTotal = rows.length ? rows[0].total : 0;
+  const limit = state.boardExpanded ? rows.length : 20;
+  $("boardEmpty").hidden = rows.length > 0;
+  $("board").innerHTML = rows.slice(0, limit).map((r, i) => {
+    const c = clubOf(r.club); if (!c) return "";
+    const above = rows[i - 1];
+    const need = above ? Math.max(0, Math.round((above.total + 1 - r.total) * 100) / 100) : 0;
+    const pct = leaderTotal > 0 ? Math.max(5, Math.round((r.total / leaderTotal) * 100)) : 0;
+    const posCls = r.position <= 3 ? ` p${r.position}` : "";
+    return `<div class="row${r.position === 1 ? " top1" : ""}${r.position === 2 ? " top2" : ""}${r.position === 3 ? " top3" : ""}${posCls}${state.flashClub === r.club ? " flash" : ""}" style="--club:${esc(c.color)}; --w:${pct}%; animation-delay:${Math.min(i * 45, 500)}ms">
+      <div class="pos">${r.position}</div>
+      <div class="row-shield">${shield(c, 46)}</div>
+      <div class="row-main">
+        <div class="club-name">${esc(c.name)}</div>
+        <div class="club-meta">${esc(leagueLabel(r.league))} · ${r.pushes} ${S().pushesWord}</div>
+      </div>
+      <div class="board-nums">
+        <div class="board-total">${money(r.total)}</div>
+        ${above ? `<div class="board-need">${S().needWord} ${money(need)} ${S().toPass} ${esc(clubOf(above.club)?.name || "")}</div>` : ""}
+      </div>
+      ${r.shout ? `<div class="row-shout"><span class="shout">💬 “${esc(r.shout.text)}”${r.shout.fan ? ` — <span class="shout-fan">${esc(r.shout.fan)}</span>` : ""}</span></div>` : ""}
+    </div>`;
+  }).join("");
+  const more = $("boardMore");
+  more.hidden = rows.length <= 20;
+  more.setAttribute("aria-expanded", String(state.boardExpanded));
+  const remaining = Math.max(0, rows.length - 20);
+  more.textContent = state.boardExpanded ? S().lessBtn : `${S().moreBtn} (${remaining})`;
+}
+
+function renderFeed() {
+  $("feed").innerHTML = state.activity.slice(0, 12).map((a) => {
+    const c = clubOf(a.club); if (!c) return "";
+    return `<li>${shield(c, 30)}<div><b>${esc(c.name)}</b> <span class="feed-amt">+${money(a.amount)}</span>
+      <span class="feed-fan"> · ${esc(scopeTag(a.scope))}${a.fan ? ` · ${esc(a.fan)}` : ""}</span>
+      ${a.message ? `<div class="feed-msg">“${esc(a.message)}”</div>` : ""}</div></li>`;
+  }).join("") || `<li class="muted">—</li>`;
+}
+
+function renderRows() {
+  const regions = ["latam", "usa", "europe"];
+  $("rows").innerHTML = regions.map((region, ri) => {
+    const clubs = state.clubs.filter((c) => leagueOf(c.league)?.region === region);
+    const chips = clubs.map((c) => `<span class="chip-club">${shield(c, 30)} ${esc(c.name)}</span>`).join("");
+    const dur = Math.max(40, clubs.length * 1.1);
+    return `<div class="row-label">${esc(S().regions[region])} · ${clubs.length}</div>
+      <div class="carousel${ri % 2 ? " rev" : ""}"><div class="carousel-track" style="--dur:${dur}s">${chips}${chips}</div></div>`;
+  }).join("");
+}
+
+function renderHof() {
+  const slots = [
+    { icon: "🌍🏆", label: S().hofWorld },
+    { icon: "🏆", label: S().hofCountries },
+  ];
+  $("hofCards").innerHTML = slots.map((s) =>
+    `<div class="hof-card"><div class="laurel">🌿🏆🌿</div><div class="hof-slot">${esc(s.label)}</div><div class="hof-tbd">${esc(S().hofTbd)}</div></div>`).join("");
+}
+
+function renderWallet() {
+  const el = $("chatBalance");
+  if (el) el.textContent = fmt(S().chatBalance, { n: String(state.balance) });
+}
+
+function renderChat() {
+  $("chatMsgs").innerHTML = [...state.chat].reverse().map((m) => {
+    const c = m.club ? clubOf(m.club) : null;
+    return `<li>${c ? shield(c, 26) : '<span style="width:26px;text-align:center">💬</span>'}
+      <div class="chat-body"><span class="chat-fan">${esc(m.fan || S().anonymous)}</span>
+      ${c ? `<span class="chat-club"> · ${esc(c.name)}</span>` : ""}<br>${esc(m.text)}</div></li>`;
+  }).join("");
+  const box = $("chatMsgs"); box.scrollTop = box.scrollHeight;
+}
+
+/* ---------- board scope ---------- */
+async function loadBoard(scope) {
+  if (state.boards.has(scope)) return state.boards.get(scope);
+  if (PREVIEW) {
+    state.boards.set(scope, PREVIEW.boards?.[scope] || []);
+    if (PREVIEW.statsByScope?.[scope]) state.statsByScope.set(scope, PREVIEW.statsByScope[scope]);
+    return boardFor(scope);
+  }
+  const d = await fetch(`/api/board?scope=${encodeURIComponent(scope)}`).then((r) => r.json());
+  if (!d.ok) throw new Error(d.error || "BOARD_ERROR");
+  state.boards.set(scope, d.board || []);
+  state.statsByScope.set(scope, d.stats || statsFor(scope));
+  if (d.activity) state.activity = d.activity;
+  return boardFor(scope);
+}
+
+async function refreshBoardView() {
+  renderScopeButtons();
+  renderTabs();
+  renderTitles();
+  try { await loadBoard(currentScope()); } catch { /* keep empty board */ }
+  renderPodium();
+  renderBoard();
+  renderStats(false);
+  renderTicker();
+  renderFeed();
+}
+
+async function selectBoardScope(view) {
+  state.viewScope = view;
+  state.boardExpanded = false;
+  await refreshBoardView();
+}
+
+async function selectCountry(country) {
+  state.country = country;
+  state.viewScope = "country";
+  state.boardExpanded = false;
+  if ([...$("fLeague").options].some((o) => o.value === country)) {
+    $("fLeague").value = country;
+    fillClubSelect();
+  }
+  await refreshBoardView();
+}
+
+/* ---------- form ---------- */
+function fillFormSelects() {
+  const previous = $("fLeague").value || state.country;
+  $("fLeague").innerHTML = countriesSorted().map((l) =>
+    `<option value="${l.id}">${esc(leagueName(l))} (${esc(countryName(l.id))})</option>`).join("");
+  if ([...$("fLeague").options].some((o) => o.value === previous)) $("fLeague").value = previous;
+  fillClubSelect();
+  // chat club select: all clubs grouped by country
+  $("cClub").innerHTML = `<option value="">—</option>` + countriesSorted().map((l) =>
+    `<optgroup label="${esc(countryName(l.id))}">${state.clubs.filter((c) => c.league === l.id)
+      .map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join("")}</optgroup>`).join("");
+}
+
+function fillClubSelect() {
+  const league = $("fLeague").value;
+  const previous = $("fClub").value;
+  const pool = state.clubs.filter((c) => c.league === league);
+  $("fClub").innerHTML = pool.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join("");
+  if (pool.some((c) => c.id === previous)) $("fClub").value = previous;
+  updateFormScopeNote();
+  updateHint();
+}
+
+function updateFormScopeNote() {
+  $("formScopeNote").textContent = state.formScope === "global"
+    ? S().formCountsGlobal
+    : fmt(S().formCountsCountry, { country: countryName(formCountry()) });
+}
+
+async function updateHint() {
+  const clubId = $("fClub").value;
+  const scope = formScope();
+  const amount = Number($("fAmount").value) || 0;
+  const hint = $("pushHint");
+  if (!clubId) { hint.textContent = ""; return; }
+  try { await loadBoard(scope); } catch { /* offline */ }
+  const rows = boardFor(scope);
+  const c = clubOf(clubId);
+  if (!c) { hint.textContent = ""; return; }
+  if (!rows.length) { hint.textContent = S().firstPushHint; return; }
+  const mine = rows.find((r) => r.club === clubId);
+  const myTotal = (mine?.total || 0) + amount;
+  const leader = rows[0];
+  if (amount <= 0) {
+    hint.textContent = leader && leader.club !== clubId
+      ? `${c.name}: ${S().needWord} ${money(Math.round((leader.total + 1 - (mine?.total || 0)) * 100) / 100)} ${S().toPass} ${clubOf(leader.club)?.name || ""}`
+      : S().yourClubTop;
+    return;
+  }
+  const aboveMe = rows.filter((r) => r.club !== clubId && r.total >= myTotal).sort((a, b) => a.total - b.total)[0];
+  if (!aboveMe) {
+    hint.textContent = `${S().projected} ${S().projectLead}`;
+  } else {
+    hint.textContent = `${S().projected} ${fmt(S().projectPos, { pos: String(rows.filter((r) => r.club !== clubId && r.total >= myTotal).length + 1) })} · ${fmt(S().projectNeed, { amount: money(Math.round((aboveMe.total + 1 - myTotal) * 100) / 100), club: clubOf(aboveMe.club)?.name || "" })}`;
+  }
+}
+
+/* ---------- i18n ---------- */
+function applyLang() {
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => { const k = el.dataset.i18n; if (S()[k]) el.textContent = S()[k]; });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => { const k = el.dataset.i18nHtml; if (S()[k]) el.innerHTML = S()[k]; });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => { const k = el.dataset.i18nPh; if (S()[k]) el.placeholder = S()[k]; });
+  document.querySelectorAll(".lang-switch button").forEach((b) => b.classList.toggle("active", b.dataset.lang === state.lang));
+  renderWallet(); renderScopeButtons(); renderTitles(); renderTabs(); renderBoard(); renderFeed(); renderTicker(); renderRows(); renderHof(); renderChat(); fillFormSelects(); renderStats(false);
+}
+
+/* ---------- data ---------- */
+async function loadAll() {
+  if (PREVIEW) {
+    state.clubs = PREVIEW.clubs.clubs; state.leagues = PREVIEW.clubs.leagues;
+    state.activity = PREVIEW.activity || [];
+    state.chat = PREVIEW.chat || [];
+    state.boards = new Map(Object.entries(PREVIEW.boards || {}));
+    state.statsByScope = new Map(Object.entries(PREVIEW.statsByScope || {}));
+    state.balance = 3;
+  } else {
+    const [clubsRes, chatRes, walletRes] = await Promise.all([
+      fetch("clubs.json").then((r) => r.json()),
+      fetch("/api/chat").then((r) => r.json()).catch(() => ({ messages: [] })),
+      fetch(`/api/chat/wallet?wallet=${encodeURIComponent(state.wallet)}`)
+        .then((r) => r.json()).catch(() => null),
+    ]);
+    state.clubs = clubsRes.clubs; state.leagues = clubsRes.leagues;
+    state.chat = chatRes.messages || [];
+    if (walletRes?.ok) state.balance = walletRes.balance;
+  }
+  state.clubById = new Map(state.clubs.map((c) => [c.id, c]));
+  state.leagueById = new Map(state.leagues.map((l) => [l.id, l]));
+}
+
+async function pollChat() {
+  if (PREVIEW) return;
+  try {
+    const d = await fetch("/api/chat").then((r) => r.json());
+    if (JSON.stringify(d.messages) !== JSON.stringify(state.chat)) { state.chat = d.messages || []; renderChat(); }
+  } catch { /* offline: keep current */ }
+}
+
+/* ---------- preview simulation ---------- */
+const SIM_FANS = ["El Diez", "La12Tw", "SebaMillonario", "AnaBanana", "TorcedorBR", "MikeMLS", "Gunner4Life", "Culé1899", "Xeneize12", "GarotoSP"];
+const SIM_MSGS = {
+  en: ["This year is ours.", "Rivals, read it and weep.", "From the stands, always.", "One dollar at a time, to the top."],
+  es: ["Este año es nuestro.", "Rivales, léanlo y lloren.", "Desde la tribuna, siempre.", "De a un dólar, hasta la cima."],
+};
+function simulate() {
+  const scope = currentScope();
+  const board = boardFor(scope);
+  if (!board.length) return;
+  const pick = board[Math.floor(Math.random() * Math.min(board.length, 14))];
+  const amount = 1 + Math.floor(Math.random() * 15);
+  const fan = SIM_FANS[Math.floor(Math.random() * SIM_FANS.length)];
+  const msg = Math.random() < 0.45 ? SIM_MSGS[state.lang][Math.floor(Math.random() * 4)] : "";
+  const entry = board.find((r) => r.club === pick.club);
+  entry.total = Math.round((entry.total + amount) * 100) / 100; entry.pushes += 1;
+  if (msg) entry.shout = { text: msg, fan, at: Date.now() };
+  board.sort((a, b) => b.total - a.total || a.firstAt - b.firstAt);
+  board.forEach((r, i) => { r.position = i + 1; });
+  state.activity.unshift({ club: pick.club, league: pick.league, scope, amount, fan, message: msg, at: Date.now() });
+  state.activity = state.activity.slice(0, 30);
+  const st = statsFor(scope);
+  state.statsByScope.set(scope, {
+    totalPushed: Math.round((st.totalPushed + amount) * 100) / 100,
+    totalPushes: st.totalPushes + 1,
+    clubsRanked: st.clubsRanked || board.length,
+  });
+  state.flashClub = pick.club;
+  renderTicker(); renderStats(false); renderPodium(); renderBoard(); renderFeed();
+  setTimeout(() => { state.flashClub = null; }, 1300);
+}
+
+/* ---------- events ---------- */
+function wire() {
+  document.querySelectorAll(".lang-switch button").forEach((b) =>
+    b.addEventListener("click", () => { state.lang = b.dataset.lang; localStorage.setItem("hinchaboard-lang", state.lang); applyLang(); }));
+  $("boardScopeGlobal").addEventListener("click", () => selectBoardScope("global"));
+  $("boardScopeCountry").addEventListener("click", () => selectBoardScope("country"));
+  $("boardMore").addEventListener("click", () => {
+    state.boardExpanded = !state.boardExpanded;
+    $("boardMore").setAttribute("aria-expanded", String(state.boardExpanded));
+    renderBoard();
+  });
+  $("fScopeCountry").addEventListener("click", () => {
+    state.formScope = "country"; renderScopeButtons(); updateFormScopeNote(); updateHint();
+  });
+  $("fScopeGlobal").addEventListener("click", () => {
+    state.formScope = "global"; renderScopeButtons(); updateFormScopeNote(); updateHint();
+  });
+  $("fLeague").addEventListener("change", fillClubSelect);
+  $("fClub").addEventListener("change", updateHint);
+  $("fAmount").addEventListener("input", updateHint);
+
+  $("pushForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("formMsg"); msg.textContent = ""; msg.className = "form-msg";
+    const scope = formScope();
+    const club = $("fClub").value, amount = Number($("fAmount").value);
+    if (!club) { msg.textContent = S().errClub; return; }
+    if (!Number.isFinite(amount) || amount < 1) { msg.textContent = S().errAmount; return; }
+    const payload = { scope, club, amount, fan: $("fFan").value, message: $("fMessage").value };
+    if (PREVIEW) { msg.textContent = S().previewOk; msg.classList.add("ok"); return; }
+    try {
+      const r = await fetch("/api/pushes", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+      const d = await r.json();
+      if (!d.ok) {
+        msg.textContent = d.error === "AMOUNT_TOO_LOW" ? S().errAmount
+          : d.error === "SCOPE_MISMATCH" ? S().errScope
+          : d.error;
+        return;
+      }
+      window.location.href = d.payUrl;
+    } catch { msg.textContent = "Network error."; }
+  });
+
+  $("creditBtn").addEventListener("click", () => {
+    $("creditPanel").hidden = !$("creditPanel").hidden;
+  });
+  document.querySelectorAll("#creditPanel [data-amount]").forEach((b) =>
+    b.addEventListener("click", () => startCredit(Number(b.dataset.amount))));
+
+  $("chatForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("chatMsg"); msg.textContent = ""; msg.className = "form-msg";
+    const payload = { wallet: state.wallet, fan: $("cFan").value, club: $("cClub").value || null, text: $("cText").value };
+    if (!payload.text.trim()) return;
+    if (state.balance < 1) {
+      msg.textContent = S().chatNoCredit;
+      $("creditPanel").hidden = false;
+      return;
+    }
+    if (PREVIEW) {
+      state.balance -= 1;
+      state.chat.unshift({ fan: payload.fan, club: payload.club, text: payload.text, at: Date.now() });
+      state.chat = state.chat.slice(0, 50);
+      $("cText").value = ""; renderChat(); renderWallet(); return;
+    }
+    try {
+      const r = await fetch("/api/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+      const d = await r.json();
+      if (!d.ok) {
+        msg.textContent = d.error === "NO_CHAT_CREDIT" ? S().chatNoCredit : S().chatErr;
+        if (d.error === "NO_CHAT_CREDIT") $("creditPanel").hidden = false;
+        return;
+      }
+      state.balance = d.balance;
+      $("cText").value = "";
+      state.chat.unshift(d.message); renderChat(); renderWallet();
+    } catch { msg.textContent = S().chatErr; }
+  });
+}
+
+async function startCredit(amount) {
+  const msg = $("chatMsg"); msg.textContent = ""; msg.className = "form-msg";
+  if (PREVIEW) {
+    const added = Math.floor(amount * 3);
+    state.balance += added; renderWallet();
+    msg.textContent = fmt(S().creditPreview, { n: String(added) }); msg.classList.add("ok");
+    $("creditPanel").hidden = true;
+    return;
+  }
+  msg.textContent = S().creditStart;
+  try {
+    const r = await fetch("/api/chat/credits", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ wallet: state.wallet, amount }),
+    });
+    const d = await r.json();
+    if (!d.ok) { msg.textContent = S().creditErr; return; }
+    window.location.href = d.payUrl;
+  } catch { msg.textContent = S().creditErr; }
+}
+
+/* ---------- init ---------- */
+(async function init() {
+  state.wallet = ensureWallet();
+  await loadAll();
+  startCountdown();
+  applyLang();
+  await selectBoardScope("global");
+  renderStats(true);
+  wire();
+  if (PREVIEW) setInterval(simulate, 8000);
+  else setInterval(pollChat, 15000);
+})();
+
+</script>
+</body>
+</html>

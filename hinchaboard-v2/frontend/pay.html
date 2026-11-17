@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirm your push — Hinchaboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<main>
+  <p style="max-width:560px;margin:18px auto 0"><a class="btn" href="/" id="back-link">← Back to the table</a></p>
+
+  <div class="card pay-card" id="pay-card">
+    <div id="pay-loading" class="muted">Loading your push…</div>
+
+    <div id="pay-content" hidden>
+      <div id="pay-shield"></div>
+      <h2 id="pay-club"></h2>
+      <p class="muted" id="pay-scope"></p>
+      <p class="amount" id="pay-amount"></p>
+      <p class="muted" id="pay-message"></p>
+      <p><span class="status-pill" id="pay-status">pending payment</span></p>
+
+      <div class="notice" id="pay-notice">
+        <strong>Payment provider: not connected (stub).</strong><br>
+        Your push intent is recorded and reserved for 1 hour. To go live, connect
+        Polar.sh or Lemon Squeezy — see the README section
+        <em>“Conectar pagos reales”</em>. Webhook endpoints are ready at
+        <code>/api/webhooks/polar</code> and
+        <code>/api/webhooks/lemonsqueezy</code>.
+      </div>
+
+      <div class="admin-box">
+        <h3 id="admin-title">Testing only</h3>
+        <p class="muted" id="admin-sub">Simulate a confirmed payment (requires ADMIN_SECRET):</p>
+        <input id="admin-secret" type="password" placeholder="ADMIN_SECRET" autocomplete="off">
+        <button class="btn primary" id="confirm-btn">Mark as paid (test)</button>
+        <p id="pay-error" class="error" role="alert" hidden></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const intentId = params.get("intent") || params.get("credit");
+const LANG = localStorage.getItem("hinchaboard-lang")
+  || (String(navigator.language || "en").toLowerCase().startsWith("es") ? "es" : "en");
+const T = {
+  en: {
+    back: "← Back to the table", loading: "Loading your purchase…", missing: "Missing purchase.",
+    notFound: "Purchase not found or expired.", global: "Global ranking", country: "Country ranking",
+    pending: "pending payment", paid: "paid ✓", creditPaid: "credit added ✓",
+    creditTitle: "Confirm your chat credit — Hinchaboard", creditScope: "La Tribuna · chat credit",
+    creditMessages: "{n} messages", creditRate: "USD 1 = 3 messages · this credit never moves a ranking.",
+    notice: '<strong>Payment provider: not connected (stub).</strong><br>Your payment intent is recorded and reserved for 1 hour. To go live, connect Polar.sh or Lemon Squeezy — see the README section <em>“Conectar pagos reales”</em>. Webhook endpoints are ready at <code>/api/webhooks/polar</code> and <code>/api/webhooks/lemonsqueezy</code>.',
+    adminTitle: "Testing only", adminSub: "Simulate a confirmed payment (requires ADMIN_SECRET):",
+    adminBtn: "Mark as paid (test)", wrongSecret: "Wrong admin secret.", confirmFail: "Could not confirm.",
+  },
+  es: {
+    back: "← Volver a la tabla", loading: "Cargando tu compra…", missing: "Falta la compra.",
+    notFound: "La compra no existe o venció.", global: "Ranking global", country: "Ranking del país",
+    pending: "pendiente de pago", paid: "pagado ✓", creditPaid: "crédito cargado ✓",
+    creditTitle: "Confirmá tu carga de chat — Hinchaboard", creditScope: "La Tribuna · carga de chat",
+    creditMessages: "{n} mensajes", creditRate: "USD 1 = 3 mensajes · este crédito nunca mueve un ranking.",
+    notice: '<strong>Pago: proveedor no conectado (stub).</strong><br>Tu intención de pago queda registrada y reservada por 1 hora. Para activarlo, conectá Polar.sh o Lemon Squeezy — ver la sección <em>“Conectar pagos reales”</em> del README. Los webhooks ya están en <code>/api/webhooks/polar</code> y <code>/api/webhooks/lemonsqueezy</code>.',
+    adminTitle: "Solo para pruebas", adminSub: "Simular un pago confirmado (requiere ADMIN_SECRET):",
+    adminBtn: "Marcar como pagado (test)", wrongSecret: "Clave de admin incorrecta.", confirmFail: "No se pudo confirmar.",
+  },
+}[LANG];
+const fmt = (tpl, vars) => Object.entries(vars).reduce((out, [k, v]) => out.replaceAll(`{${k}}`, v), tpl);
+
+document.documentElement.lang = LANG;
+$("back-link").textContent = T.back;
+$("pay-loading").textContent = T.loading;
+$("pay-notice").innerHTML = T.notice;
+$("admin-title").textContent = T.adminTitle;
+$("admin-sub").textContent = T.adminSub;
+$("confirm-btn").textContent = T.adminBtn;
+$("pay-status").textContent = T.pending;
+
+function shieldSVG(club, size = 64) {
+  const h = String(club.color || "#444").replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+  const fg = (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? "#10160f" : "#ffffff";
+  return `<svg width="${size}" height="${Math.round(size * 1.12)}" viewBox="0 0 48 54">
+    <path d="M24 2 L44 8 V27 C44 41 36 48.5 24 52 C12 48.5 4 41 4 27 V8 Z" fill="${club.color}" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/>
+    <text x="24" y="33" text-anchor="middle" font-family="Oswald, sans-serif" font-weight="700" font-size="12.5" fill="${fg}">${club.short}</text></svg>`;
+}
+
+async function init() {
+  if (!intentId) { $("pay-loading").textContent = T.missing; return; }
+  const res = await fetch(`/api/intents/${encodeURIComponent(intentId)}`);
+  const data = await res.json();
+  if (!data.ok) { $("pay-loading").textContent = T.notFound; return; }
+  const { intent } = data;
+
+  $("pay-loading").hidden = true;
+  $("pay-content").hidden = false;
+  $("pay-amount").textContent = "$" + Number(intent.amount).toLocaleString("en-US", { minimumFractionDigits: 2 });
+
+  if (intent.type === "chat_credit") {
+    document.title = T.creditTitle;
+    $("pay-shield").innerHTML = '<div style="font-size:58px;line-height:1.2">💬</div>';
+    $("pay-club").textContent = fmt(T.creditMessages, { n: String(intent.messages) });
+    $("pay-scope").textContent = T.creditScope;
+    $("pay-message").textContent = T.creditRate;
+  } else {
+    let club = { name: intent.club, short: "?", color: "#33523f" };
+    try {
+      const clubsData = await fetch("clubs.json").then((r) => r.json());
+      club = clubsData.clubs.find((c) => c.id === intent.club) || club;
+      const league = clubsData.leagues.find((l) => l.id === intent.league);
+      const country = league ? (LANG === "es" ? league.country_es : league.country_en) : intent.league;
+      $("pay-scope").textContent = intent.scope === "global"
+        ? `${T.global} · ${country}`
+        : `${T.country} · ${country}`;
+    } catch { /* fall back to the slug */ }
+    $("pay-shield").innerHTML = shieldSVG(club);
+    $("pay-club").textContent = club.name;
+    if (intent.message) $("pay-message").textContent = `💬 “${intent.message}”${intent.fan ? ` — ${intent.fan}` : ""}`;
+  }
+
+  $("confirm-btn").addEventListener("click", async () => {
+    const err = $("pay-error");
+    err.hidden = true;
+    const r = await fetch("/api/admin/confirm", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-admin-secret": $("admin-secret").value,
+      },
+      body: JSON.stringify({ intentId }),
+    });
+    const d = await r.json();
+    if (!d.ok) {
+      err.textContent = d.error === "UNAUTHORIZED" ? T.wrongSecret : T.confirmFail;
+      err.hidden = false;
+      return;
+    }
+    const pill = $("pay-status");
+    pill.textContent = d.type === "chat_credit" ? T.creditPaid : T.paid;
+    pill.className = "status-pill status-paid";
+    setTimeout(() => { window.location.href = "/"; }, 1200);
+  });
+}
+init();
+</script>
+</body>
+</html>

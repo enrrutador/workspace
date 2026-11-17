@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hinchaboard — The Fans' Ranking</title>
+<meta name="description" content="The ranking the fans decide. Push from $1, lift your club in its country table or the independent global table, and the winner stays in the Hall of Fame forever.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="ticker-wrap" aria-hidden="true">
+  <span class="live-badge"><span class="live-dot"></span><span data-i18n="tickerLabel">LIVE</span></span>
+  <div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+</div>
+
+<header class="site-header">
+  <div class="brand">
+    <span class="brand-ball">⚽</span>
+    <span class="brand-name">HINCHA<em>BOARD</em></span>
+    <span class="brand-sub" data-i18n="brandSub">THE FANS' RANKING</span>
+  </div>
+  <div class="header-right">
+    <div class="season-chip">🏆 <span data-i18n="season">SEASON</span> <span id="seasonYear">2026</span> · <span data-i18n="endsIn">ends in</span> <strong id="countdown">—</strong></div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="en" class="active">EN</button>
+      <button type="button" data-lang="es">ES</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <h1 data-i18n="headline">The ranking the fans decide.</h1>
+    <p class="hero-sub" data-i18n="sub">Every dollar is a push. Push from $1, lift your club, and the club on top when the year ends stays in the Hall of Fame forever.</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-num" id="statPool">$0</span><span class="stat-label" data-i18n="statPool">TOTAL PUSHED</span></div>
+      <div class="stat"><span class="stat-num" id="statPushes">0</span><span class="stat-label" data-i18n="statPushes">FAN PUSHES</span></div>
+      <div class="stat"><span class="stat-num" id="statClubs">0</span><span class="stat-label" data-i18n="statClubs">CLUBS RANKED</span></div>
+      <div class="stat"><span class="stat-num" id="statListed">0</span><span class="stat-label" data-i18n="statListed">CLUBS LISTED</span></div>
+    </div>
+    <p class="rules" data-i18n-html="rules">Minimum push <strong>$1</strong> · Pushes pool into your club's total · Pass the club above by <strong>$1 or more</strong> · <strong>Two separate competitions</strong>: country and world</p>
+  </section>
+
+  <section class="podium-section">
+    <h2 class="section-title" id="podiumTitle">Top of the world</h2>
+    <div class="podium" id="podium"></div>
+  </section>
+
+  <section class="board-section">
+    <div class="board-head">
+      <h2 class="section-title" id="boardTitle">The table</h2>
+      <div class="scope-switch" role="group" aria-label="Competition">
+        <button type="button" id="boardScopeGlobal" class="scope-btn active">🌍 <span data-i18n="scopeGlobal">World ranking</span></button>
+        <button type="button" id="boardScopeCountry" class="scope-btn">🏳️ <span data-i18n="scopeCountry">By country</span></button>
+      </div>
+      <p class="scope-note" data-i18n="scopeNote">Two separate competitions — pushes in one never move the other.</p>
+      <div class="tabs" id="leagueTabs" hidden></div>
+    </div>
+    <div class="board" id="board"></div>
+    <p class="board-empty" id="boardEmpty" hidden data-i18n="boardEmpty">No pushes yet here — the first fan puts their club on top for $1.</p>
+    <button type="button" id="boardMore" class="btn-more" hidden aria-expanded="false" aria-controls="board">Show more</button>
+  </section>
+
+  <section class="action-grid">
+    <form id="pushForm" class="card push-card">
+      <h2 data-i18n="pushTitle">Push your club</h2>
+      <label><span data-i18n="fLeague">League</span>
+        <select id="fLeague"></select>
+      </label>
+      <label><span data-i18n="fClub">Club</span>
+        <select id="fClub"></select>
+      </label>
+      <label><span data-i18n="fFan">Your fan name (optional)</span>
+        <input id="fFan" type="text" maxlength="40" autocomplete="nickname">
+      </label>
+      <label><span data-i18n="fMessage">Message next to your club (optional)</span>
+        <input id="fMessage" type="text" maxlength="140" data-i18n-ph="fMessagePh" placeholder="Say it loud — rivals will read it">
+      </label>
+      <label><span data-i18n="fAmount">Your push (USD)</span>
+        <input id="fAmount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="1.00" required>
+      </label>
+      <span class="form-scope-label" data-i18n="formScope">Where does your push count?</span>
+      <div class="scope-switch form-scope" role="group" aria-label="Push scope">
+        <button type="button" id="fScopeCountry" class="scope-btn active">🏳️ <span data-i18n="formScopeCountry">Club's country</span></button>
+        <button type="button" id="fScopeGlobal" class="scope-btn">🌍 <span data-i18n="formScopeGlobal">The world</span></button>
+      </div>
+      <p class="form-scope-note" id="formScopeNote"></p>
+      <p class="hint" id="pushHint"></p>
+      <p class="form-msg" id="formMsg" role="alert"></p>
+      <button type="submit" class="btn-push" data-i18n="pushBtn">Push now</button>
+    </form>
+
+    <div class="side-stack">
+      <aside class="card feed-card">
+        <h3><span class="live-dot"></span> <span data-i18n="feedTitle">Live from the stands</span></h3>
+        <ul class="feed" id="feed"></ul>
+      </aside>
+
+      <aside class="card chat-card">
+        <h3>💬 <span data-i18n="chatTitle">La Tribuna — fan chat</span></h3>
+        <div class="chat-wallet">
+          <span class="chat-balance" id="chatBalance">Messages: —</span>
+          <button type="button" class="btn-credit" id="creditBtn" data-i18n="creditBtn">Add messages</button>
+        </div>
+        <div class="credit-panel" id="creditPanel" hidden>
+          <p class="credit-note" data-i18n="creditNote">USD 1 = 3 messages. Chat credit is separate from the rankings.</p>
+          <div class="credit-options">
+            <button type="button" data-amount="1">USD 1 · 3</button>
+            <button type="button" data-amount="5">USD 5 · 15</button>
+            <button type="button" data-amount="10">USD 10 · 30</button>
+          </div>
+        </div>
+        <ul class="chat-msgs" id="chatMsgs"></ul>
+        <form id="chatForm" class="chat-form">
+          <div class="chat-row">
+            <input id="cFan" type="text" maxlength="40" data-i18n-ph="cFanPh" placeholder="Your fan name">
+            <select id="cClub"></select>
+          </div>
+          <div class="chat-row">
+            <input id="cText" type="text" maxlength="200" data-i18n-ph="cTextPh" placeholder="Talk to the stands…" required>
+            <button type="submit" class="btn-send" data-i18n="chatSend">Send</button>
+          </div>
+          <p class="form-msg" id="chatMsg" role="alert"></p>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <section class="showcase">
+    <h2 class="section-title"><span data-i18n="showTitle">Every club. Every league.</span></h2>
+    <p class="show-sub" data-i18n="showSub">405 clubs across Latin America, the MLS and Europe — listed free, forever. The ranked table above is where the fans fight.</p>
+    <div id="rows"></div>
+  </section>
+
+  <section class="hof">
+    <h2 class="section-title gold"><span data-i18n="hofTitle">Hall of Fame</span></h2>
+    <p class="hof-text" data-i18n="hofText">When the season ends, the world champion and the champion of every country enter here and stay forever. The first class is crowned on December 31.</p>
+    <div class="hof-cards" id="hofCards"></div>
+  </section>
+</main>
+
+<footer>
+  <p data-i18n="footer">Transparent fan ranking — every push is public. Seasons run January 1 to December 31; champions are forever.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
