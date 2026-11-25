@@ -1,540 +1,456 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:,">
 <title>Mi Reloj BLE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#eef2f3; --surface:#ffffff; --surface2:#f7f9f9; --text:#0f1c22; --muted:#5b6b72; --line:#dde6e8;
-  --teal:#0a9a8a; --teal-dark:#06796c; --cyan:#0ea5b7; --amber:#d97706; --red:#dc2626; --green:#059669;
-  --radius:18px; --shadow:0 10px 30px rgba(15,40,50,.08);
-}
-@media (prefers-color-scheme: dark){
-  :root{ --bg:#0a1216; --surface:#121e24; --surface2:#0f1a1f; --text:#e6f0f2; --muted:#9ab0b7; --line:#23343c; --shadow:0 10px 30px rgba(0,0,0,.35); }
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-a{color:var(--teal-dark)}
-button{min-height:44px}
-.wrap{max-width:880px;margin:0 auto;padding:16px 16px 40px}
-.top-status{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:13px;font-weight:700}
-.dot{width:9px;height:9px;border-radius:50%;background:#94a3ab;flex:none}
-.dot.ok{background:var(--green)} .dot.warn{background:var(--amber)} .dot.bad{background:var(--red)} .dot.on{background:var(--teal);box-shadow:0 0 0 5px color-mix(in srgb,var(--teal) 18%, transparent)}
-.hero{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:1fr}
-@media(min-width:700px){.hero-grid{grid-template-columns:1.05fr .95fr}}
-.hero-copy{padding:22px 22px 18px}
-.hero-copy h1{font-size:28px;line-height:1.05;letter-spacing:-.03em;margin:0 0 10px}
-.hero-copy h1 span{color:var(--teal)}
-.hero-copy p{color:var(--muted);margin:0 0 16px;font-size:15px}
-.checks{display:grid;gap:8px;margin:16px 0}
-.check{display:flex;gap:10px;align-items:flex-start;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px}
-.check b{display:block;font-size:14px}
-.check span{color:var(--muted);font-size:13px}
-.btn{border:0;border-radius:14px;padding:0 18px;font-weight:800;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px;width:100%}
-.btn-primary{background:var(--teal);color:white}
-.btn-primary:active{background:var(--teal-dark)}
-.btn-primary:disabled{opacity:.45;cursor:not-allowed}
-.btn-secondary{background:var(--surface);border:1px solid var(--line);color:var(--text)}
-.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
-.btn-danger{background:#fff1f1;color:var(--red);border:1px solid #fecaca}
-@media(prefers-color-scheme:dark){.btn-danger{background:#2a1515;border-color:#5b2323}}
-.btn-row{display:grid;gap:10px}
-@media(min-width:560px){.btn-row{grid-template-columns:1fr 1fr}}
-.small{font-size:13px;color:var(--muted)}
-/* Watch visual */
-.watch-area{padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%, color-mix(in srgb,var(--teal) 14%, transparent), transparent 62%), var(--surface2);border-top:1px solid var(--line)}
-@media(min-width:700px){.watch-area{border-top:0;border-left:1px solid var(--line)}}
-.watch{width:196px;height:232px;position:relative}
-.strap{position:absolute;left:50%;transform:translateX(-50%);width:86px;height:232px;background:#1e2e35;border-radius:40px}
-@media(prefers-color-scheme:dark){.strap{background:#22343d}}
-.case{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:176px;height:196px;background:#0d1a1f;border-radius:42px;padding:10px;box-shadow:0 18px 35px rgba(0,0,0,.28), inset 0 0 0 2px #2b414a}
-.screen{width:100%;height:100%;background:#061114;border-radius:34px;color:#e8f6f3;padding:16px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden;position:relative}
-.screen .time{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.04em;line-height:1;margin-top:4px}
-.screen .date{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8fb8b1;font-weight:800}
-.hr-big{margin-top:12px}
-.hr-big strong{font-size:28px;line-height:1}
-.hr-big span{font-size:12px;color:#9fc9c2;display:block;font-weight:700}
-.batt-ring{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;font-weight:800;color:#c8e6e0}
-.pulse{animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
-.radar{position:absolute;inset:-28px;border-radius:50%;border:2px solid var(--teal);opacity:0;pointer-events:none}
-.scanning .radar{animation:radar 1.8s infinite}
-.scanning .radar:nth-child(2){animation-delay:.6s}.scanning .radar:nth-child(3){animation-delay:1.2s}
-@keyframes radar{0%{transform:scale(.65);opacity:.7}100%{transform:scale(1.15);opacity:0}}
-@media(prefers-reduced-motion: reduce){.radar,.pulse{animation:none!important}}
-.status-line{margin-top:14px;font-weight:800;font-size:14px;text-align:center}
-.status-sub{font-size:13px;color:var(--muted);text-align:center;max-width:300px}
-/* Cards */
-.section{margin-top:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-.card h2{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}
-.card h3{margin:0 0 8px;font-size:15px}
-.grid2{display:grid;gap:16px}
-@media(min-width:700px){.grid2{grid-template-columns:1fr 1fr}}
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.kpi{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:12px}
-.kpi label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;display:block}
-.kpi strong{font-size:22px;line-height:1.1;display:block;margin-top:4px;word-break:break-word}
-.kpi span{font-size:12px;color:var(--muted)}
-.hidden{display:none!important}
-.alert{border-radius:14px;padding:13px 14px;font-size:14px;border:1px solid}
-.alert-warn{background:#fff7ed;border-color:#fed7aa;color:#7c2d12}
-.alert-bad{background:#fef2f2;border-color:#fecaca;color:#7f1d1d}
-.alert-ok{background:#ecfdf5;border-color:#a7f3d0;color:#064e3b}
-@media(prefers-color-scheme:dark){.alert-warn{background:#2a1c0d;color:#fed7aa}.alert-bad{background:#2a1212;color:#fecaca}.alert-ok{background:#0b231b;color:#a7f3d0}}
-details{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface2)}
-details+details{margin-top:8px}
-summary{cursor:pointer;font-weight:800;min-height:36px;display:flex;align-items:center}
-.mono{font-family:"JetBrains Mono",monospace;font-size:12px;word-break:break-all}
-.service{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:10px;background:var(--surface)}
-.service-head{padding:12px 14px;background:var(--surface2);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.service-head b{font-size:14px}.service-head span{display:block}
-.char{padding:12px 14px;border-top:1px solid var(--line)}
-.char-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
-.tag{font-size:11px;font-weight:800;padding:3px 7px;border-radius:999px;background:color-mix(in srgb,var(--teal) 12%, var(--surface));border:1px solid var(--line)}
-.char-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.char-actions button{min-height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:800;cursor:pointer;color:var(--text)}
-.char-actions button.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
-.value-box{margin-top:8px;background:#0d1a1f;color:#d1fae5;border-radius:10px;padding:9px 10px;font-family:"JetBrains Mono",monospace;font-size:12px;word-break:break-all;white-space:pre-wrap}
-.log{background:#0b161a;color:#cbd5e1;border-radius:14px;padding:12px;height:190px;overflow:auto;font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.6;white-space:pre-wrap}
-.log .ok{color:#6ee7b7}.log .err{color:#fca5a5}.log .info{color:#7dd3fc}
-.compat{display:grid;gap:8px;margin-top:10px}
-.compat div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
-.compat div:last-child{border:0}
-.badge{font-size:12px;font-weight:800;padding:4px 8px;border-radius:999px;white-space:nowrap}
-.badge-yes{background:#dcfce7;color:#166534}.badge-maybe{background:#fef3c7;color:#92400e}.badge-no{background:#fee2e2;color:#991b1b}
-@media(prefers-color-scheme:dark){.badge-yes{background:#123324;color:#86efac}.badge-maybe{background:#33270a;color:#fcd34d}.badge-no{background:#331414;color:#fca5a5}}
-ol.steps{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:14px} ol.steps li{margin:6px 0} ol.steps b{color:var(--text)}
+  :root{ --bg:#0b1220; --card:#131c2e; --card2:#0f1726; --txt:#e8eef7; --mut:#93a4bd; --acc:#22c55e; --acc2:#38bdf8; --warn:#f59e0b; --err:#f87171; --line:#22304a; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:var(--txt); }
+  .wrap{ max-width:640px; margin:0 auto; padding:18px 14px 40px; }
+  h1{ font-size:24px; margin:4px 0 2px; }
+  .sub{ color:var(--mut); font-size:14px; margin:0 0 16px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin:12px 0; }
+  .card h2{ font-size:15px; margin:0 0 10px; color:var(--acc2); letter-spacing:.02em; }
+  button{ font:inherit; border:0; border-radius:12px; padding:14px 16px; cursor:pointer; width:100%; }
+  .primary{ background:var(--acc); color:#04150a; font-weight:700; font-size:17px; }
+  .secondary{ background:#1c2a44; color:var(--txt); font-weight:600; margin-top:8px; }
+  .ghost{ background:transparent; color:var(--mut); border:1px solid var(--line); margin-top:8px; }
+  button:disabled{ opacity:.45; cursor:not-allowed; }
+  .status{ display:flex; align-items:center; gap:8px; font-size:14px; }
+  .dot{ width:10px; height:10px; border-radius:50%; background:#64748b; flex:none; }
+  .dot.on{ background:var(--acc); } .dot.busy{ background:var(--warn); } .dot.err{ background:var(--err); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .metric{ background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .metric .k{ font-size:12px; color:var(--mut); text-transform:uppercase; letter-spacing:.05em; }
+  .metric .v{ font-size:26px; font-weight:700; margin-top:2px; }
+  .metric .v small{ font-size:13px; color:var(--mut); font-weight:400; }
+  .kv{ font-size:14px; line-height:1.55; }
+  .kv b{ color:var(--mut); font-weight:600; }
+  .svc{ border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:8px 0; background:var(--card2); }
+  .svc .name{ font-weight:700; font-size:14px; }
+  .svc .uuid{ color:var(--mut); font-size:11px; word-break:break-all; }
+  .chr{ border-top:1px dashed var(--line); padding:8px 0 2px; margin-top:8px; }
+  .chr .name{ font-weight:600; font-size:13px; }
+  .chr .props{ color:var(--mut); font-size:11px; }
+  .chr .val{ font-size:13px; margin:4px 0; word-break:break-all; }
+  .chr .row{ display:flex; gap:8px; margin:6px 0 4px; }
+  .chr .row button{ width:auto; padding:8px 12px; font-size:13px; border-radius:9px; }
+  .mini{ background:#1c2a44; color:var(--txt); }
+  #log{ background:#05080f; border:1px solid var(--line); border-radius:12px; padding:10px; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.5; white-space:pre-wrap; word-break:break-word; max-height:320px; overflow:auto; }
+  .tips{ font-size:13.5px; line-height:1.6; color:var(--mut); }
+  .tips b{ color:var(--txt); }
+  .hidden{ display:none; }
+  .foot{ color:var(--mut); font-size:12px; text-align:center; margin-top:18px; }
 </style>
 </head>
 <body>
 <div class="wrap">
+  <h1>⌚ Mi Reloj BLE</h1>
+  <p class="sub">Buscá tu reloj por Bluetooth y mirá todo lo que expone: batería, pulso, datos del dispositivo y servicios GATT. Sin instalar nada.</p>
 
-  <div class="top-status" aria-live="polite">
-    <span class="pill"><span class="dot" id="dotSupport"></span><span id="txtSupport">Comprobando Bluetooth…</span></span>
-    <span class="pill"><span class="dot" id="dotAvail"></span><span id="txtAvail">Estado: —</span></span>
-    <span class="pill"><span class="dot" id="dotConn"></span><span id="txtConn">Sin reloj conectado</span></span>
+  <div class="card">
+    <div class="status"><span class="dot" id="dot"></span><span id="status">Listo para buscar.</span></div>
+    <div style="height:12px"></div>
+    <button class="primary" id="btnAll">⌚ Buscar mi reloj</button>
+    <button class="secondary" id="btnHealth">♥ Buscar por salud (pulso / batería)</button>
+    <button class="ghost hidden" id="btnDisc">Desconectar</button>
+    <button class="ghost hidden" id="btnRetry">↻ Reintentar lecturas (después de emparejar)</button>
   </div>
 
-  <div id="alertBox" class="hidden" style="margin-bottom:14px"></div>
-
-  <section class="hero">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <h1>Buscá tu reloj y <span>miralo acá</span>, sin instalar nada.</h1>
-        <p>Esta página usa Web Bluetooth de Chrome en Android. Al tocar buscar, Android te muestra la lista de dispositivos cercanos y vos elegís tu reloj. Nada se busca en silencio.</p>
-
-        <div class="checks">
-          <div class="check"><span>📍</span><div><b>Antes de buscar</b><span>Encendé Bluetooth y Ubicación en el celular, despertá el reloj y dejalo cerca (menos de 1 metro).</span></div></div>
-          <div class="check"><span>🔓</span><div><b>Si no aparece</b><span>Muchos relojes solo se anuncian si no están conectados a otra app. Cerrá la app del reloj o desvinculalo un momento y probá de nuevo.</span></div></div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn btn-primary" id="btnScanAll">⌚ Buscar mi reloj</button>
-          <button class="btn btn-secondary" id="btnScanFiltered">♥ Buscar relojes y salud</button>
-        </div>
-        <p class="small" style="margin-top:10px">El primer botón muestra <b>todos</b> los BLE cercanos. El segundo filtra por servicios de salud (pulso, batería, etc.). Si tu reloj no sale con uno, probá con el otro.</p>
-        <button class="btn btn-danger hidden" id="btnDisconnect" style="margin-top:10px">Desconectar reloj</button>
-      </div>
-
-      <div class="watch-area" id="watchArea">
-        <div class="watch" id="watchVisual">
-          <div class="radar"></div><div class="radar"></div><div class="radar"></div>
-          <div class="strap"></div>
-          <div class="case"><div class="screen">
-            <div class="date" id="watchDate">—</div>
-            <div class="time" id="watchTime">--:--</div>
-            <div class="hr-big"><span>RITMO CARDÍACO</span><strong><span id="heartIcon">♥</span> <span id="watchHr">--</span></strong><span>bpm</span></div>
-            <div class="batt-ring">🔋 <span id="watchBatt">Batería: --%</span></div>
-            <div style="margin-top:auto;font-size:11px;color:#7aa8a1;font-weight:700" id="watchName">Ningún reloj</div>
-          </div></div>
-        </div>
-        <div class="status-line" id="statusLine">Listo para buscar</div>
-        <div class="status-sub" id="statusSub">Tocá “Buscar mi reloj” y elegí tu dispositivo en la ventana de Chrome.</div>
-      </div>
+  <div class="card hidden" id="cardData">
+    <h2>TU RELOJ</h2>
+    <div class="grid">
+      <div class="metric"><div class="k">Batería</div><div class="v" id="mBatt">—</div></div>
+      <div class="metric"><div class="k">Pulso</div><div class="v" id="mHr">—</div></div>
     </div>
-  </section>
-
-  <!-- Device dashboard -->
-  <section class="section hidden" id="devicePanel">
-    <div class="card">
-      <h2 id="deviceTitle">Tu reloj</h2>
-      <p class="small" id="deviceSub" style="margin:0">Conectado por BLE (GATT)</p>
-      <div class="kpi-grid">
-        <div class="kpi"><label>Batería</label><strong id="kpiBatt">--%</strong><span id="kpiBattSub">Servicio 0x180F</span></div>
-        <div class="kpi"><label>Pulso en vivo</label><strong id="kpiHr">-- bpm</strong><span>Notificaciones de ritmo cardíaco</span></div>
-        <div class="kpi"><label>Fabricante</label><strong style="font-size:16px" id="kpiMaker">—</strong><span>Información del dispositivo</span></div>
-        <div class="kpi"><label>Modelo / Firmware</label><strong style="font-size:16px" id="kpiModel">—</strong><span id="kpiFw">—</span></div>
-      </div>
-      <div class="btn-row" style="margin-top:14px">
-        <button class="btn btn-secondary" id="btnReadAll">↻ Leer batería, info y hora</button>
-        <button class="btn btn-secondary" id="btnHrToggle">♥ Escuchar pulso en vivo</button>
-      </div>
-      <div id="deviceInfoList" style="margin-top:12px"></div>
-    </div>
-
-    <div class="card" style="margin-top:16px">
-      <h2>Servicios que expone tu reloj</h2>
-      <p class="small" style="margin:0">Esto es lo que el reloj permite ver desde la web. Cada fabricante expone cosas distintas: algunos muestran pulso y batería, otros casi nada sin su app oficial.</p>
-      <div id="servicesList"></div>
-      <p class="small" id="servicesEmpty">Todavía no se descubrieron servicios.</p>
-    </div>
-  </section>
-
-  <div class="grid2 section">
-    <section class="card">
-      <h2>¿Qué relojes suelen aparecer?</h2>
-      <div class="compat">
-        <div><span>Xiaomi Mi Band / Smart Band, Amazfit</span><span class="badge badge-yes">Suele verse</span></div>
-        <div><span>Huawei Band / Watch Fit, Honor Band</span><span class="badge badge-maybe">A veces</span></div>
-        <div><span>Garmin, Polar, sensores de pulso de pecho</span><span class="badge badge-yes">Suele verse</span></div>
-        <div><span>Samsung Galaxy Watch (Wear OS)</span><span class="badge badge-maybe">Limitado</span></div>
-        <div><span>Relojes genéricos BLE (ej. con app FitPro / Da Fit)</span><span class="badge badge-yes">Suele verse</span></div>
-        <div><span>Apple Watch</span><span class="badge badge-no">No se expone</span></div>
-      </div>
-      <p class="small">Si tu reloj no aparece en la lista de Chrome, no es un error de esta página: ese modelo no se está anunciando en BLE en ese momento o ya está ocupado por otra conexión.</p>
-    </section>
-
-    <section class="card">
-      <h2>Si no lo encuentra</h2>
-      <ol class="steps">
-        <li><b>Abrí esta página en Chrome</b> en Android (no en WhatsApp ni en otro navegador interno).</li>
-        <li><b>Activá Bluetooth + Ubicación</b> y aceptá el permiso de “dispositivos cercanos” si Chrome lo pide.</li>
-        <li><b>Despertá el reloj</b>, dejalo desbloqueado y al lado del celular.</li>
-        <li><b>Cerrá la app oficial del reloj</b> — si ya está conectado ahí, puede no anunciarse.</li>
-        <li>Probá el <b>otro botón de búsqueda</b> (todos vs. filtrado).</li>
-      </ol>
-    </section>
+    <div style="height:10px"></div>
+    <div class="kv" id="devInfo"></div>
   </div>
 
-  <section class="card section">
-    <h2>Registro de conexión</h2>
-    <p class="small" style="margin-top:0">Útil si algo falla: acá queda qué respondió el reloj, con la hora.</p>
-    <div class="log" id="logBox"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-      <button class="btn btn-ghost" id="btnCopyLog" style="width:auto;padding:0 16px">Copiar registro</button>
-      <button class="btn btn-ghost" id="btnClearLog" style="width:auto;padding:0 16px">Limpiar</button>
-    </div>
-  </section>
+  <div class="card hidden" id="cardSvc">
+    <h2>SERVICIOS DEL RELOJ</h2>
+    <div id="svcList"></div>
+  </div>
 
-  <p class="small" style="text-align:center;margin-top:18px">Web Bluetooth solo funciona en Chrome / Edge en Android y PC, por HTTPS y con tu toque. En iPhone ningún navegador puede hacer esto.</p>
+  <div class="card">
+    <h2>REGISTRO</h2>
+    <div id="log"></div>
+    <button class="secondary" id="btnCopy">📋 Copiar diagnóstico</button>
+  </div>
+
+  <div class="card">
+    <h2>SI EL RELOJ NO APARECE O NO CONECTA</h2>
+    <div class="tips">
+      • Despertá el reloj (pantalla encendida) y tenelo cerca del teléfono.<br>
+      • Si el reloj está conectado a su <b>app oficial</b>, cerrá esa app o desconectá el reloj desde ahí: muchos relojes aceptan <b>una sola conexión</b> por vez.<br>
+      • Chrome pide <b>ubicación activada</b> y permiso de ubicación para buscar Bluetooth en Android.<br>
+      • Algunos relojes piden <b>emparejamiento</b>: si Android muestra un diálogo de vinculación, aceptalo y después tocá «Reintentar lecturas».<br>
+      • Las pulseras tipo Mi Band usan una clave de autenticación propia de su app: pueden aparecer pero no entregar datos por esta vía.<br>
+      • Si algo falla, tocá <b>«Copiar diagnóstico»</b> y pegame el texto en el chat: con eso veo el error exacto.
+    </div>
+  </div>
+
+  <p class="foot">Mi Reloj BLE v2 — Web Bluetooth (Chrome en Android)</p>
 </div>
 
 <script>
-var OPTIONAL_SERVICES = [
-  'generic_access','generic_attribute','device_information','battery_service','heart_rate',
-  'health_thermometer','blood_pressure','glucose','current_time_service','next_dst_change_service',
-  'reference_time_update_service','link_loss','immediate_alert','tx_power','alert_notification',
-  'phone_alert_status','scan_parameters','running_speed_and_cadence','cycling_speed_and_cadence',
-  'cycling_power','location_and_navigation','environmental_sensing','body_composition','user_data',
-  'weight_scale','bond_management','continuous_glucose_monitoring','internet_protocol_support',
-  'indoor_positioning','pulse_oximeter','http_proxy','object_transfer',
-  0x1800,0x1801,0x1802,0x1803,0x1804,0x1805,0x1806,0x1807,0x1808,0x1809,0x180a,0x180d,0x180e,0x180f,
-  0x1810,0x1811,0x1812,0x1813,0x1814,0x1815,0x1816,0x1818,0x1819,0x181a,0x181b,0x181c,0x181d,0x181e,0x181f,0x1820,0x1821,0x1822,0x1823,0x1824,0x1825,0x1826,
-  // Common vendor / fitness UUIDs (full forms also tried via enumeration after connect)
-  '0000fee0-0000-1000-8000-00805f9b34fb','0000fee1-0000-1000-8000-00805f9b34fb','0000fee7-0000-1000-8000-00805f9b34fb',
-  '0000ff80-0000-1000-8000-00805f9b34fb','6e400001-b5a3-f393-e0a9-e50e24dcca9e'
+"use strict";
+/* ============ Utilidades ============ */
+const $ = id => document.getElementById(id);
+const logEl = $("log"), dotEl = $("dot"), statusEl = $("status");
+const logLines = [];
+function ts(){ const d=new Date(); return d.toTimeString().slice(0,8); }
+function log(msg){ const line = "["+ts()+"] "+msg; logLines.push(line); logEl.textContent = logLines.join("\n"); logEl.scrollTop = logEl.scrollHeight; }
+function setStatus(txt, mode){ statusEl.textContent = txt; dotEl.className = "dot" + (mode ? " "+mode : ""); }
+function hexOf(view){ const out=[]; for(let i=0;i<view.byteLength;i++) out.push(view.getUint8(i).toString(16).padStart(2,"0")); return out.join(" "); }
+function textOf(view){ try{ return new TextDecoder("utf-8").decode(view).replace(/[\x00-\x08\x0e-\x1f]/g,"").trim(); }catch(e){ return ""; } }
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function explainError(err){
+  const n = err && err.name ? err.name : "Error";
+  const m = err && err.message ? err.message : String(err);
+  const map = {
+    NotFoundError: "No se eligió ningún dispositivo: se cerró el selector o el reloj no apareció en la lista.",
+    SecurityError: "El navegador bloqueó el acceso a Bluetooth (política de seguridad o contexto no seguro).",
+    NotSupportedError: "Este navegador no soporta Web Bluetooth. Usá Chrome en Android.",
+    NotAllowedError: "Permiso denegado: Chrome necesita ubicación activada y permiso de ubicación para buscar Bluetooth.",
+    NetworkError: "La conexión GATT falló. Causas típicas: reloj lejos, reloj ya conectado a su app oficial, o el reloj rechazó la conexión.",
+    InvalidStateError: "Estado inválido: el Bluetooth puede estar apagado o el dispositivo ya se desconectó.",
+    AbortError: "La operación se canceló o expiró. Probá de nuevo con el reloj despierto y cerca.",
+    OperationError: "El reloj rechazó la operación (puede requerir emparejamiento o su app oficial).",
+    NotReadableError: "El reloj no permitió leer ese dato (puede requerir emparejamiento previo).",
+    SecurityError2: ""
+  };
+  return "["+n+"] " + (map[n] || m);
+}
+
+/* ============ Catálogos GATT ============ */
+const SVC_NAMES = {
+  "00001800-0000-1000-8000-00805f9b34fb":"Acceso genérico (nombre del dispositivo)",
+  "00001801-0000-1000-8000-00805f9b34fb":"Atributos genéricos",
+  "0000180a-0000-1000-8000-00805f9b34fb":"Información del dispositivo",
+  "0000180f-0000-1000-8000-00805f9b34fb":"Batería",
+  "0000180d-0000-1000-8000-00805f9b34fb":"Frecuencia cardíaca",
+  "00001805-0000-1000-8000-00805f9b34fb":"Hora actual",
+  "00001816-0000-1000-8000-00805f9b34fb":"Velocidad y cadencia (ciclismo)",
+  "00001814-0000-1000-8000-00805f9b34fb":"Velocidad y cadencia (running)",
+  "00001818-0000-1000-8000-00805f9b34fb":"Potencia (ciclismo)",
+  "00001826-0000-1000-8000-00805f9b34fb":"Máquina de fitness",
+  "0000181a-0000-1000-8000-00805f9b34fb":"Sensores ambientales",
+  "0000fee0-0000-1000-8000-00805f9b34fb":"Xiaomi / Amazfit (Mi Band)",
+  "0000fee1-0000-1000-8000-00805f9b34fb":"Xiaomi / Amazfit (datos)",
+  "0000fee7-0000-1000-8000-00805f9b34fb":"Amazfit / Zepp",
+  "0000fff0-0000-1000-8000-00805f9b34fb":"Servicio personalizado (FFF0)",
+  "6e400001-b5a3-f393-e0a9-e50e24dcca9e":"Nordic UART (serie por BLE)"
+};
+const CHR_NAMES = {
+  "00002a00-0000-1000-8000-00805f9b34fb":"Nombre del dispositivo",
+  "00002a01-0000-1000-8000-00805f9b34fb":"Apariencia",
+  "00002a19-0000-1000-8000-00805f9b34fb":"Nivel de batería",
+  "00002a37-0000-1000-8000-00805f9b34fb":"Medición de pulso",
+  "00002a38-0000-1000-8000-00805f9b34fb":"Posición del sensor de pulso",
+  "00002a24-0000-1000-8000-00805f9b34fb":"Modelo",
+  "00002a25-0000-1000-8000-00805f9b34fb":"Número de serie",
+  "00002a26-0000-1000-8000-00805f9b34fb":"Versión de firmware",
+  "00002a27-0000-1000-8000-00805f9b34fb":"Versión de hardware",
+  "00002a28-0000-1000-8000-00805f9b34fb":"Versión de software",
+  "00002a29-0000-1000-8000-00805f9b34fb":"Fabricante",
+  "00002a23-0000-1000-8000-00805f9b34fb":"ID del sistema",
+  "00002a2b-0000-1000-8000-00805f9b34fb":"Hora actual",
+  "00002a6e-0000-1000-8000-00805f9b34fb":"Temperatura",
+  "00002a6f-0000-1000-8000-00805f9b34fb":"Humedad",
+  "00002a7d-0000-1000-8000-00805f9b34fb":"Presión"
+};
+/* Servicios que pedimos permiso para usar (estándar + marcas conocidas) */
+const OPTIONAL_SERVICES = [
+  "generic_access","generic_attribute","device_information","battery_service",
+  "heart_rate","current_time_service","cycling_speed_and_cadence","running_speed_and_cadence",
+  "cycling_power","fitness_machine","environmental_sensing",
+  0xFEE0, 0xFEE1, 0xFEE7, 0xFFF0, 0xFFB0,
+  "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 ];
-var SERVICE_NAMES = {
-  '00001800-0000-1000-8000-00805f9b34fb':'Acceso genérico','00001801-0000-1000-8000-00805f9b34fb':'Atributos genéricos',
-  '0000180a-0000-1000-8000-00805f9b34fb':'Información del dispositivo','0000180f-0000-1000-8000-00805f9b34fb':'Batería',
-  '0000180d-0000-1000-8000-00805f9b34fb':'Ritmo cardíaco','00001809-0000-1000-8000-00805f9b34fb':'Termómetro de salud',
-  '00001810-0000-1000-8000-00805f9b34fb':'Presión arterial','00001805-0000-1000-8000-00805f9b34fb':'Hora actual',
-  '0000181a-0000-1000-8000-00805f9b34fb':'Sensores ambientales','0000181d-0000-1000-8000-00805f9b34fb':'Báscula / peso',
-  '00001816-0000-1000-8000-00805f9b34fb':'Velocidad y cadencia (ciclismo)','00001814-0000-1000-8000-00805f9b34fb':'Velocidad y cadencia (running)',
-  '0000fee0-0000-1000-8000-00805f9b34fb':'Servicio Xiaomi / Huami (Mi Band)','0000fee1-0000-1000-8000-00805f9b34fb':'Xiaomi / Huami — datos',
-  '6e400001-b5a3-f393-e0a9-e50e24dcca9e':'UART nórdico (genérico)'
-};
-var CHAR_NAMES = {
-  '00002a19-0000-1000-8000-00805f9b34fb':'Nivel de batería','00002a37-0000-1000-8000-00805f9b34fb':'Medición de pulso',
-  '00002a38-0000-1000-8000-00805f9b34fb':'Posición del sensor de pulso','00002a39-0000-1000-8000-00805f9b34fb':'Control de pulso',
-  '00002a29-0000-1000-8000-00805f9b34fb':'Fabricante','00002a24-0000-1000-8000-00805f9b34fb':'Modelo',
-  '00002a25-0000-1000-8000-00805f9b34fb':'Número de serie','00002a26-0000-1000-8000-00805f9b34fb':'Firmware',
-  '00002a27-0000-1000-8000-00805f9b34fb':'Hardware','00002a28-0000-1000-8000-00805f9b34fb':'Software',
-  '00002a00-0000-1000-8000-00805f9b34fb':'Nombre del dispositivo','00002a01-0000-1000-8000-00805f9b34fb':'Apariencia',
-  '00002a2b-0000-1000-8000-00805f9b34fb':'Hora actual','00002a1c-0000-1000-8000-00805f9b34fb':'Temperatura',
-  '00002a49-0000-1000-8000-00805f9b34fb':'Presión arterial','00002a9d-0000-1000-8000-00805f9b34fb':'Peso'
-};
+const PROBE_UUIDS = [
+  "00001800-0000-1000-8000-00805f9b34fb","00001801-0000-1000-8000-00805f9b34fb",
+  "0000180a-0000-1000-8000-00805f9b34fb","0000180f-0000-1000-8000-00805f9b34fb",
+  "0000180d-0000-1000-8000-00805f9b34fb","00001805-0000-1000-8000-00805f9b34fb",
+  "0000fee0-0000-1000-8000-00805f9b34fb","0000fee1-0000-1000-8000-00805f9b34fb",
+  "0000fff0-0000-1000-8000-00805f9b34fb","6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+];
 
-var device=null, server=null, hrChar=null, hrListening=false;
-var logBox=document.getElementById('logBox');
-function nowTime(){ return new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
-function log(msg, cls){
-  var line=document.createElement('div'); if(cls) line.className=cls;
-  line.textContent='['+nowTime()+'] '+msg; logBox.appendChild(line); logBox.scrollTop=logBox.scrollHeight;
-}
-function setStatus(main, sub){
-  document.getElementById('statusLine').textContent=main;
-  if(sub!==undefined) document.getElementById('statusSub').textContent=sub;
-}
-function showAlert(html, kind){
-  var box=document.getElementById('alertBox'); box.className='alert alert-'+kind; box.innerHTML=html; box.classList.remove('hidden');
-}
-function hideAlert(){ document.getElementById('alertBox').classList.add('hidden'); }
-function setConnPill(connected, label){
-  document.getElementById('dotConn').className='dot '+(connected?'on':'');
-  document.getElementById('txtConn').textContent=label;
-}
-function tickClock(){
-  var d=new Date();
-  document.getElementById('watchTime').textContent=d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('watchDate').textContent=d.toLocaleDateString('es-AR',{weekday:'short', day:'numeric', month:'short'});
-}
-tickClock(); setInterval(tickClock,15000);
+/* ============ Estado ============ */
+let device = null, server = null;
+let allChars = {};        // uuid -> characteristic
+let discovered = [];      // resumen para el diagnóstico
+let notifyOn = {};        // uuid -> bool
 
-// Support checks
-(function init(){
-  var dotS=document.getElementById('dotSupport'), txtS=document.getElementById('txtSupport');
-  var dotA=document.getElementById('dotAvail'), txtA=document.getElementById('txtAvail');
-  if(!('bluetooth' in navigator)){
-    dotS.className='dot bad'; txtS.textContent='Web Bluetooth no soportado';
-    dotA.className='dot bad'; txtA.textContent='Usá Chrome en Android';
-    document.getElementById('btnScanAll').disabled=true; document.getElementById('btnScanFiltered').disabled=true;
-    showAlert('<b>Este navegador no puede buscar Bluetooth.</b> Abrí esta misma página en <b>Chrome en Android</b> (o Chrome/Edge en PC). En iPhone no funciona en ningún navegador, y dentro de WhatsApp/Instagram tampoco: tocá ⋮ y “Abrir en Chrome”.','bad');
-    log('navigator.bluetooth no existe en este navegador.','err'); setStatus('Navegador no compatible','Necesitás Chrome en Android o PC.');
-    return;
-  }
-  dotS.className='dot ok'; txtS.textContent='Web Bluetooth soportado';
-  log('Web Bluetooth disponible. Listo para buscar.','ok');
-  if(navigator.bluetooth.getAvailability){
-    navigator.bluetooth.getAvailability().then(function(av){
-      dotA.className='dot '+(av?'ok':'warn'); txtA.textContent=av?'Bluetooth del equipo: disponible':'Bluetooth: apagado o sin permiso';
-      if(!av) showAlert('<b>El Bluetooth parece apagado.</b> Encendelo en el celular (y la Ubicación) y volvé a intentar.','warn');
-    }).catch(function(){ txtA.textContent='Estado: no se pudo comprobar'; });
-    if(navigator.bluetooth.addEventListener){
-      navigator.bluetooth.addEventListener('availabilitychanged', function(e){
-        dotA.className='dot '+(e.value?'ok':'warn'); txtA.textContent=e.value?'Bluetooth del equipo: disponible':'Bluetooth: apagado o sin permiso';
+function svcName(u){ return SVC_NAMES[u] || "Servicio"; }
+function chrName(u){ return CHR_NAMES[u] || "Característica"; }
+
+function parseHeartRate(view){
+  const flags = view.getUint8(0);
+  let i = 1, hr;
+  if(flags & 0x01){ hr = view.getUint16(1, true); i = 3; } else { hr = view.getUint8(1); i = 2; }
+  let extra = "";
+  if(flags & 0x08){ extra += " · Energía: " + view.getUint16(i, true) + " kJ"; i += 2; }
+  if(flags & 0x10){ const rr=[]; while(i + 1 < view.byteLength + 0 && i < view.byteLength){ rr.push(view.getUint16(i, true)); i += 2; } if(rr.length) extra += " · RR: " + rr.join(", "); }
+  return { hr, extra };
+}
+function parseCurrentTime(view){
+  try{
+    const y = view.getUint16(0,true), mo = view.getUint8(2), d = view.getUint8(3);
+    const h = view.getUint8(4), mi = view.getUint8(5), s = view.getUint8(6);
+    return d+"/"+mo+"/"+y+" "+String(h).padStart(2,"0")+":"+String(mi).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  }catch(e){ return ""; }
+}
+function describeValue(chrUuid, view){
+  if(!view) return "(sin datos)";
+  if(chrUuid.endsWith("2a19")) return view.getUint8(0) + " %";
+  if(chrUuid.endsWith("2a37")){ const p = parseHeartRate(view); return p.hr + " lpm" + p.extra; }
+  if(chrUuid.endsWith("2a2b")) return parseCurrentTime(view) || hexOf(view);
+  const t = textOf(view);
+  if(t && /^[\x20-\x7eáéíóúñüÁÉÍÓÚÑÜ ]+$/.test(t)) return t;
+  return "hex: " + hexOf(view);
+}
+
+/* ============ Flujo principal ============ */
+async function pickDevice(mode){
+  if(!navigator.bluetooth){ setStatus("Este navegador no soporta Web Bluetooth.", "err"); log("ERROR: navigator.bluetooth no existe. Abrí la página en Chrome de Android."); return null; }
+  try{
+    const avail = await navigator.bluetooth.getAvailability();
+    log("Bluetooth disponible en el navegador: " + avail);
+    if(!avail){ setStatus("El Bluetooth del teléfono parece apagado.", "err"); log("ERROR: getAvailability() = false. Activá el Bluetooth del teléfono."); return null; }
+  }catch(e){ log("getAvailability falló: " + explainError(e)); }
+  setStatus("Abriendo el selector de dispositivos…", "busy");
+  log("Solicitando dispositivo (modo: " + mode + ")…");
+  try{
+    if(mode === "health"){
+      return await navigator.bluetooth.requestDevice({
+        filters: [ { services: ["heart_rate"] }, { services: ["battery_service"] }, { services: ["device_information"] } ],
+        optionalServices: OPTIONAL_SERVICES
       });
     }
-  }
-})();
-
-function decodeValue(charUuid, dv){
-  if(!dv) return '(sin datos)';
-  var bytes=[]; for(var i=0;i<dv.byteLength;i++) bytes.push(dv.getUint8(i));
-  var hex=bytes.map(function(b){return b.toString(16).padStart(2,'0');}).join(' ');
-  // Known decodings
-  if(charUuid.indexOf('2a19')>-1 && dv.byteLength>=1) return dv.getUint8(0)+'%  ·  hex: '+hex;
-  if(charUuid.indexOf('2a37')>-1){ var hr=parseHeartRate(dv); return hr.bpm+' bpm'+(hr.energy?' · energía '+hr.energy+' kJ':'')+(hr.rr&&hr.rr.length?' · RR '+hr.rr.join(', ')+' ms':'')+'  ·  hex: '+hex; }
-  // printable string?
-  try{
-    var txt=new TextDecoder('utf-8').decode(dv);
-    if(/^[\x20-\x7EáéíóúñüÁÉÍÓÚÑÜ \.\-\/]+$/.test(txt) && txt.trim().length) return txt+'  ·  hex: '+hex;
-  }catch(e){}
-  return 'hex: '+hex+'  ·  bytes: '+bytes.join(', ');
-}
-function parseHeartRate(dv){
-  var flags=dv.getUint8(0), offset=1, bpm;
-  if(flags&0x01){ bpm=dv.getUint16(offset,true); offset+=2; } else { bpm=dv.getUint8(offset); offset+=1; }
-  var energy=null, rr=[];
-  if(flags&0x08){ energy=dv.getUint16(offset,true); offset+=2; }
-  if(flags&0x10){ while(offset+1<dv.byteLength){ rr.push(Math.round(dv.getUint16(offset,true)*1000/1024)); offset+=2; } }
-  return {bpm:bpm, energy:energy, rr:rr};
-}
-function updateHeartRate(bpm){
-  document.getElementById('watchHr').textContent=bpm;
-  document.getElementById('kpiHr').textContent=bpm+' bpm';
-  var icon=document.getElementById('heartIcon'); icon.classList.remove('pulse'); void icon.offsetWidth; icon.classList.add('pulse');
-}
-
-async function requestWatch(filtered){
-  hideAlert();
-  if(!('bluetooth' in navigator)){ return; }
-  var area=document.getElementById('watchArea'); area.classList.add('scanning');
-  setStatus('Buscando dispositivos…','Elegí tu reloj en la ventana que abre Chrome. Dejalo cerca y despierto.');
-  log(filtered?'Abriendo buscador filtrado (salud / batería / pulso)…':'Abriendo buscador de todos los dispositivos BLE…','info');
-  try{
-    var opts;
-    if(filtered){
-      opts={ filters:[{services:['heart_rate']},{services:['battery_service']},{services:['device_information']},{namePrefix:'Mi'},{namePrefix:'Amazfit'},{namePrefix:'Watch'},{namePrefix:'Band'}], optionalServices: OPTIONAL_SERVICES };
-    } else {
-      opts={ acceptAllDevices:true, optionalServices: OPTIONAL_SERVICES };
-    }
-    device=await navigator.bluetooth.requestDevice(opts);
+    return await navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: OPTIONAL_SERVICES });
   }catch(e){
-    area.classList.remove('scanning');
-    if(e && e.name==='NotFoundError'){ setStatus('Búsqueda cancelada','No elegiste ningún dispositivo, o tu reloj no se estaba anunciando. Despertalo y probá de nuevo.'); log('Búsqueda cancelada o sin selección (NotFoundError).','err'); }
-    else if(e && e.name==='SecurityError'){ setStatus('Permiso bloqueado','Chrome bloqueó el Bluetooth. Revisá los permisos del sitio y que la página esté en HTTPS.'); log('SecurityError: '+e.message,'err'); }
-    else { setStatus('No se pudo buscar','Revisá Bluetooth y ubicación, y volvé a intentar.'); log('Error al buscar: '+(e&&e.message?e.message:e),'err'); }
+    setStatus("No se eligió dispositivo.", "err");
+    log("ERROR en la búsqueda: " + explainError(e));
+    return null;
+  }
+}
+
+async function connectFlow(mode){
+  const dev = await pickDevice(mode);
+  if(!dev) return;
+  device = dev;
+  log("Dispositivo elegido: \"" + (device.name || "(sin nombre)") + "\" · id: " + device.id);
+  device.addEventListener("gattserverdisconnected", onDisconnected);
+  setStatus("Conectando con " + (device.name || "el reloj") + "…", "busy");
+  try{
+    server = await device.gatt.connect();
+  }catch(e){
+    setStatus("No se pudo conectar.", "err");
+    log("ERROR al conectar (GATT): " + explainError(e));
+    log("Tip: si el reloj está vinculado a su app oficial, desconectalo de ahí primero.");
     return;
   }
-  area.classList.remove('scanning');
-  log('Elegiste: '+(device.name||'(sin nombre)')+' · id '+device.id,'ok');
-  document.getElementById('watchName').textContent=device.name||'Dispositivo BLE';
-  document.getElementById('deviceTitle').textContent=device.name||'Dispositivo BLE';
-  document.getElementById('deviceSub').textContent='ID: '+device.id;
-  device.addEventListener('gattserverdisconnected', onDisconnected);
-  await connectDevice();
-}
-
-async function connectDevice(){
-  if(!device) return;
-  setStatus('Conectando con '+(device.name||'tu reloj')+'…','Puede tardar unos segundos. No alejes el reloj.');
-  log('Conectando GATT…','info');
-  try{
-    server=await device.gatt.connect();
-  }catch(e){
-    setStatus('No se pudo conectar','Acercá el reloj, despertalo y tocá Buscar de nuevo. Si estaba conectado a su app oficial, cerrala primero.');
-    log('Fallo de conexión GATT: '+(e&&e.message?e.message:e),'err'); return;
-  }
-  setConnPill(true,'Conectado: '+(device.name||'reloj'));
-  document.getElementById('btnDisconnect').classList.remove('hidden');
-  document.getElementById('devicePanel').classList.remove('hidden');
-  setStatus('¡Reloj conectado!','Leyendo batería, información y servicios…');
-  log('Conectado. Descubriendo servicios…','ok');
-  await discoverServices();
-  await readAll();
-  document.getElementById('devicePanel').scrollIntoView({behavior:'smooth', block:'start'});
+  log("Conexión GATT establecida.");
+  setStatus("Conectado a " + (device.name || "el reloj") + ". Leyendo datos…", "on");
+  $("btnDisc").classList.remove("hidden");
+  $("btnRetry").classList.remove("hidden");
+  await discoverAndRead();
 }
 
 function onDisconnected(){
-  server=null; hrChar=null; hrListening=false;
-  setConnPill(false,'Sin reloj conectado');
-  document.getElementById('btnDisconnect').classList.add('hidden');
-  setStatus('Reloj desconectado','Se cortó la conexión BLE. Tocá Buscar para reconectar.');
-  log('El dispositivo se desconectó.','err');
+  log("El dispositivo se desconectó.");
+  setStatus("Desconectado.", "err");
+  server = null;
 }
 
-async function discoverServices(){
-  var list=document.getElementById('servicesList'); list.innerHTML='';
-  var empty=document.getElementById('servicesEmpty');
-  var services;
-  try{ services=await server.getPrimaryServices(); }
-  catch(e){ log('No se pudieron listar servicios: '+(e&&e.message?e.message:e),'err'); empty.textContent='El reloj no permitió listar servicios desde la web.'; return; }
-  log('Servicios encontrados: '+services.length,'ok');
-  if(!services.length){ empty.textContent='El reloj no expuso ningún servicio accesible para la web.'; return; }
-  empty.classList.add('hidden');
-  for(var s=0;s<services.length;s++){
-    var svc=services[s];
-    var sName=SERVICE_NAMES[svc.uuid]||'Servicio del fabricante / desconocido';
-    var wrap=document.createElement('div'); wrap.className='service';
-    var head=document.createElement('div'); head.className='service-head';
-    head.innerHTML='<div><b></b><span class="mono" style="color:var(--muted)"></span></div><span class="badge badge-yes">GATT</span>';
-    head.querySelector('b').textContent=sName; head.querySelector('.mono').textContent=svc.uuid;
-    wrap.appendChild(head);
-    var chars=[];
-    try{ chars=await svc.getCharacteristics(); }catch(e){ var p=document.createElement('div'); p.className='char small'; p.textContent='No se pudieron leer sus características.'; wrap.appendChild(p); }
-    for(var c=0;c<chars.length;c++){
-      (function(ch){
-        var cName=CHAR_NAMES[ch.uuid]||'Característica';
-        var props=[]; if(ch.properties.read)props.push('leer'); if(ch.properties.write)props.push('escribir'); if(ch.properties.writeWithoutResponse)props.push('escribir s/resp.'); if(ch.properties.notify)props.push('notificar'); if(ch.properties.indicate)props.push('indicar');
-        var div=document.createElement('div'); div.className='char';
-        var top=document.createElement('div'); top.className='char-top';
-        top.innerHTML='<div><b style="font-size:14px"></b><div class="mono" style="color:var(--muted)"></div><div class="tags"></div></div>';
-        top.querySelector('b').textContent=cName; top.querySelector('.mono').textContent=ch.uuid;
-        var tags=top.querySelector('.tags'); props.forEach(function(pr){ var t=document.createElement('span'); t.className='tag'; t.textContent=pr; tags.appendChild(t); });
-        div.appendChild(top);
-        var actions=document.createElement('div'); actions.className='char-actions';
-        var valBox=document.createElement('div'); valBox.className='value-box hidden';
-        if(ch.properties.read){
-          var rb=document.createElement('button'); rb.textContent='Leer valor'; rb.className='primary';
-          rb.addEventListener('click', async function(){
-            rb.textContent='Leyendo…';
-            try{ var v=await ch.readValue(); var decoded=decodeValue(ch.uuid,v); valBox.textContent=decoded; valBox.classList.remove('hidden'); log('Leído '+cName+': '+decoded,'ok'); handleKnownValue(ch.uuid,v); }
-            catch(e){ valBox.textContent='Error: '+(e&&e.message?e.message:e); valBox.classList.remove('hidden'); log('Error leyendo '+ch.uuid+': '+(e&&e.message?e.message:e),'err'); }
-            rb.textContent='Leer valor';
-          });
-          actions.appendChild(rb);
-        }
-        if(ch.properties.notify||ch.properties.indicate){
-          var nb=document.createElement('button'); nb.textContent='Escuchar cambios';
-          var listening=false;
-          var handler=function(ev){ var decoded=decodeValue(ch.uuid,ev.target.value); valBox.textContent=decoded; valBox.classList.remove('hidden'); log('Notificación '+cName+': '+decoded,'info'); handleKnownValue(ch.uuid,ev.target.value); };
-          nb.addEventListener('click', async function(){
-            try{
-              if(!listening){ await ch.startNotifications(); ch.addEventListener('characteristicvaluechanged',handler); listening=true; nb.textContent='Dejar de escuchar'; log('Escuchando '+cName+'…','ok'); if(ch.uuid.indexOf('2a37')>-1){ hrChar=ch; hrListening=true; } }
-              else { await ch.stopNotifications(); ch.removeEventListener('characteristicvaluechanged',handler); listening=false; nb.textContent='Escuchar cambios'; if(ch.uuid.indexOf('2a37')>-1){ hrListening=false; } }
-            }catch(e){ log('Error en notificaciones: '+(e&&e.message?e.message:e),'err'); }
-          });
-          actions.appendChild(nb);
-        }
-        if(actions.children.length) div.appendChild(actions);
-        div.appendChild(valBox);
-        wrap.appendChild(div);
-      })(chars[c]);
-    }
-    list.appendChild(wrap);
-  }
-}
-
-function handleKnownValue(uuid, dv){
-  if(uuid.indexOf('2a19')>-1){ var pct=dv.getUint8(0); document.getElementById('kpiBatt').textContent=pct+'%'; document.getElementById('watchBatt').textContent='Batería: '+pct+'%'; }
-  if(uuid.indexOf('2a37')>-1){ updateHeartRate(parseHeartRate(dv).bpm); }
-}
-
-async function tryRead(serviceUuid, charUuid){
-  try{ var svc=await server.getPrimaryService(serviceUuid); var ch=await svc.getCharacteristic(charUuid); return await ch.readValue(); }catch(e){ return null; }
-}
-async function readString(serviceUuid, charUuid){
-  var v=await tryRead(serviceUuid,charUuid); if(!v) return null;
-  try{ return new TextDecoder('utf-8').decode(v).replace(/\0/g,'').trim(); }catch(e){ return null; }
-}
-
-async function readAll(){
-  if(!server) { log('No hay conexión para leer.','err'); return; }
-  log('Leyendo datos principales…','info');
-  var batt=await tryRead('battery_service','battery_level');
-  if(batt){ var pct=batt.getUint8(0); document.getElementById('kpiBatt').textContent=pct+'%'; document.getElementById('watchBatt').textContent='Batería: '+pct+'%'; log('Batería: '+pct+'%','ok'); }
-  else log('El reloj no expuso batería legible (0x180F/0x2A19).','err');
-
-  var fields=[
-    ['Fabricante','manufacturer_name_string'],['Modelo','model_number_string'],['Serie','serial_number_string'],
-    ['Firmware','firmware_revision_string'],['Hardware','hardware_revision_string'],['Software','software_revision_string']
-  ];
-  var infoHtml='', maker=null, model=null, fw=null;
-  for(var i=0;i<fields.length;i++){
-    var val=await readString('device_information', fields[i][1]);
-    if(val){ infoHtml+='<div class="check"><div><b>'+fields[i][0]+'</b><span>'+val.replace(/</g,'&lt;')+'</span></div></div>'; if(fields[i][0]==='Fabricante')maker=val; if(fields[i][0]==='Modelo')model=val; if(fields[i][0]==='Firmware')fw=val; }
-  }
-  if(maker) document.getElementById('kpiMaker').textContent=maker;
-  if(model) document.getElementById('kpiModel').textContent=model;
-  if(fw) document.getElementById('kpiFw').textContent='Firmware '+fw;
-  var infoList=document.getElementById('deviceInfoList');
-  infoList.innerHTML= infoHtml ? '<div class="checks">'+infoHtml+'</div>' : '<p class="small">Este reloj no expone su información de dispositivo (fabricante/modelo) a la web.</p>';
-  if(infoHtml) log('Información del dispositivo leída.','ok');
-
-  var ct=await tryRead('current_time_service','current_time');
-  if(ct && ct.byteLength>=7){ log('Hora del reloj leída: '+ct.getUint16(0,true)+'-'+ct.getUint8(2)+'-'+ct.getUint8(3)+' '+ct.getUint8(4)+':'+String(ct.getUint8(5)).padStart(2,'0'),'ok'); }
-  setStatus('Datos actualizados','Si el pulso no aparece, tocá “Escuchar pulso en vivo” y movete un poco con el reloj puesto.');
-}
-
-async function toggleHr(){
-  if(!server){ log('Conectá el reloj primero.','err'); return; }
+async function discoverAndRead(){
+  allChars = {}; discovered = [];
+  $("svcList").innerHTML = "";
+  let services = [];
   try{
-    if(!hrChar){ var svc=await server.getPrimaryService('heart_rate'); hrChar=await svc.getCharacteristic('heart_rate_measurement'); }
-    if(!hrListening){
-      await hrChar.startNotifications();
-      hrChar.addEventListener('characteristicvaluechanged', function(ev){ handleKnownValue(ev.target.uuid, ev.target.value); log('Pulso: '+parseHeartRate(ev.target.value).bpm+' bpm','info'); });
-      hrListening=true; document.getElementById('btnHrToggle').textContent='♥ Dejar de escuchar pulso';
-      log('Escuchando pulso en vivo… ponete el reloj y esperá unos segundos.','ok'); setStatus('Escuchando tu pulso…','El valor aparece cuando el sensor mide. Puede tardar 5–15 segundos.');
-    } else {
-      await hrChar.stopNotifications(); hrListening=false; document.getElementById('btnHrToggle').textContent='♥ Escuchar pulso en vivo'; log('Pulso en vivo detenido.','info');
-    }
+    services = await server.getPrimaryServices();
+    log("Servicios descubiertos: " + services.length);
   }catch(e){
-    log('Este reloj no expone pulso estándar (0x180D) a la web: '+(e&&e.message?e.message:e),'err');
-    showAlert('<b>El pulso no está disponible por la web en este reloj.</b> Muchos relojes guardan el pulso solo para su app oficial y no lo comparten por el servicio estándar BLE. La batería y la info, si aparecen arriba, sí son reales de tu reloj.','warn');
+    log("getPrimaryServices falló (" + explainError(e) + "). Probando servicio por servicio…");
+    for(const u of PROBE_UUIDS){
+      try{ const s = await server.getPrimaryService(u); services.push(s); log("  · responde: " + svcName(u) + " " + u); }
+      catch(_){ /* no está */ }
+    }
+    log("Servicios por sondeo: " + services.length);
+  }
+  if(!services.length){
+    setStatus("Conectó, pero el reloj no expone servicios accesibles.", "err");
+    log("Sin servicios accesibles: el reloj puede requerir emparejamiento previo o ser cerrado (solo su app oficial).");
+    return;
+  }
+  for(const svc of services){
+    const entry = { uuid: svc.uuid, name: svcName(svc.uuid), chars: [] };
+    discovered.push(entry);
+    let chars = [];
+    try{ chars = await svc.getCharacteristics(); }
+    catch(e){ log("Servicio " + svc.uuid + ": no se pudieron listar características: " + explainError(e)); }
+    for(const ch of chars){
+      allChars[ch.uuid] = ch;
+      const props = Object.keys(ch.properties).filter(k => ch.properties[k]);
+      entry.chars.push({ uuid: ch.uuid, name: chrName(ch.uuid), props });
+    }
+    renderService(svc, chars);
+  }
+  $("cardSvc").classList.remove("hidden");
+  $("cardData").classList.remove("hidden");
+  await autoRead();
+  setStatus("Conectado a " + (device.name || "el reloj") + ".", "on");
+}
+
+async function readInto(chrUuid, el){
+  const ch = allChars[chrUuid];
+  if(!ch) return false;
+  try{
+    const v = await ch.readValue();
+    const txt = describeValue(chrUuid, v);
+    if(el) el.textContent = txt;
+    log("Leído " + chrName(chrUuid) + ": " + txt);
+    return true;
+  }catch(e){
+    log("No se pudo leer " + chrName(chrUuid) + ": " + explainError(e));
+    return false;
   }
 }
 
-document.getElementById('btnScanAll').addEventListener('click', function(){ requestWatch(false); });
-document.getElementById('btnScanFiltered').addEventListener('click', function(){ requestWatch(true); });
-document.getElementById('btnDisconnect').addEventListener('click', function(){ if(device&&device.gatt&&device.gatt.connected) device.gatt.disconnect(); else onDisconnected(); });
-document.getElementById('btnReadAll').addEventListener('click', readAll);
-document.getElementById('btnHrToggle').addEventListener('click', toggleHr);
-document.getElementById('btnClearLog').addEventListener('click', function(){ logBox.innerHTML=''; log('Registro limpio.','info'); });
-document.getElementById('btnCopyLog').addEventListener('click', function(){
-  var txt=logBox.innerText;
-  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ log('Registro copiado.','ok'); }); }
-});
-log('Página lista. Tocá “Buscar mi reloj” para empezar.','info');
+async function autoRead(){
+  log("Leyendo datos principales…");
+  const info = [];
+  const nameCh = allChars["00002a00-0000-1000-8000-00805f9b34fb"];
+  if(nameCh){ try{ const v = await nameCh.readValue(); info.push("<b>Nombre:</b> " + esc(textOf(v))); }catch(e){ log("Nombre GAP: " + explainError(e)); } }
+  if(device && device.name) info.push("<b>Nombre anunciado:</b> " + esc(device.name));
+  const fields = [
+    ["00002a29-0000-1000-8000-00805f9b34fb","Fabricante"],
+    ["00002a24-0000-1000-8000-00805f9b34fb","Modelo"],
+    ["00002a26-0000-1000-8000-00805f9b34fb","Firmware"],
+    ["00002a27-0000-1000-8000-00805f9b34fb","Hardware"],
+    ["00002a28-0000-1000-8000-00805f9b34fb","Software"],
+    ["00002a25-0000-1000-8000-00805f9b34fb","Serie"],
+    ["00002a2b-0000-1000-8000-00805f9b34fb","Hora del reloj"]
+  ];
+  for(const [uuid,label] of fields){
+    const ch = allChars[uuid];
+    if(!ch) continue;
+    try{ const v = await ch.readValue(); info.push("<b>"+label+":</b> " + esc(describeValue(uuid, v))); }
+    catch(e){ log(label + ": " + explainError(e)); }
+  }
+  $("devInfo").innerHTML = info.length ? info.join("<br>") : "El reloj no publicó datos de identificación legibles.";
+  /* Batería */
+  const batt = allChars["00002a19-0000-1000-8000-00805f9b34fb"];
+  if(batt){
+    try{ const v = await batt.readValue(); $("mBatt").innerHTML = v.getUint8(0) + " <small>%</small>"; log("Batería: " + v.getUint8(0) + "%"); }
+    catch(e){ log("Batería: " + explainError(e)); }
+    if(batt.properties.notify){ try{ await batt.startNotifications(); batt.addEventListener("characteristicvaluechanged", ev => { $("mBatt").innerHTML = ev.target.value.getUint8(0) + " <small>%</small>"; }); log("Notificaciones de batería activas."); }catch(e){ log("Notificaciones de batería: " + explainError(e)); } }
+  }
+  /* Pulso en vivo */
+  const hr = allChars["00002a37-0000-1000-8000-00805f9b34fb"];
+  if(hr){
+    if(hr.properties.notify || hr.properties.indicate){
+      try{
+        await hr.startNotifications();
+        hr.addEventListener("characteristicvaluechanged", ev => {
+          const p = parseHeartRate(ev.target.value);
+          $("mHr").innerHTML = p.hr + " <small>lpm</small>";
+          log("Pulso: " + p.hr + " lpm" + p.extra);
+        });
+        log("Notificaciones de pulso activas: si el reloj mide ahora, el valor aparece en vivo.");
+      }catch(e){ log("Pulso: " + explainError(e)); }
+    } else if(hr.properties.read){
+      await readInto(hr.uuid, $("mHr"));
+    }
+  } else {
+    log("El reloj no expone el servicio estándar de frecuencia cardíaca (o no dio permiso de acceso).");
+  }
+}
+
+/* ============ Explorador ============ */
+function renderService(svc, chars){
+  const box = document.createElement("div");
+  box.className = "svc";
+  let html = '<div class="name">' + esc(svcName(svc.uuid)) + '</div><div class="uuid">' + esc(svc.uuid) + "</div>";
+  if(!chars.length) html += '<div class="chr"><span class="props">Sin características accesibles.</span></div>';
+  box.innerHTML = html;
+  for(const ch of chars){
+    const props = Object.keys(ch.properties).filter(k => ch.properties[k]).join(" · ");
+    const row = document.createElement("div");
+    row.className = "chr";
+    row.innerHTML = '<div class="name">' + esc(chrName(ch.uuid)) + '</div>' +
+      '<div class="uuid">' + esc(ch.uuid) + '</div>' +
+      '<div class="props">' + esc(props || "sin propiedades") + '</div>' +
+      '<div class="val"></div>';
+    const btnRow = document.createElement("div");
+    btnRow.className = "row";
+    const valEl = row.querySelector(".val");
+    if(ch.properties.read){
+      const b = document.createElement("button");
+      b.className = "mini"; b.textContent = "Leer";
+      b.onclick = async () => { b.disabled = true; await readInto(ch.uuid, valEl); b.disabled = false; };
+      btnRow.appendChild(b);
+    }
+    if(ch.properties.notify || ch.properties.indicate){
+      const b = document.createElement("button");
+      b.className = "mini"; b.textContent = "Escuchar cambios";
+      b.onclick = async () => {
+        try{
+          if(notifyOn[ch.uuid]){ await ch.stopNotifications(); notifyOn[ch.uuid] = false; b.textContent = "Escuchar cambios"; log("Dejé de escuchar " + chrName(ch.uuid)); }
+          else{
+            await ch.startNotifications();
+            if(!ch._wired){ ch.addEventListener("characteristicvaluechanged", ev => { valEl.textContent = describeValue(ch.uuid, ev.target.value); }); ch._wired = true; }
+            notifyOn[ch.uuid] = true; b.textContent = "Dejar de escuchar";
+            log("Escuchando cambios de " + chrName(ch.uuid));
+          }
+        }catch(e){ log("Notificaciones " + chrName(ch.uuid) + ": " + explainError(e)); }
+      };
+      btnRow.appendChild(b);
+    }
+    if(btnRow.children.length) row.appendChild(btnRow);
+    box.appendChild(row);
+  }
+  $("svcList").appendChild(box);
+}
+
+/* ============ Botones ============ */
+$("btnAll").onclick = () => connectFlow("all");
+$("btnHealth").onclick = () => connectFlow("health");
+$("btnRetry").onclick = async () => { if(server && device && device.gatt.connected){ log("Reintentando lecturas…"); await discoverAndRead(); } else { log("No hay conexión activa para reintentar."); } };
+$("btnDisc").onclick = () => { try{ if(device && device.gatt.connected) device.gatt.disconnect(); }catch(e){} onDisconnected(); };
+$("btnCopy").onclick = async () => {
+  const diag = [
+    "DIAGNÓSTICO MI RELOJ BLE v2",
+    "Fecha: " + new Date().toLocaleString(),
+    "Navegador: " + navigator.userAgent,
+    "Dispositivo: " + (device ? (device.name || "(sin nombre)") + " · id " + device.id : "(ninguno)"),
+    "Servicios descubiertos: " + (discovered.length ? discovered.map(s => s.name + " [" + s.uuid + "] (" + s.chars.length + " características)").join(" | ") : "(ninguno)"),
+    "--- REGISTRO ---",
+    logLines.join("\n")
+  ].join("\n");
+  try{ await navigator.clipboard.writeText(diag); log("Diagnóstico copiado al portapapeles. Pegalo en el chat."); }
+  catch(e){
+    const ta = document.createElement("textarea");
+    ta.value = diag; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); log("Diagnóstico copiado. Pegalo en el chat."); }catch(_){ log("No se pudo copiar automáticamente."); }
+    ta.remove();
+  }
+};
+
+/* ============ Inicio ============ */
+if(!navigator.bluetooth){
+  setStatus("Web Bluetooth no soportado en este navegador.", "err");
+  $("btnAll").disabled = true; $("btnHealth").disabled = true;
+  log("navigator.bluetooth no existe: esta página necesita Chrome en Android (no funciona en iPhone ni dentro de visores de apps).");
+} else {
+  log("Página lista. Tocá «Buscar mi reloj» con el reloj despierto y cerca.");
+  navigator.bluetooth.getAvailability().then(a => log("Bluetooth disponible: " + a)).catch(()=>{});
+}
 </script>
 </body>
 </html>
