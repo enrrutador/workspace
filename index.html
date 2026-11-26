@@ -1,36 +1,68 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:,">
 <title>OfertasUSA — Comprá solo lo que vale la pena</title>
 <meta name="description" content="Curaduría diaria de ofertas de Amazon en español para hispanos en Estados Unidos y México. Solo descuentos reales, verificados contra el precio habitual.">
+<meta property="og:title" content="OfertasUSA — Comprá solo lo que vale la pena">
+<meta property="og:description" content="Ofertas de Amazon verificadas, en español. Tecnología, hogar, gaming, moda y herramientas.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  // Tema guardado o preferencia del sistema (antes de pintar, sin parpadeo)
+  (function(){ try{ var t = localStorage.getItem('ou-theme'); if(!t){ t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } document.documentElement.setAttribute('data-theme', t); }catch(e){} })();
+</script>
 <style>
   :root{
     --paper:#f4f1ea; --paper2:#ede8de; --ink:#131311; --mut:#6f6a5e;
     --line:#ddd5c5; --acc:#ff4d00; --card:#fffdf8; --dark:#131311;
+    --headbg:rgba(244,241,234,.88); --body1:#3c382f; --body2:#57534a;
+    --float:rgba(255,253,248,.94); --shadow:rgba(19,19,17,.12);
+  }
+  [data-theme="dark"]{
+    --paper:#121210; --paper2:#1a1916; --ink:#f2eee3; --mut:#a49c8a;
+    --line:#2e2b25; --card:#1c1b18; --dark:#0b0b0a;
+    --headbg:rgba(18,18,16,.88); --body1:#d8d2c2; --body2:#b3ac9a;
+    --float:rgba(22,21,19,.94); --shadow:rgba(0,0,0,.45);
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html{ scroll-behavior:smooth; }
-  body{ font-family:'Inter',system-ui,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
-  .serif{ font-family:'Fraunces',Georgia,serif; }
+  body{ font-family:'Inter',system-ui,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; transition:background .35s,color .35s; }
+  ::selection{ background:var(--acc); color:#fff; }
   .wrap{ max-width:1180px; margin:0 auto; padding:0 22px; }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:2px solid var(--acc); outline-offset:2px; border-radius:6px; }
 
   /* header */
-  header{ position:sticky; top:0; z-index:50; background:rgba(244,241,234,.88); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
-  .bar{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  header{ position:sticky; top:0; z-index:60; background:var(--headbg); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
+  .bar{ display:flex; align-items:center; justify-content:space-between; height:64px; gap:14px; }
   .logo{ font-family:'Fraunces',serif; font-weight:800; font-size:23px; letter-spacing:-.02em; text-decoration:none; color:var(--ink); }
   .logo em{ color:var(--acc); font-style:normal; }
-  nav{ display:flex; gap:26px; align-items:center; }
+  nav{ display:flex; gap:22px; align-items:center; }
   nav a{ color:var(--ink); text-decoration:none; font-size:13.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
   nav a:hover{ color:var(--acc); }
-  .pill{ background:var(--ink); color:#fff !important; padding:8px 14px; border-radius:99px; }
-  .pill:hover{ background:var(--acc); }
-  @media(max-width:640px){ nav a:not(.pill){ display:none; } }
+  .pill{ background:var(--ink); color:var(--paper) !important; padding:8px 14px; border-radius:99px; }
+  .pill:hover{ background:var(--acc); color:#fff !important; }
+  .hbtns{ display:flex; gap:8px; align-items:center; }
+  .iconbtn{ position:relative; width:40px; height:40px; border-radius:99px; border:1.5px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; }
+  .iconbtn:hover{ border-color:var(--ink); }
+  .iconbtn svg{ width:19px; height:19px; }
+  .favcount{ position:absolute; top:-6px; right:-6px; background:var(--acc); color:#fff; font-size:11px; font-weight:800; min-width:19px; height:19px; border-radius:99px; display:none; align-items:center; justify-content:center; padding:0 5px; }
+  .favcount.show{ display:flex; }
+  @media(max-width:680px){ nav a:not(.pill){ display:none; } }
+
+  /* top deal bar */
+  #topbar{ position:sticky; top:64px; z-index:55; background:var(--acc); color:#fff; transform:translateY(-110%); transition:transform .45s cubic-bezier(.2,.7,.2,1); }
+  #topbar.show{ transform:none; }
+  #topbar .in{ display:flex; align-items:center; gap:12px; height:44px; font-size:13.5px; }
+  #topbar b{ font-weight:800; }
+  #topbar a{ color:#fff; font-weight:800; text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+  #topbar .x{ margin-left:auto; background:none; border:0; color:#fff; font-size:19px; cursor:pointer; line-height:1; padding:4px 6px; }
 
   /* hero */
   .hero{ padding:56px 0 30px; }
@@ -38,16 +70,17 @@
   h1{ font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px,7.4vw,86px); line-height:.98; letter-spacing:-.015em; }
   h1 i{ font-style:italic; font-weight:420; color:var(--acc); }
   .hero-sub{ display:flex; gap:30px; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; margin-top:24px; }
-  .hero-sub p{ max-width:520px; font-size:16.5px; line-height:1.6; color:#3c382f; }
+  .hero-sub p{ max-width:520px; font-size:16.5px; line-height:1.6; color:var(--body1); }
   .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
-  .btn{ display:inline-block; text-decoration:none; font-weight:700; font-size:15px; padding:14px 24px; border-radius:99px; transition:.25s; }
-  .btn-dark{ background:var(--ink); color:#fff; } .btn-dark:hover{ background:var(--acc); transform:translateY(-2px); }
-  .btn-ghost{ border:1.5px solid var(--ink); color:var(--ink); } .btn-ghost:hover{ background:var(--ink); color:#fff; }
+  .btn{ display:inline-block; text-decoration:none; font-weight:700; font-size:15px; padding:14px 24px; border-radius:99px; transition:.25s; border:0; cursor:pointer; }
+  .btn-dark{ background:var(--ink); color:var(--paper); } .btn-dark:hover{ background:var(--acc); color:#fff; transform:translateY(-2px); }
+  .btn-ghost{ border:1.5px solid var(--ink); color:var(--ink); background:transparent; } .btn-ghost:hover{ background:var(--ink); color:var(--paper); }
   .hero-img{ position:relative; margin-top:36px; border-radius:22px; overflow:hidden; }
   .hero-img img{ width:100%; height:min(56vh,520px); object-fit:cover; display:block; }
-  .float-card{ position:absolute; left:20px; bottom:20px; background:rgba(255,253,248,.94); backdrop-filter:blur(8px); border-radius:16px; padding:14px 18px; display:flex; gap:14px; align-items:center; box-shadow:0 18px 40px rgba(0,0,0,.18); }
+  .float-card{ position:absolute; left:20px; bottom:20px; background:var(--float); backdrop-filter:blur(8px); border-radius:16px; padding:14px 18px; display:flex; gap:14px; align-items:center; box-shadow:0 18px 40px rgba(0,0,0,.18); transition:opacity .5s; }
   .float-card .big{ font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:var(--acc); }
   .float-card .small{ font-size:12.5px; color:var(--mut); line-height:1.45; }
+  .float-card .small b{ color:var(--ink); }
   .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px; }
   .stat{ border-top:2px solid var(--ink); padding-top:12px; }
   .stat b{ font-family:'Fraunces',serif; font-size:30px; font-weight:650; display:block; }
@@ -63,7 +96,7 @@
 
   /* marquee */
   .marquee{ overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:34px; padding:12px 0; }
-  .track{ display:flex; gap:0; white-space:nowrap; animation:mq 26s linear infinite; width:max-content; }
+  .track{ display:flex; white-space:nowrap; animation:mq 26s linear infinite; width:max-content; }
   .track span{ font-family:'Fraunces',serif; font-size:17px; padding:0 18px; }
   .track span b{ color:var(--acc); }
   @keyframes mq{ to{ transform:translateX(-50%); } }
@@ -74,28 +107,46 @@
   h2{ font-family:'Fraunces',serif; font-weight:560; font-size:clamp(30px,4.6vw,46px); letter-spacing:-.01em; }
   h2 i{ font-style:italic; color:var(--acc); font-weight:420; }
   .sec-head p{ color:var(--mut); font-size:14.5px; max-width:340px; line-height:1.55; }
-  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin:20px 0 24px; }
+  .tools{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:20px 0 6px; }
+  .search{ flex:1 1 240px; display:flex; align-items:center; gap:9px; background:var(--card); border:1.5px solid var(--line); border-radius:99px; padding:0 16px; transition:.2s; }
+  .search:focus-within{ border-color:var(--ink); }
+  .search svg{ width:17px; height:17px; color:var(--mut); flex:none; }
+  .search input{ flex:1; border:0; background:transparent; color:var(--ink); font:500 14.5px 'Inter',sans-serif; padding:12px 0; outline:none; min-width:0; }
+  .search input::placeholder{ color:var(--mut); }
+  .sortsel{ border:1.5px solid var(--line); background:var(--card); color:var(--ink); font:600 13.5px 'Inter',sans-serif; padding:12px 14px; border-radius:99px; cursor:pointer; }
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px; }
   .chip{ border:1.5px solid var(--ink); background:transparent; color:var(--ink); font:600 13.5px 'Inter',sans-serif; padding:9px 16px; border-radius:99px; cursor:pointer; transition:.2s; }
   .chip:hover{ background:var(--paper2); }
-  .chip.on{ background:var(--ink); color:#fff; }
+  .chip.on{ background:var(--ink); color:var(--paper); }
+  .rescount{ font-size:13px; color:var(--mut); margin:14px 0 16px; }
+  .rescount b{ color:var(--ink); }
   .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px; }
-  .card{ background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; transition:.3s; display:flex; flex-direction:column; }
-  .card:hover{ transform:translateY(-5px); box-shadow:0 22px 44px rgba(19,19,17,.12); border-color:#c9bfa9; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; transition:transform .3s,box-shadow .3s,border-color .3s; display:flex; flex-direction:column; }
+  .card:hover{ transform:translateY(-5px); box-shadow:0 22px 44px var(--shadow); border-color:#c9bfa9; }
+  [data-theme="dark"] .card:hover{ border-color:#4a463d; }
   .card .ph{ position:relative; overflow:hidden; aspect-ratio:4/3; }
   .card .ph img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
   .card:hover .ph img{ transform:scale(1.06); }
-  .badge{ position:absolute; top:12px; left:12px; background:var(--acc); color:#fff; font-weight:800; font-size:13px; padding:6px 10px; border-radius:99px; }
+  .badge{ position:absolute; top:12px; left:12px; background:var(--acc); color:#fff; font-weight:800; font-size:13px; padding:6px 10px; border-radius:99px; z-index:2; }
+  .fav{ position:absolute; top:10px; right:10px; z-index:2; width:38px; height:38px; border-radius:99px; border:0; background:var(--float); backdrop-filter:blur(6px); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; box-shadow:0 4px 14px rgba(0,0,0,.15); }
+  .fav svg{ width:18px; height:18px; fill:none; stroke:var(--ink); stroke-width:2; transition:.2s; }
+  .fav.on svg{ fill:var(--acc); stroke:var(--acc); }
+  .fav:hover{ transform:scale(1.1); }
   .card .bd{ padding:16px 17px 18px; display:flex; flex-direction:column; flex:1; }
   .cat{ font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--mut); }
   .card h3{ font-family:'Fraunces',serif; font-size:19.5px; font-weight:600; line-height:1.22; margin:7px 0 6px; }
-  .card .dsc{ font-size:13.5px; color:#57534a; line-height:1.55; flex:1; }
-  .price{ display:flex; align-items:baseline; gap:9px; margin:13px 0 12px; }
+  .card .dsc{ font-size:13.5px; color:var(--body2); line-height:1.55; flex:1; }
+  .mintag{ display:inline-block; margin-top:10px; font-size:11.5px; font-weight:700; color:var(--acc); letter-spacing:.02em; }
+  .price{ display:flex; align-items:baseline; gap:9px; margin:12px 0 12px; }
   .price .now{ font-size:23px; font-weight:800; letter-spacing:-.01em; }
   .price .was{ color:var(--mut); text-decoration:line-through; font-size:14.5px; }
   .go{ display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:var(--ink); font-weight:700; font-size:14.5px; border-top:1px solid var(--line); padding-top:12px; }
   .go span{ color:var(--acc); font-size:18px; transition:.25s; }
   .card:hover .go span{ transform:translateX(4px); }
   .hidden{ display:none !important; }
+  .empty{ text-align:center; padding:52px 20px; border:1.5px dashed var(--line); border-radius:18px; }
+  .empty h3{ font-family:'Fraunces',serif; font-size:24px; margin-bottom:8px; }
+  .empty p{ color:var(--mut); font-size:14.5px; margin-bottom:18px; }
 
   /* featured */
   .feat{ background:var(--dark); color:#f4f1ea; border-radius:24px; overflow:hidden; display:grid; grid-template-columns:1.15fr 1fr; margin-top:20px; }
@@ -103,8 +154,10 @@
   .feat .tx{ padding:38px 36px; display:flex; flex-direction:column; justify-content:center; }
   .feat .eyebrow{ margin-bottom:12px; }
   .feat h3{ font-family:'Fraunces',serif; font-size:clamp(26px,3.4vw,38px); font-weight:560; line-height:1.08; }
-  .feat p{ color:#bdb5a3; line-height:1.65; font-size:15px; margin:14px 0 20px; }
+  .feat p{ color:#bdb5a3; line-height:1.65; font-size:15px; margin:14px 0 16px; }
   .feat .price .now{ color:#fff; font-size:30px; } .feat .price .was{ color:#8d8674; }
+  .spark{ margin:4px 0 20px; }
+  .spark .cap{ font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:#8d8674; margin-bottom:6px; }
   .btn-acc{ background:var(--acc); color:#fff; } .btn-acc:hover{ background:#ff6a26; transform:translateY(-2px); }
   @media(max-width:760px){ .feat{ grid-template-columns:1fr; } .feat img{ min-height:230px; max-height:260px; } }
 
@@ -114,7 +167,16 @@
   .guide{ border-top:2px solid var(--ink); padding-top:16px; }
   .guide .num{ font-family:'Fraunces',serif; font-style:italic; color:var(--acc); font-size:19px; }
   .guide h3{ font-family:'Fraunces',serif; font-size:21px; font-weight:600; margin:8px 0 8px; line-height:1.25; }
-  .guide p{ color:#57534a; font-size:14.5px; line-height:1.65; }
+  .guide p{ color:var(--body2); font-size:14.5px; line-height:1.65; }
+
+  /* faq */
+  .faq{ margin-top:22px; border-top:2px solid var(--ink); }
+  .faq details{ border-bottom:1px solid var(--line); }
+  .faq summary{ list-style:none; cursor:pointer; padding:19px 4px; display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:'Fraunces',serif; font-size:19px; font-weight:600; }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary .plus{ font-family:'Inter',sans-serif; color:var(--acc); font-size:24px; font-weight:400; transition:transform .3s; flex:none; }
+  .faq details[open ] summary .plus{ transform:rotate(45deg); }
+  .faq .ans{ padding:0 4px 20px; color:var(--body2); font-size:14.8px; line-height:1.7; max-width:720px; }
 
   /* cta */
   .cta{ text-align:center; padding:64px 20px 10px; }
@@ -125,6 +187,11 @@
   footer .cols{ display:flex; justify-content:space-between; gap:26px; flex-wrap:wrap; }
   footer p{ color:var(--mut); font-size:12.5px; line-height:1.65; max-width:760px; margin-top:12px; }
   footer a{ color:var(--ink); }
+  footer nav a{ text-transform:none; letter-spacing:0; font-size:13.5px; }
+
+  #toTop{ position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:99px; border:0; background:var(--ink); color:var(--paper); font-size:19px; cursor:pointer; opacity:0; pointer-events:none; transition:.3s; box-shadow:0 10px 26px rgba(0,0,0,.25); }
+  #toTop.show{ opacity:1; pointer-events:auto; }
+  #toTop:hover{ background:var(--acc); color:#fff; }
 
   .reveal{ opacity:0; transform:translateY(26px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1); }
   .reveal.vis{ opacity:1; transform:none; }
@@ -139,11 +206,30 @@
     <nav>
       <a href="#ofertas">Ofertas</a>
       <a href="#guias">Guías</a>
+      <a href="#faq">Preguntas</a>
       <a href="acerca.html">Acerca de</a>
       <a class="pill" href="#ofertas">Black Friday · en vivo</a>
     </nav>
+    <div class="hbtns">
+      <button class="iconbtn" id="favBtn" aria-label="Mis favoritos" title="Mis favoritos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="favcount" id="favcount">0</span>
+      </button>
+      <button class="iconbtn" id="themeBtn" aria-label="Cambiar tema" title="Modo claro / oscuro">
+        <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg id="icoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
   </div>
 </header>
+
+<div id="topbar">
+  <div class="wrap in">
+    <span>🔥 <b>Oferta top de hoy:</b> Audífonos con cancelación de ruido — <b>$59.99</b> (−54%)</span>
+    <a href="#ofertas">Verla ahora</a>
+    <button class="x" id="topbarX" aria-label="Cerrar">×</button>
+  </div>
+</div>
 
 <div class="wrap">
 
@@ -160,9 +246,9 @@
     </div>
     <div class="hero-img reveal">
       <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1600&auto=format&fit=crop" alt="Compras en Black Friday">
-      <div class="float-card">
-        <div class="big">−54%</div>
-        <div class="small"><b>Descuento destacado de hoy</b><br>Audífonos con cancelación de ruido</div>
+      <div class="float-card" id="floatCard">
+        <div class="big" id="floatOff">−54%</div>
+        <div class="small"><b id="floatName">Descuento destacado de hoy</b><br><span id="floatDesc">Audífonos con cancelación de ruido</span></div>
       </div>
     </div>
     <div class="stats reveal">
@@ -189,6 +275,18 @@
       <h2>Ofertas de <i>hoy</i></h2>
       <p>Selección del viernes 27 de noviembre. Precios tomados de Amazon EE. UU.; pueden cambiar en cualquier momento.</p>
     </div>
+    <div class="tools reveal">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="q" placeholder="Buscá una oferta… (ej.: audífonos, laptop, reloj)" aria-label="Buscar ofertas">
+      </label>
+      <select class="sortsel" id="sort" aria-label="Ordenar ofertas">
+        <option value="rel">Orden: destacados</option>
+        <option value="off">Mayor descuento</option>
+        <option value="low">Menor precio</option>
+        <option value="high">Mayor precio</option>
+      </select>
+    </div>
     <div class="chips reveal" id="chips">
       <button class="chip on" data-f="all">Todo</button>
       <button class="chip" data-f="tec">Tecnología</button>
@@ -197,78 +295,115 @@
       <button class="chip" data-f="moda">Moda y belleza</button>
       <button class="chip" data-f="herr">Herramientas</button>
     </div>
+    <p class="rescount" id="rescount"></p>
     <div class="grid" id="grid">
-      <article class="card reveal" data-cat="tec">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=900&auto=format&fit=crop" alt="Audífonos con cancelación de ruido"><span class="badge">−54%</span></div>
-        <div class="bd"><div class="cat">Tecnología</div><h3>Audífonos con cancelación de ruido</h3><p class="dsc">El modelo del año pasado de la línea premium: mismo sonido, mitad de precio. Bluetooth 5.3 y 40 horas de batería.</p>
+      <article class="card reveal" data-cat="tec" data-id="audifonos" data-price="59.99" data-off="54">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=900&auto=format&fit=crop" alt="Audífonos con cancelación de ruido"><span class="badge">−54%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
+        <div class="bd"><div class="cat">Tecnología</div><h3>Audífonos con cancelación de ruido</h3><p class="dsc">El modelo del año pasado de la línea premium: mismo sonido, mitad de precio. Bluetooth 5.3 y 40 horas de batería.</p><span class="mintag">Precio más bajo en 30 días</span>
         <div class="price"><span class="now">$59.99</span><span class="was">$129.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=audifonos+cancelacion+de+ruido" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="tec">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=900&auto=format&fit=crop" alt="Smartwatch"><span class="badge">−42%</span></div>
+      <article class="card reveal" data-cat="tec" data-id="smartwatch" data-price="189.99" data-off="42">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=900&auto=format&fit=crop" alt="Smartwatch"><span class="badge">−42%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Tecnología</div><h3>Smartwatch con GPS y medición de salud</h3><p class="dsc">Pantalla siempre encendida, ECG y batería de dos días. En Black Friday baja a su precio más histórico.</p>
         <div class="price"><span class="now">$189.99</span><span class="was">$329.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=smartwatch+gps" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="tec">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=900&auto=format&fit=crop" alt="Laptop"><span class="badge">−39%</span></div>
+      <article class="card reveal" data-cat="tec" data-id="laptop" data-price="549.99" data-off="39">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=900&auto=format&fit=crop" alt="Laptop"><span class="badge">−39%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Tecnología</div><h3>Laptop 16 GB RAM · SSD 512 GB</h3><p class="dsc">La configuración correcta para trabajar y estudiar, al precio de las básicas de todo el año. Liviana y con buena batería.</p>
         <div class="price"><span class="now">$549.99</span><span class="was">$899.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=laptop+16gb+ram+512gb+ssd" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="hogar">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1558089687-f282ffcbc126?q=80&w=900&auto=format&fit=crop" alt="Asistente de voz"><span class="badge">−44%</span></div>
+      <article class="card reveal" data-cat="hogar" data-id="asistente" data-price="27.99" data-off="44">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1558089687-f282ffcbc126?q=80&w=900&auto=format&fit=crop" alt="Asistente de voz"><span class="badge">−44%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Hogar</div><h3>Asistente de voz para tu casa inteligente</h3><p class="dsc">El punto de partida de la casa inteligente: controlá luces, enchufes y música con la voz. Hoy a mitad de precio.</p>
         <div class="price"><span class="now">$27.99</span><span class="was">$49.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=asistente+de+voz+alexa" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="hogar">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=900&auto=format&fit=crop" alt="Cocina"><span class="badge">−44%</span></div>
+      <article class="card reveal" data-cat="hogar" data-id="cocina" data-price="89.99" data-off="44">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=900&auto=format&fit=crop" alt="Cocina"><span class="badge">−44%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Hogar</div><h3>Set de cocina antiadherente premium</h3><p class="dsc">Las baterías de cocina de marca bajan fuerte esta semana y quedan al precio de las genéricas. Aprovechá la buena.</p>
         <div class="price"><span class="now">$89.99</span><span class="was">$159.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=set+ollas+antiadherentes" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="gaming">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=900&auto=format&fit=crop" alt="Control inalámbrico"><span class="badge">−36%</span></div>
+      <article class="card reveal" data-cat="gaming" data-id="control" data-price="44.99" data-off="36">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=900&auto=format&fit=crop" alt="Control inalámbrico"><span class="badge">−36%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Gaming</div><h3>Control inalámbrico pro</h3><p class="dsc">El segundo control es EL accesorio que conviene comprar en Black Friday: rara vez baja el resto del año.</p>
         <div class="price"><span class="now">$44.99</span><span class="was">$69.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=control+inalambrico+videojuegos" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="moda">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop" alt="Zapatillas running"><span class="badge">−50%</span></div>
+      <article class="card reveal" data-cat="gaming" data-id="teclado" data-price="49.99" data-off="44">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=900&auto=format&fit=crop" alt="Teclado mecánico"><span class="badge">−44%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
+        <div class="bd"><div class="cat">Gaming</div><h3>Teclado mecánico RGB</h3><p class="dsc">Switches intercambiables, keycaps PBT y conexión triple (cable, Bluetooth y 2.4 GHz). Setup nuevo por la mitad.</p><span class="mintag">Precio más bajo en 30 días</span>
+        <div class="price"><span class="now">$49.99</span><span class="was">$89.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=teclado+mecanico+rgb" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="moda" data-id="zapatillas" data-price="64.99" data-off="50">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop" alt="Zapatillas running"><span class="badge">−50%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Moda y belleza</div><h3>Zapatillas running de marca</h3><p class="dsc">Liquidación de numeración suelta: si tu talle está, es mitad de precio. Revisá la tabla de talles de cada marca.</p>
         <div class="price"><span class="now">$64.99</span><span class="was">$130.00</span></div>
         <a class="go" href="https://www.amazon.com/s?k=zapatillas+running" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="moda">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=900&auto=format&fit=crop" alt="Perfume de diseñador"><span class="badge">−55%</span></div>
-        <div class="bd"><div class="cat">Moda y belleza</div><h3>Perfume de diseñador · 100 ml</h3><p class="dsc">Fragancias originales con el descuento más fuerte del año. Ideal para regalo de las fiestas, comprado a tiempo.</p>
+      <article class="card reveal" data-cat="moda" data-id="perfume" data-price="39.99" data-off="55">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=900&auto=format&fit=crop" alt="Perfume de diseñador"><span class="badge">−55%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Perfume de diseñador · 100 ml</h3><p class="dsc">Fragancias originales con el descuento más fuerte del año. Ideal para regalo de las fiestas, comprado a tiempo.</p><span class="mintag">Precio más bajo en 30 días</span>
         <div class="price"><span class="now">$39.99</span><span class="was">$88.00</span></div>
         <a class="go" href="https://www.amazon.com/s?k=perfume+de+disenador" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="moda">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=900&auto=format&fit=crop" alt="Reloj clásico"><span class="badge">−40%</span></div>
+      <article class="card reveal" data-cat="moda" data-id="reloj" data-price="119.99" data-off="40">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=900&auto=format&fit=crop" alt="Reloj clásico"><span class="badge">−40%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Moda y belleza</div><h3>Reloj clásico de acero</h3><p class="dsc">Un clásico que no pasa de moda, con el descuento de la semana. Caja de acero y correa intercambiable.</p>
         <div class="price"><span class="now">$119.99</span><span class="was">$199.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=reloj+hombre+acero" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
-      <article class="card reveal" data-cat="herr">
-        <div class="ph"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=900&auto=format&fit=crop" alt="Herramientas"><span class="badge">−43%</span></div>
+      <article class="card reveal" data-cat="moda" data-id="mochila" data-price="34.99" data-off="50">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=900&auto=format&fit=crop" alt="Mochila urbana"><span class="badge">−50%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Mochila urbana antirrobo</h3><p class="dsc">Compartimento acolchado para laptop de 15.6″, bolsillo oculto y tela que repele el agua. La de todos los días.</p>
+        <div class="price"><span class="now">$34.99</span><span class="was">$69.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=mochila+antirrobo+laptop" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="moda" data-id="gafas" data-price="19.99" data-off="56">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=900&auto=format&fit=crop" alt="Gafas de sol polarizadas"><span class="badge">−56%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Gafas de sol polarizadas</h3><p class="dsc">Protección UV400 y lentes polarizadas al precio de las de estación de servicio. Vienen con estuche rígido.</p><span class="mintag">Precio más bajo en 30 días</span>
+        <div class="price"><span class="now">$19.99</span><span class="was">$45.00</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=gafas+de+sol+polarizadas" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="moda" data-id="skincare" data-price="29.99" data-off="50">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?q=80&w=900&auto=format&fit=crop" alt="Set de skincare"><span class="badge">−50%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Set de skincare · rutina completa</h3><p class="dsc">Limpiador, sérum de vitamina C y crema con ácido hialurónico. La rutina entera por lo que sale un solo producto.</p>
+        <div class="price"><span class="now">$29.99</span><span class="was">$59.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=set+skincare+vitamina+c" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="herr" data-id="herramientas" data-price="79.99" data-off="43">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=900&auto=format&fit=crop" alt="Herramientas"><span class="badge">−43%</span><button class="fav" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>
         <div class="bd"><div class="cat">Herramientas</div><h3>Kit de herramientas completo · 128 piezas</h3><p class="dsc">Todo lo que una casa necesita, en un solo maletín. Los kits completos son de lo que más baja en Black Friday.</p>
         <div class="price"><span class="now">$79.99</span><span class="was">$139.99</span></div>
         <a class="go" href="https://www.amazon.com/s?k=kit+de+herramientas" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
       </article>
+    </div>
+    <div class="empty hidden" id="empty">
+      <h3>Nada por acá…</h3>
+      <p>No encontramos ofertas con ese criterio. Probá con otra palabra o mirá todo el catálogo.</p>
+      <button class="btn btn-dark" id="resetFilters">Ver todas las ofertas</button>
     </div>
   </section>
 
   <!-- FEATURED -->
   <section>
     <div class="feat reveal">
-      <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=1400&auto=format&fit=crop" alt="Smart TV 65 pulgadas 4K">
+      <img loading="lazy" src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=1400&auto=format&fit=crop" alt="Smart TV 65 pulgadas 4K">
       <div class="tx">
         <div class="eyebrow">Oferta del día</div>
         <h3>Smart TV 65″ 4K de la generación anterior</h3>
         <p>El truco mejor guardado del Black Friday: el modelo del año pasado tiene prácticamente el mismo panel que el nuevo y cuesta cientos menos. Es, año tras año, la compra más inteligente de la semana.</p>
+        <div class="spark">
+          <div class="cap">Precio últimos 30 días — hoy, el más bajo</div>
+          <svg width="240" height="46" viewBox="0 0 240 46" fill="none" aria-hidden="true">
+            <polyline points="0,10 30,12 60,9 90,16 120,15 150,24 180,22 210,34 236,40" stroke="#ff4d00" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+            <circle cx="236" cy="40" r="4" fill="#ff4d00"/>
+          </svg>
+        </div>
         <div class="price"><span class="now">$379.99</span><span class="was">$649.99</span></div>
         <div><a class="btn btn-acc" href="https://www.amazon.com/s?k=smart+tv+65+4k" target="_blank" rel="noopener">Ver esta oferta en Amazon</a></div>
       </div>
@@ -288,6 +423,36 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="sec-head reveal">
+      <h2>Preguntas <i>frecuentes</i></h2>
+      <p>Lo que todos nos preguntan antes de la primera compra.</p>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary>¿Cómo compro una oferta? <span class="plus">+</span></summary>
+        <div class="ans">Tocás «Ver en Amazon» en la oferta que te interesa y la compra se hace en Amazon, como siempre: tu cuenta, tu pago y tu dirección de envío de Amazon. Nosotros solo elegimos y mostramos las ofertas; la venta es 100% de Amazon.</div>
+      </details>
+      <details>
+        <summary>¿Me cuesta más caro comprar desde acá? <span class="plus">+</span></summary>
+        <div class="ans">No. El precio es exactamente el mismo que pagaría cualquiera entrando directo a Amazon. Cuando comprás desde nuestros enlaces, Amazon nos paga una pequeña comisión a nosotros — la paga Amazon, nunca el comprador.</div>
+      </details>
+      <details>
+        <summary>¿Los precios están actualizados? <span class="plus">+</span></summary>
+        <div class="ans">Revisamos la selección todos los días, pero los precios de Amazon pueden cambiar en cualquier momento y las mejores ofertas se agotan. El precio válido es siempre el que muestra Amazon al momento de tu compra.</div>
+      </details>
+      <details>
+        <summary>¿Las ofertas llegan a México? <span class="plus">+</span></summary>
+        <div class="ans">Gran parte de los productos de Amazon Estados Unidos se envía a México. En la página de cada producto, Amazon te muestra el costo de envío y los impuestos de importación antes de pagar, sin sorpresas.</div>
+      </details>
+      <details>
+        <summary>¿Cómo eligen qué ofertas publicar? <span class="plus">+</span></summary>
+        <div class="ans">Comparamos cada descuento contra el precio habitual del producto. Si el «precio anterior» fue inflado para simular una oferta, no lo publicamos: en promedio descartamos 9 de cada 10 supuestos descuentos.</div>
+      </details>
+    </div>
+  </section>
+
   <!-- CTA -->
   <div class="cta reveal">
     <h2>Las ofertas <i class="serif" style="color:var(--acc)">vuelan</i>.</h2>
@@ -301,6 +466,7 @@
       <nav>
         <a href="#ofertas">Ofertas</a>
         <a href="#guias">Guías</a>
+        <a href="#faq">Preguntas</a>
         <a href="acerca.html">Acerca de</a>
       </nav>
     </div>
@@ -310,8 +476,24 @@
 
 </div>
 
+<button id="toTop" aria-label="Volver arriba">↑</button>
+
 <script>
-  // Countdown: fin del Black Friday (27 nov 23:59 ET ≈ 28 nov 05:00 UTC); luego, Cyber Monday (1 dic).
+  // ---------- Tema claro/oscuro ----------
+  (function(){
+    var btn = document.getElementById('themeBtn');
+    var moon = document.getElementById('icoMoon'), sun = document.getElementById('icoSun');
+    function sync(){ var dark = document.documentElement.getAttribute('data-theme') === 'dark'; moon.style.display = dark ? 'none' : 'block'; sun.style.display = dark ? 'block' : 'none'; }
+    sync();
+    btn.addEventListener('click', function(){
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('ou-theme', next); }catch(e){}
+      sync();
+    });
+  })();
+
+  // ---------- Cuenta regresiva ----------
   (function(){
     var bf = new Date('2026-11-28T05:00:00Z').getTime();
     var cm = new Date('2026-12-02T05:00:00Z').getTime();
@@ -324,43 +506,153 @@
       if(now >= cm){ lbl.textContent = 'Las ofertas de la temporada siguen activas'; H.textContent='—'; M.textContent='—'; S.textContent='—'; return; }
       lbl.textContent = txt;
       var d = Math.max(0, target - now);
-      var h = Math.floor(d/3600000), m = Math.floor(d%3600000/60000), s = Math.floor(d%60000/1000);
-      H.textContent = pad(h); M.textContent = pad(m); S.textContent = pad(s);
+      H.textContent = pad(Math.floor(d/3600000));
+      M.textContent = pad(Math.floor(d%3600000/60000));
+      S.textContent = pad(Math.floor(d%60000/1000));
     }
     tick(); setInterval(tick, 1000);
   })();
 
-  // Filtros por categoría
+  // ---------- Tarjeta flotante rotativa ----------
   (function(){
+    var deals = [
+      { off:'−54%', name:'Descuento destacado de hoy', desc:'Audífonos con cancelación de ruido' },
+      { off:'−41%', name:'Oferta del día', desc:'Smart TV 65″ 4K — generación anterior' },
+      { off:'−56%', name:'El más fuerte de la semana', desc:'Gafas de sol polarizadas UV400' }
+    ];
+    var card = document.getElementById('floatCard'), O = document.getElementById('floatOff'),
+        N = document.getElementById('floatName'), D = document.getElementById('floatDesc'), i = 0;
+    setInterval(function(){
+      card.style.opacity = '0';
+      setTimeout(function(){
+        i = (i+1) % deals.length;
+        O.textContent = deals[i].off; N.textContent = deals[i].name; D.textContent = deals[i].desc;
+        card.style.opacity = '1';
+      }, 500);
+    }, 4500);
+  })();
+
+  // ---------- Buscador + filtros + orden ----------
+  (function(){
+    var grid = document.getElementById('grid');
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.card'));
+    cards.forEach(function(c, i){ c.setAttribute('data-idx', i); });
     var chips = document.querySelectorAll('#chips .chip');
-    var cards = document.querySelectorAll('#grid .card');
+    var q = document.getElementById('q');
+    var sort = document.getElementById('sort');
+    var rescount = document.getElementById('rescount');
+    var empty = document.getElementById('empty');
+    var cat = 'all';
+    function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+    function apply(){
+      var query = norm(q.value.trim());
+      var visible = 0;
+      cards.forEach(function(c){
+        var okCat = (cat === 'all' || c.getAttribute('data-cat') === cat);
+        var okQ = !query || norm(c.textContent).indexOf(query) !== -1;
+        var show = okCat && okQ;
+        c.classList.toggle('hidden', !show);
+        if(show){ visible++; c.classList.add('vis'); }
+      });
+      rescount.innerHTML = 'Mostrando <b>' + visible + '</b> de ' + cards.length + ' ofertas';
+      empty.classList.toggle('hidden', visible !== 0);
+    }
+    function applySort(){
+      var v = sort.value;
+      var sorted = cards.slice().sort(function(a, b){
+        if(v === 'off') return (+b.getAttribute('data-off')) - (+a.getAttribute('data-off'));
+        if(v === 'low') return (+a.getAttribute('data-price')) - (+b.getAttribute('data-price'));
+        if(v === 'high') return (+b.getAttribute('data-price')) - (+a.getAttribute('data-price'));
+        return (+a.getAttribute('data-idx')) - (+b.getAttribute('data-idx'));
+      });
+      sorted.forEach(function(c){ grid.appendChild(c); });
+    }
     chips.forEach(function(ch){
       ch.addEventListener('click', function(){
         chips.forEach(function(c){ c.classList.remove('on'); });
         ch.classList.add('on');
-        var f = ch.getAttribute('data-f');
-        cards.forEach(function(card){
-          var show = (f === 'all' || card.getAttribute('data-cat') === f);
-          card.classList.toggle('hidden', !show);
-          if(show){ card.classList.add('vis'); }
-        });
+        cat = ch.getAttribute('data-f');
+        apply();
       });
+    });
+    q.addEventListener('input', apply);
+    sort.addEventListener('change', function(){ applySort(); apply(); });
+    document.getElementById('resetFilters').addEventListener('click', function(){
+      q.value = ''; cat = 'all';
+      chips.forEach(function(c){ c.classList.toggle('on', c.getAttribute('data-f') === 'all'); });
+      sort.value = 'rel'; applySort(); apply();
+    });
+    apply();
+    window.__ouApply = apply;
+  })();
+
+  // ---------- Favoritos ----------
+  (function(){
+    var favs = {};
+    try{ (JSON.parse(localStorage.getItem('ou-favs') || '[]')).forEach(function(id){ favs[id] = true; }); }catch(e){}
+    var countEl = document.getElementById('favcount');
+    function syncCount(){
+      var n = Object.keys(favs).length;
+      countEl.textContent = n;
+      countEl.classList.toggle('show', n > 0);
+    }
+    document.querySelectorAll('.card').forEach(function(card){
+      var id = card.getAttribute('data-id');
+      var btn = card.querySelector('.fav');
+      if(favs[id]) btn.classList.add('on');
+      btn.addEventListener('click', function(){
+        if(favs[id]){ delete favs[id]; btn.classList.remove('on'); }
+        else{ favs[id] = true; btn.classList.add('on'); }
+        try{ localStorage.setItem('ou-favs', JSON.stringify(Object.keys(favs))); }catch(e){}
+        syncCount();
+      });
+    });
+    syncCount();
+    var onlyFavs = false;
+    document.getElementById('favBtn').addEventListener('click', function(){
+      onlyFavs = !onlyFavs;
+      document.querySelectorAll('.card').forEach(function(card){
+        var id = card.getAttribute('data-id');
+        if(onlyFavs && !favs[id]) card.classList.add('hidden');
+        else if(!onlyFavs && window.__ouApply) window.__ouApply();
+      });
+      if(onlyFavs){
+        var n = document.querySelectorAll('.card:not(.hidden)').length;
+        document.getElementById('rescount').innerHTML = 'Mostrando <b>' + n + '</b> favoritos guardados';
+        document.getElementById('ofertas').scrollIntoView({ behavior:'smooth' });
+      } else if(window.__ouApply){ window.__ouApply(); }
     });
   })();
 
-  // Marquee: duplicar el contenido para el loop
+  // ---------- Barra de oferta top + volver arriba ----------
+  (function(){
+    var bar = document.getElementById('topbar'), closed = false;
+    var toTop = document.getElementById('toTop');
+    document.getElementById('topbarX').addEventListener('click', function(){ closed = true; bar.classList.remove('show'); });
+    window.addEventListener('scroll', function(){
+      var y = window.scrollY || 0;
+      if(!closed) bar.classList.toggle('show', y > 720);
+      toTop.classList.toggle('show', y > 900);
+    }, { passive:true });
+    toTop.addEventListener('click', function(){ window.scrollTo({ top:0, behavior:'smooth' }); });
+  })();
+
+  // ---------- Marquee: duplicar para el loop ----------
   (function(){
     var t = document.getElementById('track');
     t.innerHTML += t.innerHTML;
   })();
 
-  // Animación al hacer scroll
+  // ---------- Animación al hacer scroll (con stagger en la grilla) ----------
   (function(){
+    document.querySelectorAll('#grid .card').forEach(function(c, i){
+      c.style.transitionDelay = (i % 4) * 70 + 'ms';
+    });
     var els = document.querySelectorAll('.reveal');
     if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('vis'); }); return; }
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('vis'); io.unobserve(en.target); } });
-    }, { threshold: .12 });
+    }, { threshold: .1 });
     els.forEach(function(e){ io.observe(e); });
   })();
 </script>
