@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:,">
+<title>OfertasUSA — Comprá solo lo que vale la pena</title>
+<meta name="description" content="Curaduría diaria de ofertas de Amazon en español para hispanos en Estados Unidos y México. Solo descuentos reales, verificados contra el precio habitual.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f1ea; --paper2:#ede8de; --ink:#131311; --mut:#6f6a5e;
+    --line:#ddd5c5; --acc:#ff4d00; --card:#fffdf8; --dark:#131311;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Inter',system-ui,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .serif{ font-family:'Fraunces',Georgia,serif; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 22px; }
+
+  /* header */
+  header{ position:sticky; top:0; z-index:50; background:rgba(244,241,234,.88); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
+  .bar{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .logo{ font-family:'Fraunces',serif; font-weight:800; font-size:23px; letter-spacing:-.02em; text-decoration:none; color:var(--ink); }
+  .logo em{ color:var(--acc); font-style:normal; }
+  nav{ display:flex; gap:26px; align-items:center; }
+  nav a{ color:var(--ink); text-decoration:none; font-size:13.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+  nav a:hover{ color:var(--acc); }
+  .pill{ background:var(--ink); color:#fff !important; padding:8px 14px; border-radius:99px; }
+  .pill:hover{ background:var(--acc); }
+  @media(max-width:640px){ nav a:not(.pill){ display:none; } }
+
+  /* hero */
+  .hero{ padding:56px 0 30px; }
+  .eyebrow{ font-size:12px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--acc); margin-bottom:18px; }
+  h1{ font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px,7.4vw,86px); line-height:.98; letter-spacing:-.015em; }
+  h1 i{ font-style:italic; font-weight:420; color:var(--acc); }
+  .hero-sub{ display:flex; gap:30px; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; margin-top:24px; }
+  .hero-sub p{ max-width:520px; font-size:16.5px; line-height:1.6; color:#3c382f; }
+  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{ display:inline-block; text-decoration:none; font-weight:700; font-size:15px; padding:14px 24px; border-radius:99px; transition:.25s; }
+  .btn-dark{ background:var(--ink); color:#fff; } .btn-dark:hover{ background:var(--acc); transform:translateY(-2px); }
+  .btn-ghost{ border:1.5px solid var(--ink); color:var(--ink); } .btn-ghost:hover{ background:var(--ink); color:#fff; }
+  .hero-img{ position:relative; margin-top:36px; border-radius:22px; overflow:hidden; }
+  .hero-img img{ width:100%; height:min(56vh,520px); object-fit:cover; display:block; }
+  .float-card{ position:absolute; left:20px; bottom:20px; background:rgba(255,253,248,.94); backdrop-filter:blur(8px); border-radius:16px; padding:14px 18px; display:flex; gap:14px; align-items:center; box-shadow:0 18px 40px rgba(0,0,0,.18); }
+  .float-card .big{ font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:var(--acc); }
+  .float-card .small{ font-size:12.5px; color:var(--mut); line-height:1.45; }
+  .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px; }
+  .stat{ border-top:2px solid var(--ink); padding-top:12px; }
+  .stat b{ font-family:'Fraunces',serif; font-size:30px; font-weight:650; display:block; }
+  .stat span{ font-size:12.5px; color:var(--mut); text-transform:uppercase; letter-spacing:.08em; }
+  @media(max-width:640px){ .stats{ grid-template-columns:1fr 1fr; } }
+
+  /* countdown */
+  .count{ margin-top:26px; background:var(--dark); color:#f4f1ea; border-radius:16px; padding:18px 22px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  .count .lbl{ font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#bdb5a3; }
+  .count .lbl b{ color:#fff; display:block; font-size:16px; letter-spacing:0; text-transform:none; margin-top:2px; }
+  .timer{ font-family:'Fraunces',serif; font-size:clamp(28px,4.5vw,40px); font-weight:650; font-variant-numeric:tabular-nums; }
+  .timer small{ font-size:12px; font-family:'Inter',sans-serif; color:#bdb5a3; letter-spacing:.1em; }
+
+  /* marquee */
+  .marquee{ overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:34px; padding:12px 0; }
+  .track{ display:flex; gap:0; white-space:nowrap; animation:mq 26s linear infinite; width:max-content; }
+  .track span{ font-family:'Fraunces',serif; font-size:17px; padding:0 18px; }
+  .track span b{ color:var(--acc); }
+  @keyframes mq{ to{ transform:translateX(-50%); } }
+
+  /* deals */
+  section{ padding:54px 0 6px; }
+  .sec-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom:8px; }
+  h2{ font-family:'Fraunces',serif; font-weight:560; font-size:clamp(30px,4.6vw,46px); letter-spacing:-.01em; }
+  h2 i{ font-style:italic; color:var(--acc); font-weight:420; }
+  .sec-head p{ color:var(--mut); font-size:14.5px; max-width:340px; line-height:1.55; }
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin:20px 0 24px; }
+  .chip{ border:1.5px solid var(--ink); background:transparent; color:var(--ink); font:600 13.5px 'Inter',sans-serif; padding:9px 16px; border-radius:99px; cursor:pointer; transition:.2s; }
+  .chip:hover{ background:var(--paper2); }
+  .chip.on{ background:var(--ink); color:#fff; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; transition:.3s; display:flex; flex-direction:column; }
+  .card:hover{ transform:translateY(-5px); box-shadow:0 22px 44px rgba(19,19,17,.12); border-color:#c9bfa9; }
+  .card .ph{ position:relative; overflow:hidden; aspect-ratio:4/3; }
+  .card .ph img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  .card:hover .ph img{ transform:scale(1.06); }
+  .badge{ position:absolute; top:12px; left:12px; background:var(--acc); color:#fff; font-weight:800; font-size:13px; padding:6px 10px; border-radius:99px; }
+  .card .bd{ padding:16px 17px 18px; display:flex; flex-direction:column; flex:1; }
+  .cat{ font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--mut); }
+  .card h3{ font-family:'Fraunces',serif; font-size:19.5px; font-weight:600; line-height:1.22; margin:7px 0 6px; }
+  .card .dsc{ font-size:13.5px; color:#57534a; line-height:1.55; flex:1; }
+  .price{ display:flex; align-items:baseline; gap:9px; margin:13px 0 12px; }
+  .price .now{ font-size:23px; font-weight:800; letter-spacing:-.01em; }
+  .price .was{ color:var(--mut); text-decoration:line-through; font-size:14.5px; }
+  .go{ display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:var(--ink); font-weight:700; font-size:14.5px; border-top:1px solid var(--line); padding-top:12px; }
+  .go span{ color:var(--acc); font-size:18px; transition:.25s; }
+  .card:hover .go span{ transform:translateX(4px); }
+  .hidden{ display:none !important; }
+
+  /* featured */
+  .feat{ background:var(--dark); color:#f4f1ea; border-radius:24px; overflow:hidden; display:grid; grid-template-columns:1.15fr 1fr; margin-top:20px; }
+  .feat img{ width:100%; height:100%; object-fit:cover; display:block; min-height:340px; }
+  .feat .tx{ padding:38px 36px; display:flex; flex-direction:column; justify-content:center; }
+  .feat .eyebrow{ margin-bottom:12px; }
+  .feat h3{ font-family:'Fraunces',serif; font-size:clamp(26px,3.4vw,38px); font-weight:560; line-height:1.08; }
+  .feat p{ color:#bdb5a3; line-height:1.65; font-size:15px; margin:14px 0 20px; }
+  .feat .price .now{ color:#fff; font-size:30px; } .feat .price .was{ color:#8d8674; }
+  .btn-acc{ background:var(--acc); color:#fff; } .btn-acc:hover{ background:#ff6a26; transform:translateY(-2px); }
+  @media(max-width:760px){ .feat{ grid-template-columns:1fr; } .feat img{ min-height:230px; max-height:260px; } }
+
+  /* guides */
+  .guides{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:24px; }
+  @media(max-width:760px){ .guides{ grid-template-columns:1fr; } }
+  .guide{ border-top:2px solid var(--ink); padding-top:16px; }
+  .guide .num{ font-family:'Fraunces',serif; font-style:italic; color:var(--acc); font-size:19px; }
+  .guide h3{ font-family:'Fraunces',serif; font-size:21px; font-weight:600; margin:8px 0 8px; line-height:1.25; }
+  .guide p{ color:#57534a; font-size:14.5px; line-height:1.65; }
+
+  /* cta */
+  .cta{ text-align:center; padding:64px 20px 10px; }
+  .cta h2{ font-size:clamp(32px,5.4vw,54px); }
+  .cta p{ color:var(--mut); margin:14px auto 24px; max-width:480px; line-height:1.6; font-size:15.5px; }
+
+  footer{ border-top:1px solid var(--line); margin-top:56px; padding:30px 0 40px; }
+  footer .cols{ display:flex; justify-content:space-between; gap:26px; flex-wrap:wrap; }
+  footer p{ color:var(--mut); font-size:12.5px; line-height:1.65; max-width:760px; margin-top:12px; }
+  footer a{ color:var(--ink); }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.vis{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } .track{ animation:none; } html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="index.html">Ofertas<em>USA</em></a>
+    <nav>
+      <a href="#ofertas">Ofertas</a>
+      <a href="#guias">Guías</a>
+      <a href="acerca.html">Acerca de</a>
+      <a class="pill" href="#ofertas">Black Friday · en vivo</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">Curaduría diaria · 100% en español · EE. UU. y México</div>
+    <h1>Comprá <i>solo</i> lo que<br>vale la pena.</h1>
+    <div class="hero-sub">
+      <p>Revisamos las ofertas de Amazon todos los días, las comparamos contra el precio habitual y publicamos únicamente los descuentos reales. Nada de precios inflados disfrazados de oferta.</p>
+      <div class="cta-row">
+        <a class="btn btn-dark" href="#ofertas">Ver las ofertas de hoy</a>
+        <a class="btn btn-ghost" href="#guias">Cómo elegir bien</a>
+      </div>
+    </div>
+    <div class="hero-img reveal">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1600&auto=format&fit=crop" alt="Compras en Black Friday">
+      <div class="float-card">
+        <div class="big">−54%</div>
+        <div class="small"><b>Descuento destacado de hoy</b><br>Audífonos con cancelación de ruido</div>
+      </div>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><b>+120</b><span>ofertas revisadas hoy</span></div>
+      <div class="stat"><b>hasta −70%</b><span>en Black Friday 2026</span></div>
+      <div class="stat"><b>9 de 10</b><span>«ofertas» descartadas por falsas</span></div>
+    </div>
+    <div class="count reveal">
+      <div class="lbl">No te quedes afuera<b id="count-label">El Black Friday termina en</b></div>
+      <div class="timer"><span id="t-h">00</span><small> HS </small><span id="t-m">00</span><small> MIN </small><span id="t-s">00</span><small> SEG</small></div>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="track">
+      <span>Black Friday 2026 <b>✺</b></span><span>Descuentos verificados <b>✺</b></span><span>Tecnología <b>✺</b></span><span>Hogar <b>✺</b></span><span>Gaming <b>✺</b></span><span>Moda y belleza <b>✺</b></span><span>Herramientas <b>✺</b></span><span>Precios en dólares, explicación en español <b>✺</b></span>
+    </div>
+  </div>
+
+  <!-- DEALS -->
+  <section id="ofertas">
+    <div class="sec-head reveal">
+      <h2>Ofertas de <i>hoy</i></h2>
+      <p>Selección del viernes 27 de noviembre. Precios tomados de Amazon EE. UU.; pueden cambiar en cualquier momento.</p>
+    </div>
+    <div class="chips reveal" id="chips">
+      <button class="chip on" data-f="all">Todo</button>
+      <button class="chip" data-f="tec">Tecnología</button>
+      <button class="chip" data-f="hogar">Hogar</button>
+      <button class="chip" data-f="gaming">Gaming</button>
+      <button class="chip" data-f="moda">Moda y belleza</button>
+      <button class="chip" data-f="herr">Herramientas</button>
+    </div>
+    <div class="grid" id="grid">
+      <article class="card reveal" data-cat="tec">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=900&auto=format&fit=crop" alt="Audífonos con cancelación de ruido"><span class="badge">−54%</span></div>
+        <div class="bd"><div class="cat">Tecnología</div><h3>Audífonos con cancelación de ruido</h3><p class="dsc">El modelo del año pasado de la línea premium: mismo sonido, mitad de precio. Bluetooth 5.3 y 40 horas de batería.</p>
+        <div class="price"><span class="now">$59.99</span><span class="was">$129.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=audifonos+cancelacion+de+ruido" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="tec">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=900&auto=format&fit=crop" alt="Smartwatch"><span class="badge">−42%</span></div>
+        <div class="bd"><div class="cat">Tecnología</div><h3>Smartwatch con GPS y medición de salud</h3><p class="dsc">Pantalla siempre encendida, ECG y batería de dos días. En Black Friday baja a su precio más histórico.</p>
+        <div class="price"><span class="now">$189.99</span><span class="was">$329.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=smartwatch+gps" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="tec">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=900&auto=format&fit=crop" alt="Laptop"><span class="badge">−39%</span></div>
+        <div class="bd"><div class="cat">Tecnología</div><h3>Laptop 16 GB RAM · SSD 512 GB</h3><p class="dsc">La configuración correcta para trabajar y estudiar, al precio de las básicas de todo el año. Liviana y con buena batería.</p>
+        <div class="price"><span class="now">$549.99</span><span class="was">$899.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=laptop+16gb+ram+512gb+ssd" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="hogar">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1558089687-f282ffcbc126?q=80&w=900&auto=format&fit=crop" alt="Asistente de voz"><span class="badge">−44%</span></div>
+        <div class="bd"><div class="cat">Hogar</div><h3>Asistente de voz para tu casa inteligente</h3><p class="dsc">El punto de partida de la casa inteligente: controlá luces, enchufes y música con la voz. Hoy a mitad de precio.</p>
+        <div class="price"><span class="now">$27.99</span><span class="was">$49.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=asistente+de+voz+alexa" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="hogar">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=900&auto=format&fit=crop" alt="Cocina"><span class="badge">−44%</span></div>
+        <div class="bd"><div class="cat">Hogar</div><h3>Set de cocina antiadherente premium</h3><p class="dsc">Las baterías de cocina de marca bajan fuerte esta semana y quedan al precio de las genéricas. Aprovechá la buena.</p>
+        <div class="price"><span class="now">$89.99</span><span class="was">$159.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=set+ollas+antiadherentes" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="gaming">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=900&auto=format&fit=crop" alt="Control inalámbrico"><span class="badge">−36%</span></div>
+        <div class="bd"><div class="cat">Gaming</div><h3>Control inalámbrico pro</h3><p class="dsc">El segundo control es EL accesorio que conviene comprar en Black Friday: rara vez baja el resto del año.</p>
+        <div class="price"><span class="now">$44.99</span><span class="was">$69.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=control+inalambrico+videojuegos" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="moda">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop" alt="Zapatillas running"><span class="badge">−50%</span></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Zapatillas running de marca</h3><p class="dsc">Liquidación de numeración suelta: si tu talle está, es mitad de precio. Revisá la tabla de talles de cada marca.</p>
+        <div class="price"><span class="now">$64.99</span><span class="was">$130.00</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=zapatillas+running" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="moda">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=900&auto=format&fit=crop" alt="Perfume de diseñador"><span class="badge">−55%</span></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Perfume de diseñador · 100 ml</h3><p class="dsc">Fragancias originales con el descuento más fuerte del año. Ideal para regalo de las fiestas, comprado a tiempo.</p>
+        <div class="price"><span class="now">$39.99</span><span class="was">$88.00</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=perfume+de+disenador" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="moda">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=900&auto=format&fit=crop" alt="Reloj clásico"><span class="badge">−40%</span></div>
+        <div class="bd"><div class="cat">Moda y belleza</div><h3>Reloj clásico de acero</h3><p class="dsc">Un clásico que no pasa de moda, con el descuento de la semana. Caja de acero y correa intercambiable.</p>
+        <div class="price"><span class="now">$119.99</span><span class="was">$199.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=reloj+hombre+acero" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+      <article class="card reveal" data-cat="herr">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=900&auto=format&fit=crop" alt="Herramientas"><span class="badge">−43%</span></div>
+        <div class="bd"><div class="cat">Herramientas</div><h3>Kit de herramientas completo · 128 piezas</h3><p class="dsc">Todo lo que una casa necesita, en un solo maletín. Los kits completos son de lo que más baja en Black Friday.</p>
+        <div class="price"><span class="now">$79.99</span><span class="was">$139.99</span></div>
+        <a class="go" href="https://www.amazon.com/s?k=kit+de+herramientas" target="_blank" rel="noopener">Ver en Amazon <span>→</span></a></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <section>
+    <div class="feat reveal">
+      <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=1400&auto=format&fit=crop" alt="Smart TV 65 pulgadas 4K">
+      <div class="tx">
+        <div class="eyebrow">Oferta del día</div>
+        <h3>Smart TV 65″ 4K de la generación anterior</h3>
+        <p>El truco mejor guardado del Black Friday: el modelo del año pasado tiene prácticamente el mismo panel que el nuevo y cuesta cientos menos. Es, año tras año, la compra más inteligente de la semana.</p>
+        <div class="price"><span class="now">$379.99</span><span class="was">$649.99</span></div>
+        <div><a class="btn btn-acc" href="https://www.amazon.com/s?k=smart+tv+65+4k" target="_blank" rel="noopener">Ver esta oferta en Amazon</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDES -->
+  <section id="guias">
+    <div class="sec-head reveal">
+      <h2>Comprar bien es <i>un método</i></h2>
+      <p>Nuestras tres reglas de siempre, para que ningún «descuento» te venda humo.</p>
+    </div>
+    <div class="guides">
+      <div class="guide reveal"><div class="num">— 01</div><h3>Cómo detectar un descuento falso</h3><p>Muchas tiendas suben el precio en octubre para «bajarlo» en Black Friday. La defensa es simple: compará contra el precio habitual del producto, no contra el precio tachado que te muestran. Si el tachado nunca existió, no hay oferta.</p></div>
+      <div class="guide reveal"><div class="num">— 02</div><h3>Qué comprar ahora y qué esperar</h3><p>Comprá ahora: tecnología de la generación anterior, herramientas, casa inteligente y juguetes (en diciembre salen más caros). Esperá: ropa de temporada y línea blanca, que tienen sus mejores precios en enero.</p></div>
+      <div class="guide reveal"><div class="num">— 03</div><h3>La regla de los 30 días</h3><p>Si un producto que compraste baja de precio dentro de los 30 días, muchos vendedores igualan la diferencia si la pedís por chat. Guardá tus comprobantes de esta semana: es plata que vuelve sola.</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta reveal">
+    <h2>Las ofertas <i class="serif" style="color:var(--acc)">vuelan</i>.</h2>
+    <p>Actualizamos esta página todos los días a las 9:00 (hora del Este). Guardala en tus favoritos y volvé mañana: la selección cambia a diario.</p>
+    <a class="btn btn-dark" href="#ofertas">Ver las ofertas de hoy</a>
+  </div>
+
+  <footer>
+    <div class="cols">
+      <a class="logo" href="index.html">Ofertas<em>USA</em></a>
+      <nav>
+        <a href="#ofertas">Ofertas</a>
+        <a href="#guias">Guías</a>
+        <a href="acerca.html">Acerca de</a>
+      </nav>
+    </div>
+    <p>OfertasUSA es un sitio independiente de curaduría de ofertas en español. Los precios y la disponibilidad pueden cambiar en cualquier momento en Amazon; el precio válido es el que muestra Amazon al momento de tu compra.</p>
+    <p>OfertasUSA participa en el Programa de Afiliados de Amazon Services LLC (Amazon Associates Program), un programa de publicidad de afiliados diseñado para proporcionar a los sitios un medio para ganar comisiones por publicidad mediante enlaces a Amazon.com. Como Afiliado de Amazon, gano por las compras elegibles. <i>As an Amazon Associate I earn from qualifying purchases.</i> Amazon, el logotipo de Amazon y Amazon Prime son marcas de Amazon.com, Inc. o sus afiliados. Este sitio no es Amazon ni está operado por Amazon.</p>
+  </footer>
+
+</div>
+
+<script>
+  // Countdown: fin del Black Friday (27 nov 23:59 ET ≈ 28 nov 05:00 UTC); luego, Cyber Monday (1 dic).
+  (function(){
+    var bf = new Date('2026-11-28T05:00:00Z').getTime();
+    var cm = new Date('2026-12-02T05:00:00Z').getTime();
+    var lbl = document.getElementById('count-label');
+    var H=document.getElementById('t-h'), M=document.getElementById('t-m'), S=document.getElementById('t-s');
+    function pad(n){ return (n<10?'0':'')+n; }
+    function tick(){
+      var now = Date.now(), target = bf, txt = 'El Black Friday termina en';
+      if(now >= bf){ target = cm; txt = 'El Cyber Monday termina en'; }
+      if(now >= cm){ lbl.textContent = 'Las ofertas de la temporada siguen activas'; H.textContent='—'; M.textContent='—'; S.textContent='—'; return; }
+      lbl.textContent = txt;
+      var d = Math.max(0, target - now);
+      var h = Math.floor(d/3600000), m = Math.floor(d%3600000/60000), s = Math.floor(d%60000/1000);
+      H.textContent = pad(h); M.textContent = pad(m); S.textContent = pad(s);
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+
+  // Filtros por categoría
+  (function(){
+    var chips = document.querySelectorAll('#chips .chip');
+    var cards = document.querySelectorAll('#grid .card');
+    chips.forEach(function(ch){
+      ch.addEventListener('click', function(){
+        chips.forEach(function(c){ c.classList.remove('on'); });
+        ch.classList.add('on');
+        var f = ch.getAttribute('data-f');
+        cards.forEach(function(card){
+          var show = (f === 'all' || card.getAttribute('data-cat') === f);
+          card.classList.toggle('hidden', !show);
+          if(show){ card.classList.add('vis'); }
+        });
+      });
+    });
+  })();
+
+  // Marquee: duplicar el contenido para el loop
+  (function(){
+    var t = document.getElementById('track');
+    t.innerHTML += t.innerHTML;
+  })();
+
+  // Animación al hacer scroll
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('vis'); }); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('vis'); io.unobserve(en.target); } });
+    }, { threshold: .12 });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
+</body>
+</html>
